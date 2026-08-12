@@ -1,32 +1,42 @@
 'use client';
 
-import { useState } from 'react';
-import Header from '@/components/Header';
-import Hero from '@/components/Hero';
+import React, { useState } from 'react';
+import Header from '../components/Header';
+import Hero from '../components/Hero';
+import MarqueeStrip from '../components/MarqueeStrip';
+import AboutSection from '../components/AboutSection';
+import ServicesSection from '../components/ServicesSection';
 
 export default function Home() {
-  const [activeSection, setActiveSection] = useState('home');
+  const [isQuoteModalOpen, setIsQuoteModalOpen] = useState(false);
+  const [isVideoModalOpen, setIsVideoModalOpen] = useState(false);
 
-  const handleOpenQuoteModal = () => {
-    alert('Quote Modal clicked! We will build this component next.');
+  const handleOpenQuote = (serviceName) => {
+    setIsQuoteModalOpen(true);
   };
-
-  const handleOpenVideoModal = () => {
-    alert('Video Modal clicked! We will build this component next.');
+  
+  const handleOpenVideo = () => {
+    setIsVideoModalOpen(true);
   };
 
   return (
-    <main className="min-h-screen bg-slate-900 text-white">
-      {/* Navigation Header */}
-      <Header 
-        onOpenQuoteModal={handleOpenQuoteModal} 
-        activeSection={activeSection} 
+    <main className="min-h-screen bg-slate-900">
+      <Header onOpenQuoteModal={handleOpenQuote} />
+
+      <Hero 
+        onOpenQuoteModal={handleOpenQuote} 
+        onOpenVideoModal={handleOpenVideo} 
       />
 
-      {/* Main Hero Section */}
-      <Hero 
-        onOpenQuoteModal={handleOpenQuoteModal} 
-        onOpenVideoModal={handleOpenVideoModal} 
+      <MarqueeStrip />
+
+      <AboutSection 
+        onOpenQuoteModal={handleOpenQuote} 
+        onOpenVideoModal={handleOpenVideo} 
+      />
+
+      <ServicesSection 
+        onOpenQuoteModal={handleOpenQuote} 
       />
     </main>
   );

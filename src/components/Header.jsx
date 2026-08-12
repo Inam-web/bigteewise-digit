@@ -1,8 +1,10 @@
 'use client';
 
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import Link from 'next/link';
-import { Phone, Mail, MapPin, Menu, X, ArrowRight, Sparkles, ChevronRight } from 'lucide-react';
+import { Phone, Mail, MapPin, Menu, X, ArrowRight, Sparkles, ChevronRight, ChevronDown } from 'lucide-react';
+import { SERVICES } from '../app/Data/content';
+import gsap from 'gsap';
 
 const BUSINESS_INFO = {
   phone: '+234 800 000 0000',
@@ -55,14 +57,56 @@ export default function Header({ onOpenQuoteModal, activeSection = '' }) {
   const [isScrolled, setIsScrolled] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
+  const headerRef = useRef(null);
+  const mobileMenuRef = useRef(null);
+
   useEffect(() => {
     const handleScroll = () => {
       setIsScrolled(window.scrollY > 20);
     };
 
-    window.addEventListener('scroll', handleScroll);
+    window.addEventListener('scroll', handleScroll, { passive: true });
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
+
+  // Safe GSAP Initial Mount Reveal Animation with clearProps
+  useEffect(() => {
+    const ctx = gsap.context(() => {
+      const tl = gsap.timeline({ defaults: { ease: 'power2.out', duration: 0.5 } });
+
+      tl.fromTo('.header-top-bar', { y: -20, opacity: 0 }, { y: 0, opacity: 1 })
+        .fromTo('.header-logo', { x: -20, opacity: 0 }, { x: 0, opacity: 1 }, '-=0.25')
+        .fromTo(
+          '.header-nav-item',
+          { y: -10, opacity: 0 },
+          { y: 0, opacity: 1, stagger: 0.04, clearProps: 'transform,opacity' },
+          '-=0.3'
+        )
+        .fromTo('.header-cta-btn', { scale: 0.9, opacity: 0 }, { scale: 1, opacity: 1, clearProps: 'transform,opacity' }, '-=0.2');
+    }, headerRef);
+
+    return () => ctx.revert();
+  }, []);
+
+  // Safe GSAP Animation for Mobile Drawer
+  useEffect(() => {
+    if (!mobileMenuRef.current || !mobileMenuOpen) return;
+
+    const ctx = gsap.context(() => {
+      gsap.fromTo(
+        mobileMenuRef.current,
+        { y: -10, opacity: 0 },
+        { y: 0, opacity: 1, duration: 0.3, ease: 'power2.out' }
+      );
+      gsap.fromTo(
+        '.mobile-nav-item',
+        { y: 8, opacity: 0 },
+        { y: 0, opacity: 1, duration: 0.2, stagger: 0.03, ease: 'power2.out', delay: 0.05, clearProps: 'transform,opacity' }
+      );
+    }, mobileMenuRef);
+
+    return () => ctx.revert();
+  }, [mobileMenuOpen]);
 
   const navLinks = [
     { name: 'Home', href: '#home' },
@@ -75,11 +119,11 @@ export default function Header({ onOpenQuoteModal, activeSection = '' }) {
   ];
 
   return (
-    <header className="fixed top-0 left-0 right-0 z-50 transition-all duration-300">
+    <header ref={headerRef} className="fixed top-0 left-0 right-0 z-50 transition-all duration-300">
       
-      {/* Top Utility Bar - Hidden on mobile screen size to maximize vertical viewport space */}
+      {/* Top Utility Bar */}
       <div
-        className={`hidden sm:block bg-slate-950/95 backdrop-blur-md text-slate-300 text-xs py-2 px-4 sm:px-6 lg:px-8 border-b border-slate-800/80 transition-all duration-300 ${
+        className={`header-top-bar hidden sm:block bg-slate-950/95 backdrop-blur-md text-slate-300 text-xs py-2 px-4 sm:px-6 lg:px-8 border-b border-slate-800/80 transition-all duration-300 ${
           isScrolled ? '-translate-y-full opacity-0 pointer-events-none' : 'translate-y-0 opacity-100'
         }`}
       >
@@ -135,8 +179,8 @@ export default function Header({ onOpenQuoteModal, activeSection = '' }) {
       >
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex items-center justify-between gap-2 sm:gap-4">
           
-          {/* Logo - Scaled responsibly for small screens */}
-          <Link href="/" className="flex items-center gap-2.5 shrink group min-w-0">
+          {/* Logo */}
+          <Link href="/" className="header-logo flex items-center gap-2.5 shrink group min-w-0">
             <div className="w-9 h-9 sm:w-10 sm:h-10 rounded-xl bg-gradient-to-tr from-blue-700 via-blue-600 to-indigo-500 flex items-center justify-center shadow-md shadow-blue-600/30 group-hover:scale-105 transition-transform duration-300 shrink-0">
               <Sparkles className="w-4 h-4 sm:w-5 sm:h-5 text-white" />
             </div>
@@ -155,11 +199,54 @@ export default function Header({ onOpenQuoteModal, activeSection = '' }) {
           <nav className="hidden lg:flex items-center space-x-6 xl:space-x-8">
             {navLinks.map((link) => {
               const isActive = activeSection === link.href.substring(1);
+              const isServices = link.name === 'Services';
+
+              if (isServices) {
+                return (
+                  <div key={link.name} className="header-nav-item relative group py-2">
+                    <a
+                      href={link.href}
+                      className={`text-sm font-semibold transition-all duration-200 tracking-wide flex items-center gap-1 relative py-1 whitespace-nowrap ${
+                        isActive ? 'text-blue-600 font-bold' : 'text-slate-600 hover:text-blue-600'
+                      }`}
+                    >
+                      <span>{link.name}</span>
+                      <ChevronDown className="w-3.5 h-3.5 transition-transform duration-200 group-hover:rotate-180" />
+                      {isActive && <span className="absolute bottom-0 left-0 right-0 h-0.5 bg-blue-600 rounded-full shadow-sm shadow-blue-500" />}
+                    </a>
+
+                    {/* Compact 2-Column Dropdown */}
+                    <div className="absolute top-full left-1/2 -translate-x-1/2 w-[520px] opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 ease-out pt-2 pointer-events-none group-hover:pointer-events-auto">
+                      <div className="bg-white border border-slate-200/90 rounded-2xl shadow-xl p-3 grid grid-cols-2 gap-x-2 gap-y-1">
+                        {SERVICES && SERVICES.length > 0 ? (
+                          SERVICES.map((service) => (
+                            <Link
+                              key={service.id}
+                              href={`/services/${service.id}`}
+                              className="group/item flex items-center justify-between p-2 rounded-lg hover:bg-blue-50/70 transition-all text-slate-700 hover:text-blue-600"
+                            >
+                              <span className="text-xs font-semibold leading-tight pr-2">
+                                {service.title}
+                              </span>
+                              <ChevronRight className="w-3.5 h-3.5 text-slate-400 group-hover/item:text-blue-600 group-hover/item:translate-x-0.5 transition-all shrink-0" />
+                            </Link>
+                          ))
+                        ) : (
+                          <div className="col-span-2 text-xs text-slate-400 p-2 text-center">
+                            No services found
+                          </div>
+                        )}
+                      </div>
+                    </div>
+                  </div>
+                );
+              }
+
               return (
                 <a
                   key={link.name}
                   href={link.href}
-                  className={`text-sm font-semibold transition-all duration-200 tracking-wide relative py-1 whitespace-nowrap ${
+                  className={`header-nav-item text-sm font-semibold transition-all duration-200 tracking-wide relative py-1 whitespace-nowrap ${
                     isActive ? 'text-blue-600 font-bold' : 'text-slate-600 hover:text-blue-600'
                   }`}
                 >
@@ -171,7 +258,7 @@ export default function Header({ onOpenQuoteModal, activeSection = '' }) {
           </nav>
 
           {/* Desktop Call To Action */}
-          <div className="hidden lg:flex items-center shrink-0">
+          <div className="header-cta-btn hidden lg:flex items-center shrink-0">
             <button
               onClick={onOpenQuoteModal}
               className="whitespace-nowrap bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-500 hover:to-indigo-500 text-white font-bold text-sm px-5 py-2.5 rounded-full shadow-md shadow-blue-600/25 hover:shadow-lg hover:shadow-blue-600/40 transition-all duration-300 flex items-center gap-2 active:scale-95"
@@ -203,14 +290,17 @@ export default function Header({ onOpenQuoteModal, activeSection = '' }) {
 
       {/* Mobile Drawer Menu */}
       {mobileMenuOpen && (
-        <div className="lg:hidden bg-white/95 backdrop-blur-2xl border-b border-slate-200 shadow-2xl px-5 pt-4 pb-6 space-y-4 max-h-[85vh] overflow-y-auto">
+        <div 
+          ref={mobileMenuRef} 
+          className="lg:hidden bg-white/95 backdrop-blur-2xl border-b border-slate-200 shadow-2xl px-5 pt-4 pb-6 space-y-4 max-h-[85vh] overflow-y-auto"
+        >
           <div className="flex flex-col space-y-1">
             {navLinks.map((link) => (
               <a
                 key={link.name}
                 href={link.href}
                 onClick={() => setMobileMenuOpen(false)}
-                className="flex items-center justify-between text-slate-800 hover:text-blue-600 font-semibold text-base py-2.5 px-3 rounded-xl hover:bg-blue-50/60 transition-all"
+                className="mobile-nav-item flex items-center justify-between text-slate-800 hover:text-blue-600 font-semibold text-base py-2.5 px-3 rounded-xl hover:bg-blue-50/60 transition-all"
               >
                 <span>{link.name}</span>
                 <ChevronRight className="w-4 h-4 text-slate-400" />
@@ -218,7 +308,7 @@ export default function Header({ onOpenQuoteModal, activeSection = '' }) {
             ))}
           </div>
 
-          <div className="pt-3 border-t border-slate-100">
+          <div className="mobile-nav-item pt-3 border-t border-slate-100">
             <button
               onClick={() => {
                 setMobileMenuOpen(false);
