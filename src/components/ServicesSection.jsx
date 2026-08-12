@@ -2,6 +2,7 @@
 
 import React, { useState, useEffect, useRef } from 'react';
 import Link from 'next/link';
+import Image from 'next/image';
 import { 
   BookOpenCheck, UserCheck, Palette, Box, TrendingUp, Share2, 
   Sparkles, FileText, Search, Compass, Target, Lightbulb, 
@@ -229,13 +230,16 @@ export default function ServicesSection({ onOpenQuoteModal }) {
                   isEven ? 'lg:flex-row' : 'lg:flex-row-reverse'
                 }`}
               >
-                {/* Compact Image Column (40% width with exact original proportions) */}
+                {/* Compact Image Column */}
                 <div className="service-image-col w-full lg:w-[40%] shrink-0 relative z-10">
                   <div className="relative aspect-[4/3] sm:aspect-[1.1/1] rounded-3xl sm:rounded-[2.2rem] overflow-hidden shadow-lg border border-slate-200/80 bg-slate-100">
-                    <img 
+                    <Image 
                       src={serviceImage} 
                       alt={service.title} 
-                      className="w-full h-full object-cover transition-transform duration-700 ease-out hover:scale-105"
+                      fill
+                      sizes="(max-width: 768px) 100vw, (max-width: 1200px) 40vw, 500px"
+                      quality={80}
+                      className="object-cover transition-transform duration-700 ease-out hover:scale-105"
                     />
 
                     {/* Top Stat Badge */}
@@ -270,7 +274,7 @@ export default function ServicesSection({ onOpenQuoteModal }) {
                   </div>
                 </div>
 
-                {/* Dominant Overlapping Content Card (68% width with exact original overlap layout) */}
+                {/* Dominant Overlapping Content Card */}
                 <div 
                   className={`service-card-col w-full lg:w-[68%] relative z-20 -mt-6 lg:mt-0 ${
                     isEven ? 'lg:-ml-12' : 'lg:-mr-12'
