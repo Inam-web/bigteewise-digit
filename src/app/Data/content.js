@@ -1,7 +1,8 @@
 export const BUSINESS_INFO = {
-  phone: '+234 800 000 0000',
-  email: 'info@bigteewise.com',
+  address: 'Lagos, Nigeria',
   location: 'Lagos, Nigeria',
+  phone: '+234 814 000 9821',
+  email: 'info@bigteewise.com',
   socialHandle: '@bigteewisedigital',
   socialLinks: {
     facebook: 'https://facebook.com',
@@ -143,6 +144,226 @@ export const SERVICES = [
     fullDesc: 'Clear, actionable roadmap outlining exact marketing channels, tactics, budgets, and timelines required to reach your target KPIs.',
     deliverables: ['Comprehensive Marketing Blueprint', 'Competitor Benchmark Report', 'Budget Allocation Plan'],
     roiHighlights: 'Eliminates wasted ad spend and focuses budget on proven ROI channels.'
+  }
+];
+
+export const PROCESS_STEPS = [
+  {
+    number: "01",
+    iconName: "FileSpreadsheet",
+    title: "Discovery & Strategy",
+    desc: "We analyze your audience, goals, and market landscape to build a tailored growth blueprint."
+  },
+  {
+    number: "02",
+    iconName: "Lightbulb",
+    title: "Creative Execution",
+    desc: "Our team drafts high-converting content, designs engaging visuals, and sets up campaigns."
+  },
+  {
+    number: "03",
+    iconName: "Layers",
+    title: "Optimization & Scaling",
+    desc: "We continuously test, refine, and optimize performant channels to maximize your ROI."
+  },
+  {
+    number: "04",
+    iconName: "Smile",
+    title: "Results & Growth",
+    desc: "Sit back and enjoy consistent sales growth with transparent weekly reporting."
+  }
+];
+
+export const TESTIMONIALS = [
+  {
+    id: 1,
+    name: 'Sarah Jenkins',
+    role: 'Bestselling Author',
+    companyOrBook: 'The Silent Horizon',
+    rating: 5,
+    title: 'Exceeded All My Expectations',
+    quote: 'BigTeeWise Digital completely transformed my book launch strategy. Their author branding and targeted campaign drove us straight to the Amazon Bestseller list!',
+    avatar: 'https://images.pexels.com/photos/774909/pexels-photo-774909.jpeg?auto=compress&cs=tinysrgb&w=300'
+  },
+  {
+    id: 2,
+    name: 'David Adeleke',
+    role: 'CEO & Founder',
+    companyOrBook: 'Vanguard Media Group',
+    rating: 5,
+    title: 'Outstanding Digital Growth Partner',
+    quote: 'Professional, punctual, and highly results-driven. Their marketing campaigns doubled our digital leads within two months. I cannot recommend them enough.',
+    avatar: 'https://images.pexels.com/photos/220453/pexels-photo-220453.jpeg?auto=compress&cs=tinysrgb&w=300'
+  },
+  {
+    id: 3,
+    name: 'Elena Rostova',
+    role: 'Self-Published Novelist',
+    companyOrBook: 'Whispers in the Dark',
+    rating: 5,
+    title: 'Incredible Design & Branding',
+    quote: 'The 3D book mockups and cover artwork they designed were stunning. It gave my title instant credibility and boosted reader pre-orders immensely.',
+    avatar: 'https://images.pexels.com/photos/1239291/pexels-photo-1239291.jpeg?auto=compress&cs=tinysrgb&w=300'
+  }
+];
+
+export const PORTFOLIO = [
+  {
+    id: '1',
+    title: 'The Midnight Echo - Fantasy Cover',
+    client: 'Author J. A. Vance',
+    category: 'Book Covers',
+    image: 'https://images.unsplash.com/photo-1544716278-ca5e3f4abd8c?auto=format&fit=crop&q=80&w=1000',
+    additionalImages: [
+      'https://images.unsplash.com/photo-1512820790803-83ca734da794?auto=format&fit=crop&q=80&w=1000',
+    ],
+    description: 'A complete fantasy cover design built to capture dark fantasy tropes with high-contrast custom typography.',
+    challenge: 'The client needed a cover that would stand out on Amazon search results against heavily saturated dark fantasy titles.',
+    solution: 'We developed custom artwork focusing on glowing atmospheric lighting paired with bold serif typography.',
+    tags: ['Book Cover', '3D Mockup', 'Typography'],
+    results: [
+      { value: '+320%', label: 'Amazon CTR' },
+      { value: '10,000+', label: 'Copies Sold' },
+      { value: '#1', label: 'Category Bestseller' },
+    ],
+  },
+  {
+    id: '2',
+    title: 'Author Brand Identity & Web Kit',
+    client: 'Elena Rostova',
+    category: 'Author Branding',
+    image: 'https://images.unsplash.com/photo-1434030216411-0b793f4b4173?auto=format&fit=crop&q=80&w=1000',
+    additionalImages: [],
+    description: 'Complete author branding package including logo design, color palette, social assets, and media kit.',
+    challenge: 'Connecting romantic fiction and non-fiction work under one unified personal brand identity.',
+    solution: 'We crafted an elegant, warm-toned brand language with minimalist typography and clear style guides.',
+    tags: ['Brand Identity', 'Logo Design', 'Media Kit'],
+    results: [
+      { value: '100%', label: 'Client Satisfaction' },
+      { value: '5x', label: 'Inquiry Growth' },
+    ],
+  },
+  {
+    id: '3',
+    title: 'Bestseller Launch Campaign',
+    client: 'Marcus Wright',
+    category: 'Book Marketing',
+    image: 'https://images.unsplash.com/photo-1460925895917-afdab827c52f?auto=format&fit=crop&q=80&w=1000',
+    additionalImages: [],
+    description: 'Data-driven Amazon and Meta ad campaign strategy for a multi-genre fiction launch.',
+    challenge: 'Scaling ad spend while maintaining a profitable Return on Ad Spend (ROAS).',
+    solution: 'Ran targeted video mockups and carousel ads focusing on key emotional hooks from the novel.',
+    tags: ['Meta Ads', 'Amazon PPC', 'Copywriting'],
+    results: [
+      { value: '4.2x', label: 'Average ROAS' },
+      { value: '25k+', label: 'Reads on Kindle' },
+    ],
+  },
+];
+
+export const TEAM_MEMBERS = [
+  {
+    id: 1,
+    name: "Tayo Wise Obasa",
+    role: "FOUNDER & CREATIVE DIRECTOR",
+    photo: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&q=80&w=800",
+    bio: "Founder and creative strategist leading digital transformation and brand campaigns at BigTeeWise Digital.",
+    specialties: ["Creative Direction", "Brand Strategy", "Executive Leadership"],
+    socials: {
+      linkedin: "https://linkedin.com",
+      twitter: "https://twitter.com",
+      instagram: "https://instagram.com"
+    }
+  },
+  {
+    id: 2,
+    name: "Kemi Adeleke",
+    role: "HEAD OF BOOK MARKETING & AUTHOR BRANDING",
+    photo: "https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?auto=format&fit=crop&q=80&w=800",
+    bio: "Specializing in author branding, book launches, and publishing marketing strategies.",
+    specialties: ["Author Branding", "Book Launch Campaigns", "PR & Outreach"],
+    socials: {
+      linkedin: "https://linkedin.com",
+      twitter: "https://twitter.com",
+      instagram: "https://instagram.com"
+    }
+  },
+  {
+    id: 3,
+    name: "David O. Eze",
+    role: "LEAD CREATIVE DESIGNER & 3D ARTIST",
+    photo: "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?auto=format&fit=crop&q=80&w=800",
+    bio: "Expert in 3D visualization, brand aesthetics, and modern digital design.",
+    specialties: ["3D Modeling", "Visual Design", "Brand Aesthetics"],
+    socials: {
+      linkedin: "https://linkedin.com",
+      twitter: "https://twitter.com",
+      instagram: "https://instagram.com"
+    }
+  },
+  {
+    id: 4,
+    name: "Blessing Amadi",
+    role: "PERFORMANCE MARKETING & SEO STRATEGIST",
+    photo: "https://images.unsplash.com/photo-1580489944761-15a19d654956?auto=format&fit=crop&q=80&w=800",
+    bio: "Driving search visibility and performance ad campaigns for digital growth.",
+    specialties: ["SEO Optimization", "Performance Ads", "Analytics"],
+    socials: {
+      linkedin: "https://linkedin.com",
+      twitter: "https://twitter.com",
+      instagram: "https://instagram.com"
+    }
+  }
+];
+
+export const blogPosts = [
+  {
+    id: '1',
+    category: 'Book Marketing',
+    date: 'February 24, 2025',
+    readTime: '5 min read',
+    title: '7 Proven Steps to Hit Amazon #1 Bestseller in 2025/2026',
+    snippet: 'Discover how top authors combine KDP category selection, pre-order buzz, and targeted Meta ads to dominate Amazon launch week.',
+    image: 'https://images.unsplash.com/photo-1512820790803-83ca734da794?q=80&w=800&auto=format&fit=crop',
+    author: 'BIGTEEWISE Team'
+  },
+  {
+    id: '2',
+    category: 'Book Cover Design',
+    date: 'February 18, 2025',
+    readTime: '4 min read',
+    title: 'Why High-Impact 3D Book Mockups Double Your Ad Click-Through Rate',
+    snippet: 'Flat book cover images are no longer enough on crowded social feeds. Learn how photorealistic 3D assets turn casual scrollers into buyers.',
+    image: 'https://images.unsplash.com/photo-1544716278-ca5e3f4abd8c?q=80&w=800&auto=format&fit=crop',
+    author: 'BIGTEEWISE Team'
+  },
+  {
+    id: '3',
+    category: 'Author Branding',
+    date: 'February 10, 2025',
+    readTime: '6 min read',
+    title: 'Building an Author Brand That Commands 5-Figure Keynotes & Book Deals',
+    snippet: 'Your book is your premium business card. Here is how executive authors leverage personal branding to open high-paying corporate doors.',
+    image: 'https://images.unsplash.com/photo-1455390582262-044cdead277a?q=80&w=800&auto=format&fit=crop',
+    author: 'BIGTEEWISE Team'
+  }
+];
+
+export const FAQS = [
+  {
+    id: 'faq-1',
+    question: 'What services do you offer for book marketing?',
+    answer: 'We provide full-service book marketing including Amazon ads, social media campaigns, author branding, and PR outreach.'
+  },
+  {
+    id: 'faq-2',
+    question: 'How long does a typical campaign take?',
+    answer: 'Campaign duration depends on your package, typically ranging from 4 weeks for launch boosts to ongoing monthly retainer strategies.'
+  },
+  {
+    id: 'faq-3',
+    question: 'Can I request customized marketing plans?',
+    answer: 'Yes, we tailor every strategy to match your target readership, genre, and budget goals.'
   }
 ];
 

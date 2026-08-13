@@ -2,7 +2,7 @@
 
 import React, { useEffect, useRef } from 'react';
 import Image from 'next/image';
-import { Play, CheckCircle2, ArrowRight } from 'lucide-react';
+import { Play, CheckCircle2, ArrowRight, Sparkles, Target, TrendingUp, Users, ShieldCheck } from 'lucide-react';
 import { BUSINESS_INFO } from '../app/Data/content';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
@@ -19,240 +19,407 @@ export default function AboutSection({ onOpenVideoModal, onOpenQuoteModal }) {
     'BigTeeWise Digital is a full-service creative agency in Lagos, Nigeria. We combine creative design, strategic marketing, and specialized book marketing & author branding to convert attention into measurable revenue.';
 
   useEffect(() => {
+    if (!sectionRef.current) return;
+
     const ctx = gsap.context(() => {
-      // Left Collage Grid Photo Reveal - Slower, relaxed fade & slide
-      gsap.fromTo(
-        '.about-photo',
-        { y: 40, opacity: 0, scale: 0.94 },
-        {
-          y: 0,
+      const isMobile = window.matchMedia('(max-width: 767px)').matches;
+      const isTablet = window.matchMedia('(min-width: 768px) and (max-width: 1279px)').matches;
+
+      gsap.set('.about-reveal', { opacity: 0, y: isMobile ? 20 : 35 });
+      gsap.set('.about-photo', { opacity: 0, scale: 0.96 });
+      gsap.set('.about-play-btn', { opacity: 0, scale: 0.7 });
+
+      const intro = gsap.timeline({
+        scrollTrigger: {
+          trigger: sectionRef.current,
+          start: 'top 78%',
+          once: true,
+        },
+      });
+
+      intro
+        .to('.about-photo', {
           opacity: 1,
           scale: 1,
-          duration: 1.2,
-          stagger: 0.22,
+          duration: isMobile ? 0.7 : 1,
+          stagger: 0.12,
+          ease: 'power3.out',
+        })
+        .to(
+          '.about-play-btn',
+          {
+            opacity: 1,
+            scale: 1,
+            duration: 0.7,
+            ease: 'back.out(1.6)',
+          },
+          '-=0.55'
+        )
+        .to(
+          '.about-reveal',
+          {
+            opacity: 1,
+            y: 0,
+            duration: isMobile ? 0.65 : 0.8,
+            stagger: isMobile ? 0.08 : 0.12,
+            ease: 'power3.out',
+          },
+          '-=0.35'
+        );
+
+      if (!isMobile && !isTablet) {
+        gsap.to('.about-orbit', {
+          y: -18,
+          x: 8,
+          duration: 4,
+          repeat: -1,
+          yoyo: true,
+          ease: 'sine.inOut',
+        });
+
+        gsap.to('.about-photo-main', {
+          y: -10,
+          duration: 5,
+          repeat: -1,
+          yoyo: true,
+          ease: 'sine.inOut',
+        });
+
+        gsap.to('.about-photo-secondary', {
+          y: 12,
+          duration: 4.5,
+          repeat: -1,
+          yoyo: true,
+          ease: 'sine.inOut',
+          delay: 0.4,
+        });
+
+        gsap.fromTo(
+          '.about-scroll-card',
+          { y: 50, opacity: 0 },
+          {
+            y: 0,
+            opacity: 1,
+            stagger: 0.15,
+            duration: 0.8,
+            ease: 'power3.out',
+            scrollTrigger: {
+              trigger: '.about-scroll-content',
+              start: 'top 72%',
+              toggleActions: 'play none none none',
+            },
+          }
+        );
+
+        gsap.to('.about-progress', {
+          scaleY: 1,
+          transformOrigin: 'top center',
+          ease: 'none',
+          scrollTrigger: {
+            trigger: sectionRef.current,
+            start: 'top top',
+            end: 'bottom bottom',
+            scrub: 0.5,
+          },
+        });
+      }
+
+      gsap.fromTo(
+        '.about-stat',
+        { opacity: 0, y: 20 },
+        {
+          opacity: 1,
+          y: 0,
+          duration: 0.65,
+          stagger: 0.1,
           ease: 'power3.out',
           scrollTrigger: {
-            trigger: sectionRef.current,
-            start: 'top 80%',
-            toggleActions: 'play none none none',
-          },
-          clearProps: 'transform,opacity',
-        }
-      );
-
-      // Play Button Pulse Pop - Slower pop-in sequence
-      gsap.fromTo(
-        '.about-play-btn',
-        { scale: 0, opacity: 0 },
-        {
-          scale: 1,
-          opacity: 1,
-          duration: 1.0,
-          delay: 0.6,
-          ease: 'back.out(1.4)',
-          scrollTrigger: {
-            trigger: sectionRef.current,
-            start: 'top 80%',
-            toggleActions: 'play none none none',
-          },
-          clearProps: 'transform,opacity',
-        }
-      );
-
-      // Right Text Sequence Reveal - Unhurried cascade
-      gsap.fromTo(
-        '.about-text-item',
-        { y: 35, opacity: 0 },
-        {
-          y: 0,
-          opacity: 1,
-          duration: 1.1,
-          stagger: 0.18,
-          ease: 'power3.out',
-          scrollTrigger: {
-            trigger: sectionRef.current,
-            start: 'top 75%',
-            toggleActions: 'play none none none',
-          },
-          clearProps: 'transform,opacity',
-        }
-      );
-
-      // Metrics Counter Grid - Gradual scale and rise
-      gsap.fromTo(
-        '.about-metric-item',
-        { scale: 0.85, opacity: 0, y: 15 },
-        {
-          scale: 1,
-          opacity: 1,
-          y: 0,
-          duration: 0.9,
-          stagger: 0.2,
-          ease: 'back.out(1.2)',
-          scrollTrigger: {
-            trigger: '.about-metrics-grid',
+            trigger: '.about-stats',
             start: 'top 85%',
-            toggleActions: 'play none none none',
+            once: true,
           },
-          clearProps: 'transform,opacity',
         }
       );
     }, sectionRef);
 
-    return () => ctx.revert();
+    return () => {
+      ctx.revert();
+    };
   }, []);
 
   return (
-    <section ref={sectionRef} id="about" className="py-16 sm:py-20 lg:py-28 bg-white relative overflow-hidden">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="grid grid-cols-1 xl:grid-cols-12 gap-10 xl:gap-16 items-center">
+    <section
+      ref={sectionRef}
+      id="about"
+      className="relative bg-white text-slate-900"
+    >
+      {/* Background */}
+      <div className="absolute inset-0 pointer-events-none">
+        <div className="absolute top-0 right-0 w-[420px] h-[420px] bg-blue-100/40 rounded-full blur-3xl" />
+        <div className="absolute bottom-0 left-0 w-[360px] h-[360px] bg-slate-100/80 rounded-full blur-3xl" />
+        <div className="absolute inset-0 opacity-[0.025] bg-[radial-gradient(#0f172a_1px,transparent_1px)] [background-size:26px_26px]" />
+      </div>
+
+      <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        {/* Desktop editorial layout - FIXED */}
+        <div className="xl:grid xl:grid-cols-12 xl:gap-8">
           
-          {/* Left Collage Photo Grid */}
-          <div className="xl:col-span-6 relative">
-            <div className="grid grid-cols-2 gap-3 sm:gap-4 relative">
-              
-              {/* Photo 1 - Top Left */}
-              <div className="about-photo relative rounded-2xl sm:rounded-3xl overflow-hidden shadow-md group h-44 md:h-56 lg:h-64">
-                <Image
-                  src="https://images.pexels.com/photos/15543037/pexels-photo-15543037.jpeg?auto=compress&cs=tinysrgb&fit=crop&h=600&w=600"
-                  alt="BigTeeWise Team Collaborating"
-                  fill
-                  sizes="(max-width: 1280px) 50vw, 25vw"
-                  className="object-cover group-hover:scale-105 transition-transform duration-700 ease-out"
-                />
-              </div>
+          {/* STICKY VISUAL AREA - Fixed position wrapper */}
+          <div className="xl:col-span-6">
+            <div className="xl:sticky xl:top-0 flex items-center min-h-screen">
+              <div className="relative w-full h-[560px] sm:h-[620px] lg:h-[660px] xl:h-[700px] max-h-[760px]">
 
-              {/* Photo 2 - Top Right */}
-              <div className="about-photo relative rounded-2xl sm:rounded-3xl overflow-hidden shadow-md group h-44 md:h-56 lg:h-64 mt-4 sm:mt-6">
-                <Image
-                  src="https://images.pexels.com/photos/5648408/pexels-photo-5648408.jpeg?auto=compress&cs=tinysrgb&fit=crop&h=600&w=600"
-                  alt="BigTeeWise Executive Director"
-                  fill
-                  sizes="(max-width: 1280px) 50vw, 25vw"
-                  className="object-cover group-hover:scale-105 transition-transform duration-700 ease-out"
-                />
-              </div>
+                {/* Large soft frame */}
+                <div className="about-orbit absolute inset-4 sm:inset-8 rounded-[2.5rem] border border-blue-100 bg-blue-50/30" />
 
-              {/* Photo 3 - Bottom Left */}
-              <div className="about-photo relative rounded-2xl sm:rounded-3xl overflow-hidden shadow-md group h-44 md:h-56 lg:h-64 -mt-4 sm:-mt-6">
-                <Image
-                  src="https://images.pexels.com/photos/8154578/pexels-photo-8154578.jpeg?auto=compress&cs=tinysrgb&fit=crop&h=600&w=600"
-                  alt="Digital Marketing Campaign Strategy"
-                  fill
-                  sizes="(max-width: 1280px) 50vw, 25vw"
-                  className="object-cover group-hover:scale-105 transition-transform duration-700 ease-out"
-                />
-              </div>
-
-              {/* Photo 4 - Bottom Right */}
-              <div className="about-photo relative rounded-2xl sm:rounded-3xl overflow-hidden shadow-md group h-44 md:h-56 lg:h-64">
-                <Image
-                  src="https://images.pexels.com/photos/15635247/pexels-photo-15635247.jpeg?auto=compress&cs=tinysrgb&fit=crop&h=600&w=600"
-                  alt="Book Branding Materials"
-                  fill
-                  sizes="(max-width: 1280px) 50vw, 25vw"
-                  className="object-cover group-hover:scale-105 transition-transform duration-700 ease-out"
-                />
-              </div>
-
-              {/* Center Circular Interactive Play Button */}
-              <button
-                onClick={onOpenVideoModal}
-                className="about-play-btn absolute inset-0 m-auto w-14 h-14 sm:w-16 md:w-20 sm:h-16 md:h-20 rounded-full bg-blue-600 text-white flex items-center justify-center shadow-2xl border-4 border-white hover:scale-110 hover:bg-blue-700 transition-all duration-500 ease-out z-10 group"
-                title="Watch Agency Video"
-              >
-                <Play className="w-6 h-6 sm:w-8 sm:h-8 fill-white ml-0.5 group-hover:scale-110 transition-transform duration-300" />
-                <span className="absolute -inset-1 rounded-full border-2 border-blue-400 animate-ping pointer-events-none opacity-75" />
-              </button>
-
-              {/* Decorative Blue Corner Accent */}
-              <div className="absolute -bottom-3 -left-3 sm:-bottom-4 sm:-left-4 w-20 h-20 sm:w-28 sm:h-28 border-l-4 border-b-4 border-blue-600 rounded-bl-2xl sm:rounded-bl-3xl pointer-events-none" />
-            </div>
-          </div>
-
-          {/* Right Text Content */}
-          <div className="xl:col-span-6 space-y-6">
-            
-            {/* Tag Badge */}
-            <div className="about-text-item inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-blue-50 border border-blue-100 text-blue-600 text-xs sm:text-sm font-bold tracking-wide uppercase">
-              <span className="text-blue-600 font-extrabold">//</span>
-              <span>About BigTeeWise Digital</span>
-            </div>
-
-            {/* Title */}
-            <h2 className="about-text-item text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-extrabold text-slate-900 tracking-tight leading-snug sm:leading-tight">
-              Transforming <span className="text-blue-600">Ideas & Books</span> into Digital Reality
-            </h2>
-
-            {/* Description */}
-            <p className="about-text-item text-sm sm:text-base lg:text-lg text-slate-600 leading-relaxed font-normal">
-              {aboutText}
-            </p>
-
-            {/* Key Value Points */}
-            <div className="about-text-item grid grid-cols-1 sm:grid-cols-2 gap-4 pt-1">
-              <div className="flex items-start gap-2.5">
-                <CheckCircle2 className="w-5 h-5 text-blue-600 shrink-0 mt-0.5" />
-                <div>
-                  <h4 className="font-bold text-slate-900 text-sm sm:text-base">Author Positioning</h4>
-                  <p className="text-xs sm:text-sm text-slate-500 mt-0.5">Elevating authors into trusted industry authorities.</p>
-                </div>
-              </div>
-
-              <div className="flex items-start gap-2.5">
-                <CheckCircle2 className="w-5 h-5 text-blue-600 shrink-0 mt-0.5" />
-                <div>
-                  <h4 className="font-bold text-slate-900 text-sm sm:text-base">Conversion-Focused</h4>
-                  <p className="text-xs sm:text-sm text-slate-500 mt-0.5">Every design and campaign is optimized for direct sales.</p>
-                </div>
-              </div>
-            </div>
-
-            {/* Key Metrics Counter Grid */}
-            <div className="about-metrics-grid about-text-item grid grid-cols-3 gap-2 md:gap-4 py-5 border-y border-slate-200">
-              <div className="about-metric-item p-2 sm:p-3 bg-slate-50 md:bg-transparent rounded-2xl text-center md:text-left">
-                <div className="text-2xl sm:text-3xl md:text-3xl lg:text-4xl font-black text-blue-600 tracking-tight">150+</div>
-                <div className="text-[10px] sm:text-xs font-bold text-slate-600 uppercase tracking-wider mt-1">Projects Delivered</div>
-              </div>
-              <div className="about-metric-item p-2 sm:p-3 bg-slate-50 md:bg-transparent rounded-2xl text-center md:text-left">
-                <div className="text-2xl sm:text-3xl md:text-3xl lg:text-4xl font-black text-slate-900 tracking-tight">2000+</div>
-                <div className="text-[10px] sm:text-xs font-bold text-slate-600 uppercase tracking-wider mt-1">Happy Clients</div>
-              </div>
-              <div className="about-metric-item p-2 sm:p-3 bg-slate-50 md:bg-transparent rounded-2xl text-center md:text-left">
-                <div className="text-2xl sm:text-3xl md:text-3xl lg:text-4xl font-black text-blue-600 tracking-tight">99%</div>
-                <div className="text-[10px] sm:text-xs font-bold text-slate-600 uppercase tracking-wider mt-1">Satisfaction Rate</div>
-              </div>
-            </div>
-
-            {/* CEO Signature Section */}
-            <div className="about-text-item flex flex-col md:flex-row items-stretch md:items-center justify-between gap-4 pt-2">
-              <div className="flex items-center gap-3.5">
-                <div className="relative w-12 h-12 sm:w-14 sm:h-14 rounded-full overflow-hidden ring-2 ring-blue-600/30 shrink-0">
+                {/* Main image */}
+                <div className="about-photo about-photo-main absolute left-0 top-10 sm:top-12 w-[68%] h-[57%] rounded-[2rem] overflow-hidden shadow-2xl border-4 border-white z-10">
                   <Image
-                    src="https://images.pexels.com/photos/5648408/pexels-photo-5648408.jpeg?auto=compress&cs=tinysrgb&fit=crop&h=120&w=120"
-                    alt="Tayo Wise Obasa"
+                    src="https://images.pexels.com/photos/15543037/pexels-photo-15543037.jpeg?auto=compress&cs=tinysrgb&fit=crop&h=800&w=800"
+                    alt="BigTeeWise creative strategy team"
                     fill
-                    sizes="56px"
+                    sizes="(max-width: 1280px) 60vw, 35vw"
+                    className="object-cover"
+                  />
+
+                  <div className="absolute top-4 left-4 px-3 py-2 rounded-full bg-white/95 backdrop-blur-sm shadow-lg flex items-center gap-2">
+                    <span className="w-2 h-2 rounded-full bg-blue-600" />
+                    <span className="text-[10px] sm:text-xs font-bold text-slate-800">
+                      Creative Strategy Studio
+                    </span>
+                  </div>
+
+                  <div className="absolute inset-x-0 bottom-0 h-24 bg-gradient-to-t from-slate-950/60 to-transparent" />
+                </div>
+
+                {/* Secondary portrait */}
+                <div className="about-photo about-photo-secondary absolute right-0 top-[21%] sm:top-[23%] w-[48%] h-[51%] rounded-[2rem] overflow-hidden shadow-2xl border-4 border-white z-20">
+                  <Image
+                    src="https://images.pexels.com/photos/5648408/pexels-photo-5648408.jpeg?auto=compress&cs=tinysrgb&fit=crop&h=800&w=700"
+                    alt="BigTeeWise creative director"
+                    fill
+                    sizes="(max-width: 1280px) 45vw, 25vw"
                     className="object-cover"
                   />
                 </div>
-                <div>
-                  <h4 className="text-base sm:text-lg font-bold text-slate-900 leading-snug">Tayo Wise Obasa</h4>
-                  <p className="text-[11px] sm:text-xs font-bold text-blue-600 uppercase tracking-wider">Founder & Creative Director</p>
+
+                {/* Bottom image */}
+                <div className="about-photo absolute left-0 bottom-0 sm:bottom-3 w-[57%] h-[38%] rounded-[2rem] overflow-hidden shadow-2xl border-4 border-white z-30">
+                  <Image
+                    src="https://images.pexels.com/photos/8154578/pexels-photo-8154578.jpeg?auto=compress&cs=tinysrgb&fit=crop&h=700&w=800"
+                    alt="Digital marketing strategy"
+                    fill
+                    sizes="(max-width: 1280px) 55vw, 30vw"
+                    className="object-cover"
+                  />
+                </div>
+
+                {/* Bottom right image */}
+                <div className="about-photo absolute right-0 bottom-0 sm:bottom-3 w-[43%] h-[29%] rounded-[1.75rem] overflow-hidden shadow-2xl border-4 border-white z-40">
+                  <Image
+                    src="https://images.pexels.com/photos/15635247/pexels-photo-15635247.jpeg?auto=compress&cs=tinysrgb&fit=crop&h=700&w=800"
+                    alt="Book branding materials"
+                    fill
+                    sizes="(max-width: 1280px) 42vw, 23vw"
+                    className="object-cover"
+                  />
+                </div>
+
+                {/* Play button */}
+                <button
+                  onClick={onOpenVideoModal}
+                  className="about-play-btn absolute left-[50%] top-[52%] -translate-x-1/2 -translate-y-1/2 w-16 h-16 sm:w-20 sm:h-20 rounded-full bg-blue-600 text-white flex items-center justify-center shadow-2xl border-4 border-white hover:bg-blue-700 hover:scale-105 transition-all duration-300 z-50"
+                  title="Watch Agency Video"
+                >
+                  <Play className="w-7 h-7 sm:w-8 sm:h-8 fill-white ml-1" />
+                  <span className="absolute -inset-2 rounded-full border border-blue-500/30 animate-ping pointer-events-none" />
+                </button>
+
+                {/* Floating label */}
+                <div className="about-reveal absolute -bottom-3 left-4 sm:left-8 z-50 bg-slate-950 text-white rounded-2xl px-4 py-3 shadow-2xl border border-slate-800">
+                  <div className="flex items-center gap-2">
+                    <Sparkles className="w-4 h-4 text-blue-400" />
+                    <span className="text-xs font-bold">Strategy • Creativity • Growth</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          {/* SCROLLING CONTENT - This will determine section height */}
+          <div className="xl:col-span-6 relative z-50">
+            <div className="about-scroll-content space-y-5 sm:space-y-6 py-8 xl:py-16">
+              {/* Added vertical padding to create enough scroll height */}
+
+              {/* Intro */}
+              <div className="about-scroll-card bg-white/95 backdrop-blur-md rounded-[2rem] border border-slate-200 shadow-sm p-6 sm:p-8 lg:p-10">
+                <div className="about-reveal inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-blue-50 border border-blue-100 text-blue-600 text-xs font-bold tracking-wide uppercase">
+                  <span className="font-extrabold">//</span>
+                  <span>About BigTeeWise Digital</span>
+                </div>
+
+                <h2 className="about-reveal mt-5 text-3xl sm:text-4xl lg:text-5xl font-extrabold tracking-tight leading-[1.08]">
+                  Transforming <span className="text-blue-600">Ideas & Books</span> into Digital Reality
+                </h2>
+
+                <p className="about-reveal mt-5 text-sm sm:text-base lg:text-lg text-slate-600 leading-relaxed">
+                  {aboutText}
+                </p>
+
+                <p className="about-reveal mt-4 text-sm sm:text-base text-slate-500 leading-relaxed">
+                  Our approach goes beyond attractive visuals. We connect strategy, storytelling, design, marketing and digital growth to create brand experiences that stand out and produce meaningful business outcomes.
+                </p>
+              </div>
+
+              {/* Approach */}
+              <div className="about-scroll-card bg-slate-950 text-white rounded-[2rem] p-6 sm:p-8 lg:p-9 shadow-xl overflow-hidden relative">
+                <div className="absolute -right-20 -top-20 w-48 h-48 bg-blue-600/20 rounded-full blur-3xl" />
+
+                <div className="relative">
+                  <div className="flex items-center gap-2 text-blue-400 text-xs font-bold uppercase tracking-wider">
+                    <Target className="w-4 h-4" />
+                    Our Approach
+                  </div>
+
+                  <h3 className="mt-3 text-2xl sm:text-3xl font-extrabold">
+                    Creative work backed by strategy.
+                  </h3>
+
+                  <div className="grid sm:grid-cols-2 gap-4 mt-6">
+                    <div className="p-4 rounded-2xl bg-white/5 border border-white/10">
+                      <Sparkles className="w-5 h-5 text-blue-400 mb-3" />
+                      <h4 className="font-bold">Creative Direction</h4>
+                      <p className="text-xs sm:text-sm text-slate-400 mt-2 leading-relaxed">
+                        Strong visual identities, book covers, campaigns and digital experiences built to be remembered.
+                      </p>
+                    </div>
+
+                    <div className="p-4 rounded-2xl bg-white/5 border border-white/10">
+                      <TrendingUp className="w-5 h-5 text-blue-400 mb-3" />
+                      <h4 className="font-bold">Growth Strategy</h4>
+                      <p className="text-xs sm:text-sm text-slate-400 mt-2 leading-relaxed">
+                        Marketing systems designed to turn attention into engagement, leads and measurable growth.
+                      </p>
+                    </div>
+                  </div>
                 </div>
               </div>
 
-              <button
-                onClick={onOpenQuoteModal}
-                className="w-full md:w-auto shrink-0 inline-flex items-center justify-center gap-2 text-sm font-bold text-white bg-blue-600 hover:bg-blue-700 px-6 py-3.5 rounded-full shadow-md shadow-blue-600/20 transition-all active:scale-95 duration-300"
-              >
-                <span>Work With Us</span>
-                <ArrowRight className="w-4 h-4" />
-              </button>
+              {/* Value points */}
+              <div className="about-scroll-card bg-white rounded-[2rem] border border-slate-200 shadow-sm p-6 sm:p-8">
+                <div className="about-reveal grid sm:grid-cols-2 gap-5">
+                  <div className="flex items-start gap-3">
+                    <div className="w-10 h-10 rounded-xl bg-blue-50 flex items-center justify-center shrink-0">
+                      <CheckCircle2 className="w-5 h-5 text-blue-600" />
+                    </div>
+                    <div>
+                      <h4 className="font-bold text-slate-900">Author Positioning</h4>
+                      <p className="text-sm text-slate-500 mt-1 leading-relaxed">
+                        Elevating authors into trusted industry authorities.
+                      </p>
+                    </div>
+                  </div>
+
+                  <div className="flex items-start gap-3">
+                    <div className="w-10 h-10 rounded-xl bg-blue-50 flex items-center justify-center shrink-0">
+                      <TrendingUp className="w-5 h-5 text-blue-600" />
+                    </div>
+                    <div>
+                      <h4 className="font-bold text-slate-900">Conversion-Focused</h4>
+                      <p className="text-sm text-slate-500 mt-1 leading-relaxed">
+                        Campaigns and designs created around real business goals.
+                      </p>
+                    </div>
+                  </div>
+
+                  <div className="flex items-start gap-3">
+                    <div className="w-10 h-10 rounded-xl bg-blue-50 flex items-center justify-center shrink-0">
+                      <Users className="w-5 h-5 text-blue-600" />
+                    </div>
+                    <div>
+                      <h4 className="font-bold text-slate-900">Audience First</h4>
+                      <p className="text-sm text-slate-500 mt-1 leading-relaxed">
+                        Every message is shaped around the people you want to reach.
+                      </p>
+                    </div>
+                  </div>
+
+                  <div className="flex items-start gap-3">
+                    <div className="w-10 h-10 rounded-xl bg-blue-50 flex items-center justify-center shrink-0">
+                      <ShieldCheck className="w-5 h-5 text-blue-600" />
+                    </div>
+                    <div>
+                      <h4 className="font-bold text-slate-900">Long-Term Value</h4>
+                      <p className="text-sm text-slate-500 mt-1 leading-relaxed">
+                        Building digital assets and strategies that continue working beyond launch day.
+                      </p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              {/* Stats */}
+              <div className="about-scroll-card about-stats grid grid-cols-3 gap-2 sm:gap-3">
+                <div className="about-stat rounded-2xl bg-blue-600 text-white p-4 sm:p-5">
+                  <div className="text-2xl sm:text-3xl font-black">150+</div>
+                  <p className="text-[10px] sm:text-xs text-blue-100 font-semibold uppercase tracking-wide mt-1">
+                    Projects
+                  </p>
+                </div>
+
+                <div className="about-stat rounded-2xl bg-slate-950 text-white p-4 sm:p-5">
+                  <div className="text-2xl sm:text-3xl font-black">2000+</div>
+                  <p className="text-[10px] sm:text-xs text-slate-400 font-semibold uppercase tracking-wide mt-1">
+                    Clients
+                  </p>
+                </div>
+
+                <div className="about-stat rounded-2xl bg-slate-100 text-slate-900 p-4 sm:p-5">
+                  <div className="text-2xl sm:text-3xl font-black">99%</div>
+                  <p className="text-[10px] sm:text-xs text-slate-500 font-semibold uppercase tracking-wide mt-1">
+                    Satisfaction
+                  </p>
+                </div>
+              </div>
+
+              {/* Founder / CTA */}
+              <div className="about-scroll-card bg-white rounded-[2rem] border border-slate-200 shadow-sm p-6 sm:p-7">
+                <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-5">
+                  <div className="flex items-center gap-3.5">
+                    <div className="relative w-14 h-14 rounded-full overflow-hidden ring-2 ring-blue-600/20 shrink-0">
+                      <Image
+                        src="https://images.pexels.com/photos/5648408/pexels-photo-5648408.jpeg?auto=compress&cs=tinysrgb&fit=crop&h=120&w=120"
+                        alt="Tayo Wise Obasa"
+                        fill
+                        sizes="56px"
+                        className="object-cover"
+                      />
+                    </div>
+
+                    <div>
+                      <h4 className="font-bold text-slate-900">Tayo Wise Obasa</h4>
+                      <p className="text-[10px] sm:text-xs text-blue-600 font-bold uppercase tracking-wider mt-1">
+                        Founder & Creative Director
+                      </p>
+                    </div>
+                  </div>
+
+                  <button
+                    onClick={onOpenQuoteModal}
+                    className="w-full sm:w-auto inline-flex items-center justify-center gap-2 bg-blue-600 hover:bg-blue-700 text-white font-bold text-sm px-6 py-3.5 rounded-full shadow-lg shadow-blue-600/20 transition-all duration-300 active:scale-95"
+                  >
+                    Work With Us
+                    <ArrowRight className="w-4 h-4" />
+                  </button>
+                </div>
+              </div>
             </div>
-
           </div>
+        </div>
 
+        {/* Scroll progress indicator — desktop only */}
+        <div className="hidden xl:block absolute left-1/2 top-32 bottom-32 w-px bg-slate-200 -translate-x-1/2 pointer-events-none">
+          <div className="about-progress absolute top-0 left-0 w-full h-full bg-blue-600 scale-y-0" />
         </div>
       </div>
     </section>

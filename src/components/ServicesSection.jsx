@@ -226,13 +226,13 @@ export default function ServicesSection({ onOpenQuoteModal }) {
             return (
               <div 
                 key={service.id || index} 
-                className={`service-row-item flex flex-col lg:flex-row items-center justify-between gap-6 lg:gap-0 relative ${
+                className={`service-row-item flex flex-col lg:flex-row items-center justify-between gap-0 relative bg-white rounded-3xl shadow-xl border border-slate-200/80 overflow-hidden lg:bg-transparent lg:shadow-none lg:border-none lg:overflow-visible ${
                   isEven ? 'lg:flex-row' : 'lg:flex-row-reverse'
                 }`}
               >
                 {/* Compact Image Column */}
                 <div className="service-image-col w-full lg:w-[40%] shrink-0 relative z-10">
-                  <div className="relative aspect-[4/3] sm:aspect-[1.1/1] rounded-3xl sm:rounded-[2.2rem] overflow-hidden shadow-lg border border-slate-200/80 bg-slate-100">
+                  <div className="relative aspect-[4/3] sm:aspect-[1.1/1] rounded-none lg:rounded-[2.2rem] overflow-hidden shadow-none lg:shadow-lg border-none lg:border lg:border-slate-200/80 bg-transparent lg:bg-slate-100">
                     <Image 
                       src={serviceImage} 
                       alt={service.title} 
@@ -276,11 +276,11 @@ export default function ServicesSection({ onOpenQuoteModal }) {
 
                 {/* Dominant Overlapping Content Card */}
                 <div 
-                  className={`service-card-col w-full lg:w-[68%] relative z-20 -mt-6 lg:mt-0 ${
+                  className={`service-card-col w-full lg:w-[68%] relative z-20 mt-0 ${
                     isEven ? 'lg:-ml-12' : 'lg:-mr-12'
                   }`}
                 >
-                  <div className="bg-white rounded-3xl p-6 sm:p-10 lg:p-12 shadow-xl border border-slate-200/80 space-y-6">
+                  <div className="bg-transparent lg:bg-white rounded-none lg:rounded-3xl p-6 sm:p-10 lg:p-12 shadow-none lg:shadow-xl border-none lg:border lg:border-slate-200/80 space-y-6">
                     
                     {/* Header Badges */}
                     <div className="flex flex-wrap items-center justify-between gap-2">
