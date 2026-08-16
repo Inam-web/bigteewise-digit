@@ -1,5 +1,3 @@
-// src/app/services/[id]/page.js
-
 'use client';
 
 import React, { useState, useEffect, useRef } from 'react';
