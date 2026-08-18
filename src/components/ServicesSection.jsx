@@ -20,7 +20,7 @@ if (typeof window !== 'undefined') {
 const SERVICE_IMAGES = {
   'book-marketing': '/images/services/book-marketing.jpg',
   'author-branding': '/images/services/author-branding.jpg',
-  'book-cover-design': '/images/services/book-cover-design.jpg',
+  'book-cover-design': '/images/services/book-cover-design-v2.jpg',
   'book-mockup-design': '/images/services/book-mockup-design.jpg',
   'digital-marketing': '/images/services/digital-marketing.jpg',
   'social-media-marketing': '/images/services/social-media-marketing.jpg',

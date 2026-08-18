@@ -19,9 +19,9 @@ import { SERVICES } from '../app/Data/content';
 import gsap from 'gsap';
 
 const BUSINESS_INFO = {
-  phone: '+234 800 000 0000',
-  email: 'info@bigteewise.com',
-  location: 'Lagos, Nigeria',
+  phone: '+234 807 352 7146',
+  email: 'petergodswill52@gmail.com',
+  location: 'UK, United Kingdom',
   socialHandle: '@bigteewisedigital',
   socialLinks: {
     facebook: 'https://facebook.com',

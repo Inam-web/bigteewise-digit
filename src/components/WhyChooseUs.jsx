@@ -301,7 +301,7 @@ export default function WhyChooseUs({ onOpenQuoteModal, onOpenVideoModal }) {
               <div className="absolute bottom-4 left-4 right-4 p-4 sm:p-5 rounded-2xl bg-slate-900/95 backdrop-blur-md border border-slate-700 z-20 shadow-xl">
                 <div className="flex items-center gap-2 mb-1.5">
                   <CheckCircle2 className="w-3.5 h-3.5 text-blue-400" />
-                  <p className="text-[10px] text-blue-400 font-bold uppercase tracking-wider">Based in Lagos, Nigeria</p>
+                  <p className="text-[10px] text-blue-400 font-bold uppercase tracking-wider">Based in UK, United Kingdom</p>
                 </div>
                 <p className="text-xs sm:text-sm font-semibold text-slate-200 leading-relaxed">
                   Serving authors & corporate clients worldwide with world-class standard

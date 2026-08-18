@@ -12,9 +12,9 @@ import { FacebookIcon, TwitterXIcon, InstagramIcon, LinkedinIcon } from './Socia
 
 const BUSINESS_INFO = {
   shortAbout: "Empowering authors and digital creators with strategic marketing, branding, and web design.",
-  address: "Lagos, Nigeria",
-  phone: "+234 800 000 0000",
-  email: "contact@bigteewise.digital",
+  address: "UK, United Kingdom",
+  phone: "+234 807 352 7146",
+  email: "petergodswill52@gmail.com",
   socialHandle: "@bigteewisedigital",
   socialLinks: {
     facebook: "https://facebook.com",
@@ -167,7 +167,7 @@ export const Footer = ({ onOpenQuoteModal }) => {
               </a>
 
               <p className="text-slate-400 text-sm leading-relaxed max-w-xs">
-                {BUSINESS_INFO.shortAbout} We specialize in high-converting Book Marketing, Author Branding, and Digital Strategy based in Lagos, Nigeria.
+                {BUSINESS_INFO.shortAbout} We specialize in high-converting Book Marketing, Author Branding, and Digital Strategy based in UK, United Kingdom.
               </p>
 
               {/* Socials */}
@@ -301,7 +301,7 @@ export const Footer = ({ onOpenQuoteModal }) => {
             <div className="flex flex-col sm:flex-row items-center gap-2 sm:gap-4 text-xs text-slate-500 text-center sm:text-left">
               <p>© 2025 BigTeeWise Digital. All Rights Reserved.</p>
               <span className="hidden sm:block w-1 h-1 rounded-full bg-slate-700" />
-              <p>Crafted with precision in Lagos, Nigeria.</p>
+              <p>Crafted with precision in UK, United Kingdom.</p>
             </div>
 
             <div className="flex items-center gap-6">

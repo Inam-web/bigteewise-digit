@@ -1,19 +1,22 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   images: {
-    qualities: [75, 80, 85], // ✅ ADDED: 85
+    qualities: [75, 80, 85],
     remotePatterns: [
       {
         protocol: 'https',
         hostname: 'images.pexels.com',
+        pathname: '/**',
       },
       {
         protocol: 'https',
-        hostname: 'images.unsplash.com', // ✅ ADDED for portfolio images
+        hostname: 'images.unsplash.com',
+        pathname: '/**',
       },
       {
         protocol: 'https',
-        hostname: 'images.ctfassets.net', // ✅ ADDED (common for CMS)
+        hostname: 'images.ctfassets.net',
+        pathname: '/**',
       },
     ],
   },

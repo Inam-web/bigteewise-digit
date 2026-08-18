@@ -17,6 +17,20 @@ import {
   Eye,
   X,
   Star,
+  Compass,
+  Layers,
+  TrendingUp,
+  Feather,
+  Clock,
+  History,
+  Target,
+  Video,
+  Search,
+  ShoppingBag,
+  FileText,
+  MapPin,
+  Bookmark,
+  BookOpen,
 } from 'lucide-react';
 
 gsap.registerPlugin(ScrollTrigger);
@@ -133,6 +147,65 @@ const PROJECT = {
     'Gallery and archival storytelling',
     'Amazon and book discovery touchpoints',
   ],
+
+  timeline: [
+    {
+      era: '1960s',
+      title: 'Exile & Separation',
+      desc: 'Leaving Havana under turbulent political conflict, leaving behind homes and family to preserve identity and memory in handwritten letters.',
+    },
+    {
+      era: '1980s',
+      title: 'Transition & Discovery',
+      desc: 'Navigating democratic awakening in Spain, where long-buried family documents revealed unexpected connections across continents.',
+    },
+    {
+      era: '2000s',
+      title: 'Resurgence & Art',
+      desc: 'Rebuilding life in Valencia through literature, fine arts, and spiritual resilience, crafting the foundation of the trilogy.',
+    },
+    {
+      era: '2025',
+      title: 'The Digital Heritage',
+      desc: 'Transforming over fifty years of personal archive into a published literary trilogy and an immersive author platform.',
+    },
+  ],
+
+  craftPillars: [
+    {
+      number: '01',
+      title: 'Archival Palette & Texture',
+      desc: 'Deep monochrome tones paired with subtle sepia highlights mirror vintage photograph albums and historical paper.',
+    },
+    {
+      number: '02',
+      title: 'Philological Typography',
+      desc: 'Refined serif typography honoring Spanish literary traditions and balancing the co-authorship of Fábregas & Brieva.',
+    },
+    {
+      number: '03',
+      title: 'Documentary Atmosphere',
+      desc: 'Integrating historical photographs, original covers, and reader testimonials into a seamless editorial canvas.',
+    },
+  ],
+
+  funnelSteps: [
+    {
+      step: '01',
+      title: 'Archival Discovery',
+      desc: 'Engaging historical hooks and visual excerpts invite readers to explore the backstory behind the 50-year memoir.',
+    },
+    {
+      step: '02',
+      title: 'First-Chapter Excerpt',
+      desc: 'Frictionless preview access lets readers immerse themselves in Destinos Cruzados before buying.',
+    },
+    {
+      step: '03',
+      title: 'Direct Amazon Acquisition',
+      desc: 'Seamless touchpoints lead directly to Amazon España print and Kindle editions with 5★ reader social proof.',
+    },
+  ],
 };
 
 const PROJECT_TWO = {
@@ -211,6 +284,65 @@ const PROJECT_TWO = {
 
   results:
     'The project supported a stronger commercial and reader-facing presence for The Sea Stone Sisters, with the book generating $2,800+ in monthly sales and strong reader engagement across major book discovery platforms.',
+
+  narrativePillars: [
+    {
+      number: '01',
+      title: '1931 Historical Arc',
+      desc: 'Four sisters torn apart in pre-war Britain, linked by secret vows made at an ancient standing stone in Cornwall.',
+    },
+    {
+      number: '02',
+      title: 'Present-Day Discovery',
+      desc: 'Inherited antique rings reveal clues across archives in York, London, and international locations to uncover family truth.',
+    },
+    {
+      number: '03',
+      title: 'Genre Target Positioning',
+      desc: 'Tailored ad copy and visual hooks designed specifically for readers of Kate Morton, Lucinda Riley, and time-slip romance.',
+    },
+  ],
+
+  aplusModules: [
+    {
+      number: '01',
+      title: 'Atmospheric Brand Banners',
+      desc: 'High-impact full-bleed graphics communicating the coastal mood, historical depth, and emotional resonance of the novel.',
+    },
+    {
+      number: '02',
+      title: 'Sister & Heirloom Spotlights',
+      desc: 'Detailed visual breakdown of the four sisters, their unique rings, and their roles in the dual timeline mystery.',
+    },
+    {
+      number: '03',
+      title: 'Series Comparison Grid',
+      desc: 'Conversion-focused cross-promotional carousel encouraging readers to pre-order and follow future installments in the series.',
+    },
+  ],
+
+  growthEcosystem: [
+    {
+      number: '01',
+      title: 'Cinematic Video Trailer',
+      desc: 'High-production promotional trailer distributed across Meta, Instagram Reels, and YouTube shorts to drive initial reader hype.',
+    },
+    {
+      number: '02',
+      title: 'Amazon PPC & Categories',
+      desc: 'Laser-targeted sponsored product ads dominating Time-Slip Romance and British Historical Fiction keywords.',
+    },
+    {
+      number: '03',
+      title: 'Goodreads & ARC Blitz',
+      desc: 'Coordinated reader outreach generating 1,860+ ratings and 4.6/5 stars across major book review communities.',
+    },
+    {
+      number: '04',
+      title: 'SEO & Author Authority',
+      desc: 'Search-optimized York author website establishing Eleanor Buchanan as an authoritative figure in historical fiction.',
+    },
+  ],
 };
 
 const EASE = 'power4.out';
@@ -1218,6 +1350,46 @@ export default function PortfolioCaseStudy() {
         }
       }
 
+      /* ---------- TIMELINE ---------- */
+
+      const timeline = main.querySelector('.timeline-section');
+      if (timeline) {
+        reveal(timeline.querySelector('.section-label'), { x: -35, y: 8, duration: 0.8 });
+        timeline.querySelectorAll('.timeline-card').forEach((card, index) => {
+          reveal(card, {
+            x: 0, y: 40, scale: 0.97,
+            rotate: index % 2 === 0 ? -1 : 1,
+            duration: 0.9, delay: index * 0.08, start: 'top 88%',
+          });
+        });
+      }
+
+      /* ---------- CRAFT & DESIGN SYSTEM ---------- */
+
+      const craft = main.querySelector('.craft-section');
+      if (craft) {
+        reveal(craft.querySelector('.section-label'), { x: -35, y: 8, duration: 0.8 });
+        craft.querySelectorAll('.craft-card').forEach((card, index) => {
+          reveal(card, {
+            x: 0, y: 45, scale: 0.97,
+            duration: 0.9, delay: index * 0.1, start: 'top 88%',
+          });
+        });
+      }
+
+      /* ---------- READER FUNNEL ---------- */
+
+      const funnel = main.querySelector('.funnel-section');
+      if (funnel) {
+        reveal(funnel.querySelector('.section-label'), { x: -35, y: 8, duration: 0.8 });
+        funnel.querySelectorAll('.funnel-card').forEach((card, index) => {
+          reveal(card, {
+            x: 0, y: 45, scale: 0.97,
+            duration: 0.9, delay: index * 0.1, start: 'top 88%',
+          });
+        });
+      }
+
       /* ---------- FOOTER ---------- */
 
       const footer = main.querySelector('.site-footer');
@@ -1358,6 +1530,45 @@ export default function PortfolioCaseStudy() {
         reveal(p2Scope.querySelector('.section-label'), { x: -35, y: 8, duration: 0.75 });
         p2Scope.querySelectorAll('.p2-scope-row').forEach((row, index) => {
           reveal(row, { x: -40, y: 0, duration: 0.8, delay: index * 0.06, start: 'top 92%' });
+        });
+      }
+
+      /* ---------- PROJECT 2 — NARRATIVE ARCHITECTURE ---------- */
+
+      const p2Narrative = main.querySelector('.p2-narrative-section');
+      if (p2Narrative) {
+        reveal(p2Narrative.querySelector('.section-label'), { x: -35, y: 8, duration: 0.8 });
+        p2Narrative.querySelectorAll('.p2-narrative-card').forEach((card, index) => {
+          reveal(card, {
+            x: 0, y: 45, scale: 0.97,
+            duration: 0.9, delay: index * 0.1, start: 'top 88%',
+          });
+        });
+      }
+
+      /* ---------- PROJECT 2 — AMAZON A+ STRATEGY ---------- */
+
+      const p2Aplus = main.querySelector('.p2-aplus-section');
+      if (p2Aplus) {
+        reveal(p2Aplus.querySelector('.section-label'), { x: -35, y: 8, duration: 0.8 });
+        p2Aplus.querySelectorAll('.p2-aplus-card').forEach((card, index) => {
+          reveal(card, {
+            x: 0, y: 45, scale: 0.97,
+            duration: 0.9, delay: index * 0.1, start: 'top 88%',
+          });
+        });
+      }
+
+      /* ---------- PROJECT 2 — MARKETING ECOSYSTEM ---------- */
+
+      const p2Ecosystem = main.querySelector('.p2-ecosystem-section');
+      if (p2Ecosystem) {
+        reveal(p2Ecosystem.querySelector('.section-label'), { x: -35, y: 8, duration: 0.8 });
+        p2Ecosystem.querySelectorAll('.p2-ecosystem-card').forEach((card, index) => {
+          reveal(card, {
+            x: 0, y: 45, scale: 0.97,
+            duration: 0.9, delay: index * 0.08, start: 'top 88%',
+          });
         });
       }
 
@@ -1835,6 +2046,55 @@ export default function PortfolioCaseStudy() {
           </div>
         </section>
 
+        {/* ====== TIMELINE / HISTORICAL ARC ====== */}
+
+        <section className="timeline-section border-t border-white/10 bg-[#0c0c0c] px-5 py-24 sm:px-6 md:py-36 lg:py-44">
+          <div className="mx-auto max-w-7xl">
+            <div className="mb-14 flex flex-col justify-between gap-6 md:mb-20 md:flex-row md:items-end">
+              <div>
+                <SectionLabel>Historical Arc</SectionLabel>
+                <TextReveal
+                  tag="h2"
+                  className="mt-5 max-w-4xl text-4xl font-semibold leading-[0.95] tracking-[-0.045em] sm:text-5xl md:text-6xl"
+                >
+                  Fifty years of living memory.
+                </TextReveal>
+                <p className="mt-2 max-w-4xl text-4xl font-semibold leading-[0.95] tracking-[-0.045em] text-white/20 sm:text-5xl md:text-6xl">
+                  Preserved for the next generation.
+                </p>
+              </div>
+              <p className="max-w-sm text-sm leading-relaxed text-white/40">
+                A chronological narrative connecting Havana, Madrid, and Valencia into a unified literary legacy.
+              </p>
+            </div>
+
+            <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-4 lg:gap-6">
+              {PROJECT.timeline.map((item, i) => (
+                <article
+                  key={item.era}
+                  className="timeline-card group relative overflow-hidden rounded-[1.8rem] border border-white/10 bg-[#111] p-6 transition-all duration-700 hover:-translate-y-2 hover:border-white/25 hover:bg-white/[0.04] md:p-8"
+                >
+                  <div className="mb-6 flex items-center justify-between border-b border-white/10 pb-4">
+                    <span className="text-[10px] font-semibold uppercase tracking-[0.28em] text-white/30">
+                      Epoch 0{i + 1}
+                    </span>
+                    <span className="rounded-full border border-white/15 bg-white/[0.04] px-3 py-1 text-xs font-bold tracking-wider text-white/80 transition-colors duration-500 group-hover:bg-white group-hover:text-black">
+                      {item.era}
+                    </span>
+                  </div>
+                  <h3 className="text-xl font-semibold text-white/90 transition-colors duration-500 group-hover:text-white">
+                    {item.title}
+                  </h3>
+                  <p className="mt-3 text-xs leading-6 text-white/45 md:text-sm md:leading-7">
+                    {item.desc}
+                  </p>
+                  <div className="mt-6 h-px w-0 bg-gradient-to-r from-white/30 to-transparent transition-all duration-700 group-hover:w-full" />
+                </article>
+              ))}
+            </div>
+          </div>
+        </section>
+
         {/* ====== STATS ====== */}
 
         <section className="stats-section border-b border-white/10 bg-[#0c0c0c] px-5 py-16 sm:px-6 md:py-20">
@@ -2018,6 +2278,50 @@ export default function PortfolioCaseStudy() {
                   </div>
                 </div>
               </div>
+            </div>
+          </div>
+        </section>
+
+        {/* ====== EDITORIAL CRAFT & DESIGN SYSTEM ====== */}
+
+        <section className="craft-section border-t border-white/10 bg-[#111] px-5 py-24 sm:px-6 md:py-36 lg:py-44">
+          <div className="mx-auto max-w-7xl">
+            <div className="mb-14 flex flex-col justify-between gap-6 md:mb-20 md:flex-row md:items-end">
+              <div>
+                <SectionLabel>Design & Craft</SectionLabel>
+                <TextReveal
+                  tag="h2"
+                  className="mt-5 max-w-4xl text-4xl font-semibold leading-[0.95] tracking-[-0.045em] sm:text-5xl md:text-6xl"
+                >
+                  Crafted like a museum archive.
+                </TextReveal>
+              </div>
+              <p className="max-w-sm text-sm leading-relaxed text-white/40">
+                Every interface component, typography choice, and color palette decision was tailored to respect the emotional gravitas of the authors&apos; history.
+              </p>
+            </div>
+
+            <div className="grid gap-6 md:grid-cols-3 lg:gap-8">
+              {PROJECT.craftPillars.map((pillar, i) => (
+                <article
+                  key={pillar.title}
+                  className="craft-card group relative overflow-hidden rounded-[2rem] border border-white/10 bg-white/[0.02] p-7 transition-all duration-700 hover:-translate-y-2 hover:border-white/25 hover:bg-white/[0.045] hover:shadow-2xl md:p-10"
+                >
+                  <div className="mb-8 flex items-center justify-between">
+                    <span className="text-[10px] uppercase tracking-[0.25em] text-white/30">
+                      Pillar 0{i + 1}
+                    </span>
+                    <Sparkles className="h-4 w-4 text-white/20 transition-all duration-500 group-hover:scale-110 group-hover:text-white/60" />
+                  </div>
+                  <h3 className="text-xl font-semibold transition-colors duration-500 group-hover:text-white md:text-2xl">
+                    {pillar.title}
+                  </h3>
+                  <p className="mt-4 text-sm leading-7 text-white/45">
+                    {pillar.desc}
+                  </p>
+                  <div className="mt-8 h-px w-0 bg-gradient-to-r from-white/30 to-transparent transition-all duration-700 group-hover:w-full" />
+                </article>
+              ))}
             </div>
           </div>
         </section>
@@ -2260,6 +2564,50 @@ export default function PortfolioCaseStudy() {
             </div>
           </div>
         )}
+
+        {/* ====== READER DISCOVERY FUNNEL ====== */}
+
+        <section className="funnel-section border-t border-white/10 bg-[#090909] px-5 py-24 sm:px-6 md:py-36 lg:py-44">
+          <div className="mx-auto max-w-7xl">
+            <div className="mb-14 flex flex-col justify-between gap-6 md:mb-20 md:flex-row md:items-end">
+              <div>
+                <SectionLabel>Reader Journey</SectionLabel>
+                <TextReveal
+                  tag="h2"
+                  className="mt-5 max-w-4xl text-4xl font-semibold leading-[0.95] tracking-[-0.045em] sm:text-5xl md:text-6xl"
+                >
+                  Converting interest into readership.
+                </TextReveal>
+              </div>
+              <p className="max-w-sm text-sm leading-relaxed text-white/40">
+                A structured three-step experience designed to welcome readers, establish trust, and drive book purchases on Amazon España.
+              </p>
+            </div>
+
+            <div className="grid gap-6 md:grid-cols-3 lg:gap-8">
+              {PROJECT.funnelSteps.map((step, i) => (
+                <article
+                  key={step.title}
+                  className="funnel-card group relative overflow-hidden rounded-[2rem] border border-white/10 bg-[#111] p-7 transition-all duration-700 hover:-translate-y-2 hover:border-white/25 hover:bg-white/[0.04] md:p-10"
+                >
+                  <div className="mb-8 flex items-center justify-between">
+                    <span className="rounded-full border border-white/10 bg-white/[0.03] px-3.5 py-1 text-[9px] uppercase tracking-[0.25em] text-white/40">
+                      Stage {step.step}
+                    </span>
+                    <ArrowUpRight className="h-5 w-5 text-white/20 transition-all duration-500 group-hover:-translate-y-1 group-hover:translate-x-1 group-hover:text-white/70" />
+                  </div>
+                  <h3 className="text-xl font-semibold transition-colors duration-500 group-hover:text-white md:text-2xl">
+                    {step.title}
+                  </h3>
+                  <p className="mt-4 text-sm leading-7 text-white/45">
+                    {step.desc}
+                  </p>
+                  <div className="mt-8 h-px w-0 bg-gradient-to-r from-white/30 to-transparent transition-all duration-700 group-hover:w-full" />
+                </article>
+              ))}
+            </div>
+          </div>
+        </section>
 
         {/* ====== SCOPE ====== */}
 
@@ -2611,6 +2959,53 @@ export default function PortfolioCaseStudy() {
           </div>
         </section>
 
+        {/* ====== PROJECT 2 — NARRATIVE ARCHITECTURE ====== */}
+
+        <section className="p2-narrative-section border-t border-white/10 bg-[#0d1a2e] px-5 py-24 sm:px-6 md:py-36 lg:py-44">
+          <div className="mx-auto max-w-7xl">
+            <div className="mb-14 flex flex-col justify-between gap-6 md:mb-20 md:flex-row md:items-end">
+              <div>
+                <SectionLabel>Story Architecture</SectionLabel>
+                <TextReveal
+                  tag="h2"
+                  className="p2-narrative-heading mt-5 max-w-4xl text-4xl font-semibold leading-[0.95] tracking-[-0.045em] sm:text-5xl md:text-6xl"
+                >
+                  Dual timelines. Four heirloom rings.
+                </TextReveal>
+                <p className="mt-2 max-w-4xl text-4xl font-semibold leading-[0.95] tracking-[-0.045em] text-white/20 sm:text-5xl md:text-6xl">
+                  One long-buried family vow.
+                </p>
+              </div>
+              <p className="max-w-sm text-sm leading-relaxed text-white/40">
+                The marketing strategy anchored directly into the book&apos;s dual-narrative timeline to target avid fans of historical time-slip romance.
+              </p>
+            </div>
+
+            <div className="grid gap-6 md:grid-cols-3 lg:gap-8">
+              {PROJECT_TWO.narrativePillars.map((item, i) => (
+                <article
+                  key={item.title}
+                  className="p2-narrative-card group relative overflow-hidden rounded-[2rem] border border-white/10 bg-white/[0.025] p-7 transition-all duration-700 hover:-translate-y-2 hover:border-white/25 hover:bg-white/[0.05] hover:shadow-2xl md:p-10"
+                >
+                  <div className="mb-8 flex items-center justify-between">
+                    <span className="rounded-full border border-white/10 px-3 py-1 text-[9px] uppercase tracking-[0.25em] text-white/30">
+                      Pillar 0{i + 1}
+                    </span>
+                    <Compass className="h-4 w-4 text-blue-300/40 transition-all duration-500 group-hover:scale-110 group-hover:text-blue-300/80" />
+                  </div>
+                  <h3 className="text-xl font-semibold transition-colors duration-500 group-hover:text-white md:text-2xl">
+                    {item.title}
+                  </h3>
+                  <p className="mt-4 text-sm leading-7 text-white/45">
+                    {item.desc}
+                  </p>
+                  <div className="mt-8 h-px w-0 bg-gradient-to-r from-blue-300/40 to-transparent transition-all duration-700 group-hover:w-full" />
+                </article>
+              ))}
+            </div>
+          </div>
+        </section>
+
         {/* ====== PROJECT 2 — PHILOSOPHY ====== */}
 
         <section className="p2-philosophy-section relative overflow-hidden border-y border-white/10 bg-[#0d1a2e] px-5 py-24 sm:px-6 md:py-36 lg:py-44">
@@ -2691,6 +3086,50 @@ export default function PortfolioCaseStudy() {
                   </h3>
                   <p className="mt-4 text-sm leading-7 text-white/45">{solution.text}</p>
                   <div className="mt-6 h-px w-0 bg-gradient-to-r from-blue-300/40 to-transparent transition-all duration-700 group-hover:w-full" />
+                </article>
+              ))}
+            </div>
+          </div>
+        </section>
+
+        {/* ====== PROJECT 2 — AMAZON A+ VISUAL CONTENT ====== */}
+
+        <section className="p2-aplus-section border-t border-white/10 bg-[#0a1628] px-5 py-24 sm:px-6 md:py-36 lg:py-44">
+          <div className="mx-auto max-w-7xl">
+            <div className="mb-14 flex flex-col justify-between gap-6 md:mb-20 md:flex-row md:items-end">
+              <div>
+                <SectionLabel>Amazon A+ Strategy</SectionLabel>
+                <TextReveal
+                  tag="h2"
+                  className="p2-aplus-heading mt-5 max-w-4xl text-4xl font-semibold leading-[0.95] tracking-[-0.045em] sm:text-5xl md:text-6xl"
+                >
+                  Turning Amazon scrollers into buyers.
+                </TextReveal>
+              </div>
+              <p className="max-w-sm text-sm leading-relaxed text-white/40">
+                Custom visual modules designed to highlight character dynamics, emotional hooks, and series branding directly on the Amazon book listing.
+              </p>
+            </div>
+
+            <div className="grid gap-6 md:grid-cols-3 lg:gap-8">
+              {PROJECT_TWO.aplusModules.map((module, i) => (
+                <article
+                  key={module.title}
+                  className="p2-aplus-card group relative overflow-hidden rounded-[2rem] border border-white/10 bg-white/[0.025] p-7 transition-all duration-700 hover:-translate-y-2 hover:border-white/25 hover:bg-white/[0.05] hover:shadow-2xl md:p-10"
+                >
+                  <div className="mb-8 flex items-center justify-between">
+                    <span className="rounded-full border border-white/10 px-3 py-1 text-[9px] uppercase tracking-[0.25em] text-white/30">
+                      Module 0{i + 1}
+                    </span>
+                    <Layers className="h-4 w-4 text-blue-300/40 transition-all duration-500 group-hover:scale-110 group-hover:text-blue-300/80" />
+                  </div>
+                  <h3 className="text-xl font-semibold transition-colors duration-500 group-hover:text-white md:text-2xl">
+                    {module.title}
+                  </h3>
+                  <p className="mt-4 text-sm leading-7 text-white/45">
+                    {module.desc}
+                  </p>
+                  <div className="mt-8 h-px w-0 bg-gradient-to-r from-blue-300/40 to-transparent transition-all duration-700 group-hover:w-full" />
                 </article>
               ))}
             </div>
@@ -2801,6 +3240,50 @@ export default function PortfolioCaseStudy() {
 
               <div className="relative mt-8 h-px w-0 bg-gradient-to-r from-white/25 to-transparent transition-all duration-700 group-hover:w-full" />
             </article>
+          </div>
+        </section>
+
+        {/* ====== PROJECT 2 — MARKETING ECOSYSTEM ====== */}
+
+        <section className="p2-ecosystem-section border-t border-white/10 bg-[#0d1a2e] px-5 py-24 sm:px-6 md:py-36 lg:py-44">
+          <div className="mx-auto max-w-7xl">
+            <div className="mb-14 flex flex-col justify-between gap-6 md:mb-20 md:flex-row md:items-end">
+              <div>
+                <SectionLabel>Marketing Ecosystem</SectionLabel>
+                <TextReveal
+                  tag="h2"
+                  className="p2-ecosystem-heading mt-5 max-w-4xl text-4xl font-semibold leading-[0.95] tracking-[-0.045em] sm:text-5xl md:text-6xl"
+                >
+                  Four channels driving commercial growth.
+                </TextReveal>
+              </div>
+              <p className="max-w-sm text-sm leading-relaxed text-white/40">
+                A multi-layered reader acquisition pipeline engineered to maintain consistent monthly sales and high search visibility.
+              </p>
+            </div>
+
+            <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-4 lg:gap-6">
+              {PROJECT_TWO.growthEcosystem.map((channel, i) => (
+                <article
+                  key={channel.title}
+                  className="p2-ecosystem-card group relative overflow-hidden rounded-[1.8rem] border border-white/10 bg-white/[0.025] p-6 transition-all duration-700 hover:-translate-y-2 hover:border-white/25 hover:bg-white/[0.05] hover:shadow-2xl md:p-8"
+                >
+                  <div className="mb-6 flex items-center justify-between border-b border-white/10 pb-4">
+                    <span className="text-[10px] font-semibold uppercase tracking-[0.28em] text-white/30">
+                      Channel 0{i + 1}
+                    </span>
+                    <TrendingUp className="h-4 w-4 text-blue-300/50 transition-colors duration-500 group-hover:text-blue-300" />
+                  </div>
+                  <h3 className="text-lg font-semibold text-white/90 transition-colors duration-500 group-hover:text-white">
+                    {channel.title}
+                  </h3>
+                  <p className="mt-3 text-xs leading-6 text-white/45 md:text-sm md:leading-7">
+                    {channel.desc}
+                  </p>
+                  <div className="mt-6 h-px w-0 bg-gradient-to-r from-blue-300/40 to-transparent transition-all duration-700 group-hover:w-full" />
+                </article>
+              ))}
+            </div>
           </div>
         </section>
 

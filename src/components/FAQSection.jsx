@@ -203,8 +203,8 @@ export default function FAQSection({ onOpenQuoteModal }) {
                   <PhoneCall className="w-4 h-4" />
                 </div>
                 <p className="text-[9px] text-slate-400 font-bold uppercase tracking-wider">Call Us</p>
-                <a href="tel:+2348140009821" className="text-xs font-extrabold text-slate-900 hover:text-blue-600 transition-colors">
-                  +234 814 000 9821
+                <a href="tel:+2348073527146" className="text-xs font-extrabold text-slate-900 hover:text-blue-600 transition-colors">
+                  +234 807 352 7146
                 </a>
               </div>
 
@@ -213,8 +213,8 @@ export default function FAQSection({ onOpenQuoteModal }) {
                   <Mail className="w-4 h-4" />
                 </div>
                 <p className="text-[9px] text-slate-400 font-bold uppercase tracking-wider">Email Us</p>
-                <a href="mailto:info@bigteewise.com" className="text-xs font-extrabold text-slate-900 hover:text-blue-600 transition-colors">
-                  info@bigteewise.com
+                <a href="mailto:petergodswill52@gmail.com" className="text-xs font-extrabold text-slate-900 hover:text-blue-600 transition-colors">
+                  petergodswill52@gmail.com
                 </a>
               </div>
             </div>

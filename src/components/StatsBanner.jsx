@@ -5,7 +5,7 @@ export const StatsBanner = () => {
     { value: '150+', label: 'Book & Brand Launches' },
     { value: '2000+', label: 'Happy Clients & Readers' },
     { value: '99%', label: 'Customer Satisfaction' },
-    { value: '8+', label: 'Years Experience in Lagos' },
+    { value: '8+', label: 'Years Experience in UK' },
   ];
 
   return (

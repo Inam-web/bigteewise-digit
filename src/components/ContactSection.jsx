@@ -14,9 +14,9 @@ if (typeof window !== 'undefined') {
 }
 
 const businessInfo = {
-  address: 'Lagos, Nigeria',
-  phone: '+234 814 000 9821',
-  email: 'info@bigteewise.com',
+  address: 'UK, United Kingdom',
+  phone: '+234 807 352 7146',
+  email: 'petergodswill52@gmail.com',
   socialLinks: {
     facebook: '#',
     twitter: '#',

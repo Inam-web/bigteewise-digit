@@ -374,7 +374,7 @@ export default function Hero({ onOpenQuoteModal, onOpenVideoModal }) {
               ref={descRef}
               className="text-sm sm:text-lg text-slate-300 max-w-2xl font-normal leading-relaxed mx-auto lg:mx-0"
             >
-              BigTeeWise Digital is a full-service creative agency in Lagos, Nigeria. We combine creative design, strategic marketing, and specialized{' '}
+              BigTeeWise Digital is a full-service creative agency in UK, United Kingdom. We combine creative design, strategic marketing, and specialized{' '}
               <span className="text-blue-400 font-semibold">
                 book marketing & author branding
               </span>{' '}
@@ -609,7 +609,7 @@ export default function Hero({ onOpenQuoteModal, onOpenVideoModal }) {
                 <div className="text-4xl sm:text-5xl font-extrabold">8+</div>
 
                 <p className="text-xs text-blue-100 mt-2">
-                  Years Experience in Lagos
+                  Years Experience in UK
                 </p>
 
                 <div className="flex flex-wrap gap-2 mt-5">

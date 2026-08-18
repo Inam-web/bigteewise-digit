@@ -1,8 +1,8 @@
 export const BUSINESS_INFO = {
-  address: 'Lagos, Nigeria',
-  location: 'Lagos, Nigeria',
-  phone: '+234 814 000 9821',
-  email: 'info@bigteewise.com',
+  address: 'Uk, United Kingdom',
+  location: 'UK, United Kingdom',
+  phone: '+234 807 352 7146',
+  email: 'petergodswill52@gmail.com',
   socialHandle: '@bigteewisedigital',
   socialLinks: {
     facebook: 'https://facebook.com',
@@ -11,7 +11,6 @@ export const BUSINESS_INFO = {
     linkedin: 'https://linkedin.com',
   },
 };
-
 export const SERVICES = [
   {
     id: 'book-marketing',
@@ -264,7 +263,7 @@ export const PORTFOLIO = [
 export const TEAM_MEMBERS = [
   {
     id: 1,
-    name: "Tayo Wise Obasa",
+    name: "Peter Taiwo Godswill",
     role: "FOUNDER & CREATIVE DIRECTOR",
     photo: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&q=80&w=800",
     bio: "Founder and creative strategist leading digital transformation and brand campaigns at BigTeeWise Digital.",

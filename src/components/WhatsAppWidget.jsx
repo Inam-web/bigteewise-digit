@@ -14,7 +14,7 @@ export const WhatsAppWidget = () => {
 
   const sendWhatsApp = (text) => {
     const encoded = encodeURIComponent(text);
-    const url = `https://wa.me/2348140009821?text=${encoded}`;
+    const url = `https://wa.me/2348073527146?text=${encoded}`;
 
     window.open(url, '_blank');
   };
@@ -41,7 +41,7 @@ export const WhatsAppWidget = () => {
 
                 <p className="text-[11px] text-emerald-100 flex items-center gap-1">
                   <span className="w-2 h-2 rounded-full bg-white animate-pulse" />
-                  <span>Online • Lagos Team</span>
+                  <span>Online • UK Team</span>
                 </p>
               </div>
             </div>

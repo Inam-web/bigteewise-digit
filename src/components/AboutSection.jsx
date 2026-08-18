@@ -16,7 +16,7 @@ export default function AboutSection({ onOpenVideoModal, onOpenQuoteModal }) {
 
   const aboutText =
     BUSINESS_INFO?.fullAbout ||
-    'BigTeeWise Digital is a full-service creative agency in Lagos, Nigeria. We combine creative design, strategic marketing, and specialized book marketing & author branding to convert attention into measurable revenue.';
+    'BigTeeWise Digital is a full-service creative agency in UK, United Kingdom. We combine creative design, strategic marketing, and specialized book marketing & author branding to convert attention into measurable revenue.';
 
   useEffect(() => {
     if (!sectionRef.current) return;
@@ -254,7 +254,7 @@ export default function AboutSection({ onOpenVideoModal, onOpenQuoteModal }) {
               {/* Intro */}
               <div className="about-scroll-card bg-white/95 backdrop-blur-md rounded-[2rem] border border-slate-200 shadow-sm p-6 sm:p-8 lg:p-10">
                 <div className="about-reveal inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-blue-50 border border-blue-100 text-blue-600 text-xs font-bold tracking-wide uppercase">
-                  <span className="font-extrabold">//</span>
+                  <span className="font-extrabold">{"//"}</span>
                   <span>About BigTeeWise Digital</span>
                 </div>
 
@@ -386,18 +386,8 @@ export default function AboutSection({ onOpenVideoModal, onOpenQuoteModal }) {
               <div className="about-scroll-card bg-white rounded-[2rem] border border-slate-200 shadow-sm p-6 sm:p-7">
                 <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-5">
                   <div className="flex items-center gap-3.5">
-                    <div className="relative w-14 h-14 rounded-full overflow-hidden ring-2 ring-blue-600/20 shrink-0">
-                      <Image
-                        src="https://images.pexels.com/photos/5648408/pexels-photo-5648408.jpeg?auto=compress&cs=tinysrgb&fit=crop&h=120&w=120"
-                        alt="Tayo Wise Obasa"
-                        fill
-                        sizes="56px"
-                        className="object-cover"
-                      />
-                    </div>
-
                     <div>
-                      <h4 className="font-bold text-slate-900">Tayo Wise Obasa</h4>
+                      <h4 className="font-bold text-slate-900">Peter Taiwo Godswill</h4>
                       <p className="text-[10px] sm:text-xs text-blue-600 font-bold uppercase tracking-wider mt-1">
                         Founder & Creative Director
                       </p>

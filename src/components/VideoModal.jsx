@@ -58,7 +58,7 @@ export const VideoModal = ({
             </h4>
 
             <p className="text-xs text-slate-300 leading-relaxed">
-              Discover how our team in Lagos helps authors launch bestselling
+              Discover how our team in the UK helps authors launch bestselling
               books, design award-winning covers, and scale digital brand
               performance.
             </p>
