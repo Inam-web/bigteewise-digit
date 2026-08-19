@@ -3,7 +3,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { 
   MapPin, Phone, Clock, Send, CheckCircle2, Mail, 
-  ArrowRight, MessageSquare, Sparkles, Zap 
+  ArrowRight, MessageSquare, Sparkles, Zap, AlertCircle 
 } from 'lucide-react';
 import { FacebookIcon, TwitterXIcon, InstagramIcon, LinkedinIcon } from './SocialIcons';
 import gsap from 'gsap';
@@ -38,10 +38,12 @@ export default function ContactSection({ initialService = '', onSuccessToast }) 
     phone: '',
     service: initialService || 'Book Marketing',
     budget: '$1,000 - $3,000',
-    message: ''
+    message: '',
+    website: '', // Honeypot field for anti-spam
   });
   const [submitted, setSubmitted] = useState(false);
   const [loading, setLoading] = useState(false);
+  const [errorMessage, setErrorMessage] = useState('');
   const [focusedField, setFocusedField] = useState(null);
 
   const sectionRef = useRef(null);
@@ -105,16 +107,38 @@ export default function ContactSection({ initialService = '', onSuccessToast }) 
     return () => ctx.revert();
   }, []);
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     setLoading(true);
-    setTimeout(() => {
+    setErrorMessage('');
+
+    try {
+      const response = await fetch('/api/contact', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          ...formData,
+          source: 'contact_section',
+        }),
+      });
+
+      const data = await response.json();
       setLoading(false);
-      setSubmitted(true);
-      if (typeof onSuccessToast === 'function') {
-        onSuccessToast("Thank you! Your quote request has been sent to BigTeeWise Digital.");
+
+      if (response.ok && data.success) {
+        setSubmitted(true);
+        if (typeof onSuccessToast === 'function') {
+          onSuccessToast("Thank you! Your quote request has been sent to BigTeeWise Digital.");
+        }
+      } else {
+        setErrorMessage(data.error || 'Failed to submit request. Please try again.');
       }
-    }, 1500);
+    } catch (err) {
+      setLoading(false);
+      setErrorMessage('Network error. Please check your connection and try again.');
+    }
   };
 
   const contactItems = [
@@ -278,7 +302,19 @@ export default function ContactSection({ initialService = '', onSuccessToast }) 
 
                   <div className="flex flex-col sm:flex-row items-center gap-3 pt-2">
                     <button
-                      onClick={() => setSubmitted(false)}
+                      onClick={() => {
+                        setSubmitted(false);
+                        setFormData({
+                          name: '',
+                          email: '',
+                          phone: '',
+                          service: initialService || 'Book Marketing',
+                          budget: '$1,000 - $3,000',
+                          message: '',
+                          website: '',
+                        });
+                        setErrorMessage('');
+                      }}
                       className="bg-slate-900 hover:bg-slate-800 text-white font-bold text-sm px-8 py-3 rounded-full transition-all shadow-lg hover:shadow-xl active:scale-95"
                     >
                       Send Another Request
@@ -287,6 +323,25 @@ export default function ContactSection({ initialService = '', onSuccessToast }) 
                 </div>
               ) : (
                 <form onSubmit={handleSubmit} className="relative z-10 space-y-7">
+                  {/* Anti-spam Honeypot Field */}
+                  <input
+                    type="text"
+                    name="website"
+                    tabIndex={-1}
+                    autoComplete="off"
+                    value={formData.website}
+                    onChange={(e) => setFormData({ ...formData, website: e.target.value })}
+                    className="hidden absolute top-0 left-0 w-0 h-0 opacity-0 pointer-events-none"
+                  />
+
+                  {/* Error Alert Box */}
+                  {errorMessage && (
+                    <div className="p-4 rounded-2xl bg-red-50 border border-red-200 text-red-700 text-xs sm:text-sm font-medium flex items-start gap-3 animate-in fade-in">
+                      <AlertCircle className="w-5 h-5 text-red-500 shrink-0 mt-0.5" />
+                      <span>{errorMessage}</span>
+                    </div>
+                  )}
+
                   <div className="flex items-center gap-3 mb-2">
                     <div className="w-8 h-8 rounded-lg bg-blue-50 text-blue-600 flex items-center justify-center">
                       <MessageSquare className="w-4 h-4" />

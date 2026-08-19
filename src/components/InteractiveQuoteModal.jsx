@@ -13,6 +13,7 @@ import {
   Phone,
   Calendar,
   Target,
+  AlertCircle,
 } from "lucide-react";
 import gsap from 'gsap';
 
@@ -31,6 +32,8 @@ export const InteractiveQuoteModal = ({
   const [email, setEmail] = useState("");
   const [phone, setPhone] = useState("");
   const [details, setDetails] = useState("");
+  const [website, setWebsite] = useState("");
+  const [errorMessage, setErrorMessage] = useState("");
   const [submitted, setSubmitted] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
   
@@ -108,32 +111,62 @@ export const InteractiveQuoteModal = ({
 
   if (!isOpen) return null;
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     setIsSubmitting(true);
-    
-    // Simulate submission
-    setTimeout(() => {
+    setErrorMessage("");
+
+    try {
+      const response = await fetch("/api/contact", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          name,
+          email,
+          phone,
+          service: selectedService,
+          bookType,
+          hasDesign,
+          details,
+          website,
+          source: 'quote_modal',
+        }),
+      });
+
+      const data = await response.json();
       setIsSubmitting(false);
-      setSubmitted(true);
-      
-      if (onSuccessToast) {
-        onSuccessToast(
-          "Proposal request submitted! BigTeeWise Digital will contact you shortly."
+
+      if (response.ok && data.success) {
+        setSubmitted(true);
+        if (onSuccessToast) {
+          onSuccessToast(
+            "Proposal request submitted! BigTeeWise Digital will contact you shortly."
+          );
+        }
+
+        setTimeout(() => {
+          onClose();
+          setSubmitted(false);
+          setName("");
+          setEmail("");
+          setPhone("");
+          setDetails("");
+          setWebsite("");
+          setErrorMessage("");
+        }, 3000);
+      } else {
+        setErrorMessage(
+          data.error || "Failed to submit request. Please try again."
         );
       }
-      
-      // Auto close after success
-      setTimeout(() => {
-        onClose();
-        setSubmitted(false);
-        // Reset form
-        setName("");
-        setEmail("");
-        setPhone("");
-        setDetails("");
-      }, 3000);
-    }, 1500);
+    } catch (err) {
+      setIsSubmitting(false);
+      setErrorMessage(
+        "Network error. Please check your connection and try again."
+      );
+    }
   };
 
   return (
@@ -210,6 +243,25 @@ export const InteractiveQuoteModal = ({
               </p>
 
               <form onSubmit={handleSubmit} className="space-y-5">
+                {/* Anti-spam Honeypot Field */}
+                <input
+                  type="text"
+                  name="website"
+                  tabIndex={-1}
+                  autoComplete="off"
+                  value={website}
+                  onChange={(e) => setWebsite(e.target.value)}
+                  className="hidden absolute top-0 left-0 w-0 h-0 opacity-0 pointer-events-none"
+                />
+
+                {/* Error Alert Box */}
+                {errorMessage && (
+                  <div className="p-3.5 rounded-xl bg-red-50 border border-red-200 text-red-700 text-xs font-medium flex items-start gap-2.5 animate-in fade-in">
+                    <AlertCircle className="w-4 h-4 text-red-500 shrink-0 mt-0.5" />
+                    <span>{errorMessage}</span>
+                  </div>
+                )}
+
                 {/* Service Selection */}
                 <div className="space-y-1.5">
                   <label className="text-xs font-extrabold text-slate-800 uppercase tracking-wider flex items-center gap-1">
