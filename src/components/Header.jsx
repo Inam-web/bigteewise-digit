@@ -2,6 +2,7 @@
 
 import React, { useState, useEffect, useRef } from 'react';
 import Link from 'next/link';
+
 import {
   Phone,
   Mail,
@@ -15,7 +16,12 @@ import {
 } from 'lucide-react';
 
 import { SERVICES } from '../app/Data/content';
-import { FacebookIcon, TwitterXIcon, InstagramIcon, LinkedinIcon } from './SocialIcons';
+import {
+  FacebookIcon,
+  TwitterXIcon,
+  InstagramIcon,
+  LinkedinIcon,
+} from './SocialIcons';
 
 import gsap from 'gsap';
 
@@ -24,6 +30,7 @@ const BUSINESS_INFO = {
   email: 'petergodswill52@gmail.com',
   location: 'UK, United Kingdom',
   socialHandle: '@bigteewisedigital',
+
   socialLinks: {
     facebook: 'https://facebook.com',
     twitter: 'https://x.com',
@@ -309,7 +316,6 @@ export default function Header({
       ref={headerRef}
       className="fixed inset-x-0 top-0 z-[100] pointer-events-none"
     >
-
       {/* =====================================================
           UTILITY BAR
       ===================================================== */}
@@ -322,13 +328,10 @@ export default function Header({
         }`}
       >
         <div className="max-w-7xl mx-auto px-5 sm:px-6 lg:px-8">
-
           <div className="min-h-9 flex items-center justify-between gap-5">
-
             {/* Contact */}
 
             <div className="flex items-center gap-4 lg:gap-6 min-w-0">
-
               <a
                 href={`tel:${BUSINESS_INFO.phone}`}
                 className="group flex items-center gap-1.5 text-[10px] lg:text-[11px] font-semibold tracking-wide hover:text-white transition-colors whitespace-nowrap"
@@ -349,19 +352,16 @@ export default function Header({
                 <MapPin className="w-3 h-3 text-blue-500" />
                 {BUSINESS_INFO.location}
               </span>
-
             </div>
 
             {/* Social */}
 
             <div className="flex items-center gap-3 shrink-0">
-
               <span className="hidden xl:inline text-[10px] text-slate-500">
                 {BUSINESS_INFO.socialHandle}
               </span>
 
               <div className="flex items-center gap-1.5">
-
                 {[
                   {
                     href: BUSINESS_INFO.socialLinks.facebook,
@@ -395,15 +395,11 @@ export default function Header({
                     <Icon className="w-3 h-3" />
                   </a>
                 ))}
-
               </div>
-
             </div>
-
           </div>
         </div>
       </div>
-
 
       {/* =====================================================
           MAIN NAVBAR
@@ -411,12 +407,9 @@ export default function Header({
 
       <div
         className={`header-shell pointer-events-auto transition-all duration-500 ${
-          isScrolled
-            ? 'pt-2 sm:pt-3'
-            : 'pt-0'
+          isScrolled ? 'pt-2 sm:pt-3' : 'pt-0'
         }`}
       >
-
         <div
           className={`max-w-7xl mx-auto transition-all duration-500 ${
             isScrolled
@@ -424,7 +417,6 @@ export default function Header({
               : 'px-0'
           }`}
         >
-
           <div
             className={`relative bg-white/95 backdrop-blur-2xl border transition-all duration-500 ${
               isScrolled
@@ -432,7 +424,6 @@ export default function Header({
                 : 'border-x-0 border-t-0 border-slate-100 shadow-sm'
             }`}
           >
-
             <div
               className={`max-w-7xl mx-auto px-4 sm:px-6 lg:px-7 flex items-center justify-between gap-3 transition-all duration-500 ${
                 isScrolled
@@ -440,7 +431,6 @@ export default function Header({
                   : 'py-3.5 sm:py-4'
               }`}
             >
-
               {/* =================================================
                   LOGO
               ================================================= */}
@@ -449,19 +439,14 @@ export default function Header({
                 href="/"
                 className="header-logo group flex items-center gap-2.5 min-w-0 shrink-0"
               >
-
                 <div className="relative w-9 h-9 sm:w-10 sm:h-10 rounded-xl bg-gradient-to-br from-blue-700 via-blue-600 to-indigo-500 flex items-center justify-center shadow-lg shadow-blue-600/20 group-hover:shadow-blue-600/35 group-hover:-translate-y-0.5 transition-all duration-300">
-
                   <Sparkles className="w-4 h-4 sm:w-5 sm:h-5 text-white group-hover:rotate-12 transition-transform duration-300" />
 
                   <span className="absolute inset-0 rounded-xl ring-1 ring-white/20" />
-
                 </div>
 
                 <div className="min-w-0">
-
                   <div className="flex items-center gap-0.5 leading-none whitespace-nowrap">
-
                     <span className="font-black text-[17px] sm:text-xl lg:text-2xl tracking-[-0.04em] text-slate-950">
                       BigTeeWise
                     </span>
@@ -469,26 +454,20 @@ export default function Header({
                     <span className="font-black text-[17px] sm:text-xl lg:text-2xl tracking-[-0.04em] text-blue-600">
                       Digital
                     </span>
-
                   </div>
 
                   <p className="hidden sm:block mt-1 text-[8px] lg:text-[9px] uppercase tracking-[0.13em] font-bold text-slate-400 truncate max-w-[230px]">
                     Creative Agency & Author Branding
                   </p>
-
                 </div>
-
               </Link>
-
 
               {/* =================================================
                   DESKTOP NAVIGATION
               ================================================= */}
 
               <nav className="hidden lg:flex items-center gap-1">
-
                 {navLinks.map((link) => {
-
                   const isActive = isLinkActive(link);
 
                   if (link.name === 'Services') {
@@ -497,7 +476,6 @@ export default function Header({
                         key={link.name}
                         className="header-nav-item relative group"
                       >
-
                         <Link
                           href={link.href}
                           className={`relative flex items-center gap-1.5 px-3 py-2.5 rounded-xl text-[12px] xl:text-[13px] font-bold tracking-wide transition-all duration-200 ${
@@ -511,11 +489,9 @@ export default function Header({
                           <ChevronDown className="w-3.5 h-3.5 transition-transform duration-300 group-hover:rotate-180" />
                         </Link>
 
-
                         {/* SERVICES DROPDOWN */}
 
                         <div className="absolute left-1/2 top-full -translate-x-1/2 pt-3 opacity-0 invisible translate-y-2 group-hover:opacity-100 group-hover:visible group-hover:translate-y-0 transition-all duration-250">
-
                           <div className="relative w-[min(560px,calc(100vw-32px))]">
 
                             {/* Small arrow */}
@@ -527,7 +503,6 @@ export default function Header({
                               {/* Header */}
 
                               <div className="px-3 pt-2 pb-3 mb-1 border-b border-slate-100 flex items-center justify-between">
-
                                 <div>
                                   <p className="text-[9px] uppercase tracking-[0.18em] font-black text-blue-600">
                                     What we do
@@ -539,14 +514,11 @@ export default function Header({
                                 </div>
 
                                 <Sparkles className="w-4 h-4 text-blue-500" />
-
                               </div>
-
 
                               {/* Service Grid */}
 
                               <div className="grid grid-cols-2 gap-1.5">
-
                                 {SERVICES && SERVICES.length > 0 ? (
                                   SERVICES.map((service, index) => (
                                     <Link
@@ -554,11 +526,8 @@ export default function Header({
                                       href={`/services/${service.id}`}
                                       className="group/item relative flex items-center justify-between gap-3 p-3 rounded-xl hover:bg-blue-50 transition-all duration-200"
                                     >
-
                                       <div className="min-w-0">
-
                                         <div className="flex items-center gap-2">
-
                                           <span className="text-[8px] font-black text-blue-500/60">
                                             {String(index + 1).padStart(2, '0')}
                                           </span>
@@ -566,7 +535,6 @@ export default function Header({
                                           <span className="text-[11px] font-bold text-slate-700 group-hover/item:text-blue-600 transition-colors truncate">
                                             {service.title}
                                           </span>
-
                                         </div>
 
                                         {service.category && (
@@ -574,11 +542,9 @@ export default function Header({
                                             {service.category}
                                           </span>
                                         )}
-
                                       </div>
 
                                       <ChevronRight className="w-3.5 h-3.5 shrink-0 text-slate-300 group-hover/item:text-blue-600 group-hover/item:translate-x-0.5 transition-all" />
-
                                     </Link>
                                   ))
                                 ) : (
@@ -586,7 +552,6 @@ export default function Header({
                                     No services found
                                   </div>
                                 )}
-
                               </div>
 
                               <Link
@@ -594,13 +559,12 @@ export default function Header({
                                 className="mt-2 flex items-center justify-center gap-1.5 py-2.5 rounded-xl bg-slate-50 hover:bg-blue-50 text-[10px] font-black text-slate-500 hover:text-blue-600 uppercase tracking-wider transition-colors"
                               >
                                 View all services
+
                                 <ArrowRight className="w-3 h-3" />
                               </Link>
-
                             </div>
                           </div>
                         </div>
-
                       </div>
                     );
                   }
@@ -619,16 +583,13 @@ export default function Header({
                     </Link>
                   );
                 })}
-
               </nav>
-
 
               {/* =================================================
                   DESKTOP CTA
               ================================================= */}
 
               <div className="header-cta hidden lg:block shrink-0">
-
                 <button
                   type="button"
                   onClick={onOpenQuoteModal}
@@ -638,55 +599,51 @@ export default function Header({
 
                   <ArrowRight className="w-3.5 h-3.5 group-hover:translate-x-0.5 transition-transform" />
                 </button>
-
               </div>
 
-
               {/* =================================================
-                  MOBILE ACTIONS — FIXED & VISIBLE QUOTE BUTTON
+                  MOBILE ACTIONS
               ================================================= */}
 
-              <div className="lg:hidden flex items-center gap-2 shrink-0 relative z-50">
-
-                {/* QUOTE BUTTON — Visible on all mobile/tablet screens */}
+              <div className="lg:hidden flex items-center gap-1.5 sm:gap-2 shrink-0 relative z-50">
                 <button
                   type="button"
                   onClick={onOpenQuoteModal}
-                  className="group inline-flex items-center gap-1.5 bg-blue-600 hover:bg-blue-700 text-white text-[11px] sm:text-xs font-black px-3 sm:px-4 py-2 sm:py-2.5 rounded-full shadow-md shadow-blue-600/20 hover:shadow-lg hover:shadow-blue-600/30 hover:-translate-y-0.5 active:scale-95 active:translate-y-0 transition-all duration-300 shrink-0 whitespace-nowrap"
+                  className="group inline-flex items-center gap-1 bg-blue-600 hover:bg-blue-700 text-white text-[10px] sm:text-xs font-black px-2.5 sm:px-4 py-1.5 sm:py-2.5 rounded-full shadow-md shadow-blue-600/20 hover:shadow-lg hover:shadow-blue-600/30 hover:-translate-y-0.5 active:scale-95 active:translate-y-0 transition-all duration-300 shrink-0 whitespace-nowrap"
                 >
                   <span>Get Quote</span>
-                  <ArrowRight className="w-3 h-3 transition-transform duration-300 group-hover:translate-x-0.5" />
+
+                  <ArrowRight className="w-2.5 h-2.5 transition-transform duration-300 group-hover:translate-x-0.5" />
                 </button>
 
                 <button
                   type="button"
-                  onClick={() => setMobileMenuOpen((prev) => !prev)}
+                  onClick={() =>
+                    setMobileMenuOpen((prev) => !prev)
+                  }
                   aria-label={
                     mobileMenuOpen
                       ? 'Close navigation menu'
                       : 'Open navigation menu'
                   }
                   aria-expanded={mobileMenuOpen}
-                  className={`w-10 h-10 flex items-center justify-center rounded-xl border transition-all duration-300 relative ${
+                  className={`w-9 h-9 sm:w-10 sm:h-10 flex items-center justify-center rounded-lg sm:rounded-xl border transition-all duration-300 relative ${
                     mobileMenuOpen
                       ? 'bg-slate-950 border-slate-950 text-white shadow-lg shadow-slate-950/20'
                       : 'bg-slate-100 border-slate-200 text-slate-800 hover:bg-slate-200 hover:border-slate-300'
                   }`}
                 >
                   {mobileMenuOpen ? (
-                    <X className="w-5 h-5" />
+                    <X className="w-4 h-4 sm:w-5 sm:h-5" />
                   ) : (
-                    <Menu className="w-5 h-5" />
+                    <Menu className="w-4 h-4 sm:w-5 sm:h-5" />
                   )}
                 </button>
-
               </div>
-
             </div>
           </div>
         </div>
       </div>
-
 
       {/* =====================================================
           MOBILE MENU
@@ -698,34 +655,37 @@ export default function Header({
           className="lg:hidden pointer-events-auto fixed inset-0 top-[calc(3.75rem+env(safe-area-inset-top))] sm:top-[4.5rem] bg-slate-900/30 backdrop-blur-sm"
           onClick={closeMobileMenu}
         >
-
           <div
             ref={mobileMenuInnerRef}
             onClick={(e) => e.stopPropagation()}
             className="bg-white rounded-3xl rounded-t-none shadow-2xl max-h-[calc(100dvh-4rem)] overflow-y-auto overscroll-contain mx-3 sm:mx-6 border border-slate-200/80"
           >
-
             <div className="px-5 sm:px-7 py-6 sm:py-8">
 
               {/* Menu Header */}
+
               <div className="mobile-nav-item flex items-center justify-between pb-4 mb-5 border-b border-slate-200/70">
                 <div>
                   <p className="text-[10px] uppercase tracking-[0.2em] font-black text-blue-600">
                     Navigation
                   </p>
+
                   <p className="mt-1 text-xs font-medium text-slate-500">
                     Explore BigTeeWise Digital
                   </p>
                 </div>
+
                 <div className="w-8 h-8 rounded-xl bg-blue-50 flex items-center justify-center text-blue-600">
                   <Sparkles className="w-4 h-4" />
                 </div>
               </div>
 
               {/* Navigation Links */}
+
               <nav className="flex flex-col gap-1">
                 {navLinks.map((link, index) => {
                   const isActive = isLinkActive(link);
+
                   return (
                     <Link
                       key={link.name}
@@ -747,10 +707,12 @@ export default function Header({
                         >
                           {String(index + 1).padStart(2, '0')}
                         </span>
+
                         <span className="text-sm font-semibold">
                           {link.name}
                         </span>
                       </div>
+
                       <ChevronRight
                         className={`w-4 h-4 transition-all duration-200 ${
                           isActive
@@ -764,23 +726,30 @@ export default function Header({
               </nav>
 
               {/* CTA Button */}
+
               <div className="mobile-nav-item mt-5 pt-5 border-t border-slate-200/70">
                 <button
                   type="button"
                   onClick={() => {
                     closeMobileMenu();
-                    if (onOpenQuoteModal) onOpenQuoteModal();
+
+                    if (onOpenQuoteModal) {
+                      onOpenQuoteModal();
+                    }
                   }}
                   className="group w-full flex items-center justify-center gap-2 bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800 text-white font-bold text-sm py-3.5 rounded-xl shadow-lg shadow-blue-600/25 active:scale-[0.98] transition-all duration-300"
                 >
                   Get A Free Consultation
+
                   <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
                 </button>
               </div>
 
               {/* Contact & Social */}
+
               <div className="mobile-social mt-5 pt-5 border-t border-slate-200/70">
                 <div className="grid grid-cols-2 gap-2.5">
+
                   <a
                     href={`tel:${BUSINESS_INFO.phone}`}
                     className="flex items-center gap-3 p-3.5 rounded-xl bg-slate-50 hover:bg-blue-50 transition-colors border border-slate-100"
@@ -788,10 +757,12 @@ export default function Header({
                     <div className="w-8 h-8 rounded-lg bg-white flex items-center justify-center text-blue-600 border border-slate-200 shadow-sm">
                       <Phone className="w-3.5 h-3.5" />
                     </div>
+
                     <div className="min-w-0">
                       <div className="text-[8px] uppercase tracking-[0.15em] font-black text-slate-400">
                         Call
                       </div>
+
                       <div className="text-[11px] font-bold text-slate-700 truncate">
                         {BUSINESS_INFO.phone}
                       </div>
@@ -805,10 +776,12 @@ export default function Header({
                     <div className="w-8 h-8 rounded-lg bg-white flex items-center justify-center text-blue-600 border border-slate-200 shadow-sm">
                       <Mail className="w-3.5 h-3.5" />
                     </div>
+
                     <div className="min-w-0">
                       <div className="text-[8px] uppercase tracking-[0.15em] font-black text-slate-400">
                         Email
                       </div>
+
                       <div className="text-[11px] font-bold text-slate-700 truncate">
                         {BUSINESS_INFO.email}
                       </div>
@@ -817,11 +790,14 @@ export default function Header({
                 </div>
 
                 {/* Social Icons */}
+
                 <div className="flex items-center justify-center gap-3 mt-5 pt-4 border-t border-slate-100">
                   <span className="text-[8px] uppercase tracking-[0.2em] font-black text-slate-400">
                     Follow us
                   </span>
+
                   <div className="h-4 w-px bg-slate-200" />
+
                   <div className="flex items-center gap-2">
                     {[
                       {
@@ -860,17 +836,16 @@ export default function Header({
                 </div>
 
                 {/* Location */}
+
                 <div className="flex items-center justify-center gap-2 mt-3 text-[10px] text-slate-400">
                   <MapPin className="w-3 h-3" />
                   <span>{BUSINESS_INFO.location}</span>
                 </div>
               </div>
-
             </div>
           </div>
         </div>
       )}
-
     </header>
   );
 }

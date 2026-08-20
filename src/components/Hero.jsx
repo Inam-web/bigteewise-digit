@@ -432,9 +432,9 @@ export default function Hero({ onOpenQuoteModal, onOpenVideoModal }) {
             >
               <div className="flex -space-x-2 overflow-hidden shrink-0">
                 {[
-                  'https://images.pexels.com/photos/5648408/pexels-photo-5648408.jpeg?auto=compress&cs=tinysrgb&fit=crop&h=100&w=100',
-                  'https://images.pexels.com/photos/5905895/pexels-photo-5905895.jpeg?auto=compress&cs=tinysrgb&fit=crop&h=100&w=100',
-                  'https://images.pexels.com/photos/5905902/pexels-photo-5905902.jpeg?auto=compress&cs=tinysrgb&fit=crop&h=100&w=100'
+                  'https://images.pexels.com/photos/774909/pexels-photo-774909.jpeg?auto=compress&cs=tinysrgb&fit=crop&h=100&w=100',
+                  'https://images.pexels.com/photos/220453/pexels-photo-220453.jpeg?auto=compress&cs=tinysrgb&fit=crop&h=100&w=100',
+                  'https://images.pexels.com/photos/1239291/pexels-photo-1239291.jpeg?auto=compress&cs=tinysrgb&fit=crop&h=100&w=100'
                 ].map((src, i) => (
                   <div
                     key={i}
