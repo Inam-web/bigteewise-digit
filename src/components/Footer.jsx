@@ -275,12 +275,12 @@ export const Footer = ({ onOpenQuoteModal }) => {
 
                 <a 
                   href={`mailto:${BUSINESS_INFO.email}`}
-                  className="group flex items-start gap-3 text-sm text-slate-400 hover:text-white transition-colors duration-200"
+                  className="group flex items-start gap-3 text-sm text-slate-400 hover:text-white transition-colors duration-200 min-w-0"
                 >
                   <div className="w-8 h-8 rounded-lg bg-slate-800/80 border border-slate-700 flex items-center justify-center shrink-0 group-hover:border-blue-500/30 group-hover:bg-blue-500/10 transition-all duration-300">
                     <Mail className="w-3.5 h-3.5 text-blue-500" />
                   </div>
-                  <span className="leading-snug pt-1">{BUSINESS_INFO.email}</span>
+                  <span className="leading-snug pt-1 break-all">{BUSINESS_INFO.email}</span>
                 </a>
               </div>
 

@@ -208,7 +208,7 @@ export const InteractiveQuoteModal = ({
                   {selectedService}
                 </span>{" "}
                 and send a tailored strategy breakdown to{" "}
-                <strong className="text-slate-900">{email}</strong>.
+                <strong className="text-slate-900 break-all">{email}</strong>.
               </p>
 
               <button

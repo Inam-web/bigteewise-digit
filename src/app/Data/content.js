@@ -176,8 +176,7 @@ export const PROCESS_STEPS = [
 export const TESTIMONIALS = [
   {
     id: 1,
-    name: 'Sarah Jenkins',
-    role: 'Bestselling Author',
+    name: 'Kaelen Vaynroth',
     companyOrBook: 'The Silent Horizon',
     rating: 5,
     title: 'Exceeded All My Expectations',
@@ -186,8 +185,7 @@ export const TESTIMONIALS = [
   },
   {
     id: 2,
-    name: 'David Adeleke',
-    role: 'CEO & Founder',
+    name: 'Zephyrus Thalor',
     companyOrBook: 'Vanguard Media Group',
     rating: 5,
     title: 'Outstanding Digital Growth Partner',
@@ -196,8 +194,7 @@ export const TESTIMONIALS = [
   },
   {
     id: 3,
-    name: 'Elena Rostova',
-    role: 'Self-Published Novelist',
+    name: 'Mireia Solvane',
     companyOrBook: 'Whispers in the Dark',
     rating: 5,
     title: 'Incredible Design & Branding',

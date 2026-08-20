@@ -196,24 +196,31 @@ export default function FAQSection({ onOpenQuoteModal }) {
               </button>
             </div>
 
-            {/* Contact Grid - 2 columns */}
-            <div className="grid grid-cols-2 gap-3">
-              <div className="bg-white p-4 rounded-2xl border border-slate-200 shadow-sm text-center hover:border-blue-300 transition-all duration-300">
-                <div className="w-10 h-10 rounded-xl bg-blue-50 text-blue-600 flex items-center justify-center mx-auto mb-2">
+            {/* Contact Grid - 2 columns with responsive text wrapping */}
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+              <div className="bg-white p-3.5 sm:p-4 rounded-2xl border border-slate-200 shadow-sm text-center hover:border-blue-300 transition-all duration-300 min-w-0 overflow-hidden">
+                <div className="w-10 h-10 rounded-xl bg-blue-50 text-blue-600 flex items-center justify-center mx-auto mb-2 shrink-0">
                   <PhoneCall className="w-4 h-4" />
                 </div>
-                <p className="text-[9px] text-slate-400 font-bold uppercase tracking-wider">Call Us</p>
-                <a href="tel:+2348073527146" className="text-xs font-extrabold text-slate-900 hover:text-blue-600 transition-colors">
+                <p className="text-[9px] text-slate-400 font-bold uppercase tracking-wider mb-0.5">Call Us</p>
+                <a 
+                  href="tel:+2348073527146" 
+                  className="text-xs font-extrabold text-slate-900 hover:text-blue-600 transition-colors block break-all leading-snug"
+                >
                   +234 807 352 7146
                 </a>
               </div>
 
-              <div className="bg-white p-4 rounded-2xl border border-slate-200 shadow-sm text-center hover:border-blue-300 transition-all duration-300">
-                <div className="w-10 h-10 rounded-xl bg-blue-50 text-blue-600 flex items-center justify-center mx-auto mb-2">
+              <div className="bg-white p-3.5 sm:p-4 rounded-2xl border border-slate-200 shadow-sm text-center hover:border-blue-300 transition-all duration-300 min-w-0 overflow-hidden">
+                <div className="w-10 h-10 rounded-xl bg-blue-50 text-blue-600 flex items-center justify-center mx-auto mb-2 shrink-0">
                   <Mail className="w-4 h-4" />
                 </div>
-                <p className="text-[9px] text-slate-400 font-bold uppercase tracking-wider">Email Us</p>
-                <a href="mailto:petergodswill52@gmail.com" className="text-xs font-extrabold text-slate-900 hover:text-blue-600 transition-colors">
+                <p className="text-[9px] text-slate-400 font-bold uppercase tracking-wider mb-0.5">Email Us</p>
+                <a 
+                  href="mailto:petergodswill52@gmail.com" 
+                  title="petergodswill52@gmail.com"
+                  className="text-[11px] sm:text-xs font-extrabold text-slate-900 hover:text-blue-600 transition-colors block break-all leading-snug"
+                >
                   petergodswill52@gmail.com
                 </a>
               </div>

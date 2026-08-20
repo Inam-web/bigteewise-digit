@@ -14,8 +14,7 @@ if (typeof window !== 'undefined') {
 const DEFAULT_TESTIMONIALS = [
   {
     id: 1,
-    name: 'Sarah Jenkins',
-    role: 'Bestselling Author',
+    name: 'Kaelen Vaynroth',
     companyOrBook: 'The Silent Horizon',
     rating: 5,
     title: 'Exceeded All My Expectations',
@@ -24,8 +23,7 @@ const DEFAULT_TESTIMONIALS = [
   },
   {
     id: 2,
-    name: 'David Adeleke',
-    role: 'CEO & Founder',
+    name: 'Zephyrus Thalor',
     companyOrBook: 'Vanguard Media Group',
     rating: 5,
     title: 'Outstanding Digital Growth Partner',
@@ -34,8 +32,7 @@ const DEFAULT_TESTIMONIALS = [
   },
   {
     id: 3,
-    name: 'Elena Rostova',
-    role: 'Self-Published Novelist',
+    name: 'Mireia Solvane',
     companyOrBook: 'Whispers in the Dark',
     rating: 5,
     title: 'Incredible Design & Branding',
@@ -316,8 +313,8 @@ export default function TestimonialsSection() {
                   <h4 className="font-bold text-white text-base sm:text-lg leading-snug group-hover:text-blue-400 transition-colors duration-300">
                     {item1.name}
                   </h4>
-                  <p className="text-xs font-semibold text-blue-400">{item1.role}</p>
-                  <p className="text-[11px] text-slate-400 mt-0.5">{item1.companyOrBook}</p>
+                  {item1.role && <p className="text-xs font-semibold text-blue-400">{item1.role}</p>}
+                  {item1.companyOrBook && <p className="text-[11px] text-slate-400 mt-0.5">{item1.companyOrBook}</p>}
                 </div>
               </div>
             </div>
@@ -370,8 +367,8 @@ export default function TestimonialsSection() {
                   <h4 className="font-bold text-white text-base sm:text-lg leading-snug group-hover:text-blue-400 transition-colors duration-300">
                     {item2.name}
                   </h4>
-                  <p className="text-xs font-semibold text-blue-400">{item2.role}</p>
-                  <p className="text-[11px] text-slate-400 mt-0.5">{item2.companyOrBook}</p>
+                  {item2.role && <p className="text-xs font-semibold text-blue-400">{item2.role}</p>}
+                  {item2.companyOrBook && <p className="text-[11px] text-slate-400 mt-0.5">{item2.companyOrBook}</p>}
                 </div>
               </div>
             </div>

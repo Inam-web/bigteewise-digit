@@ -231,12 +231,12 @@ export default function ContactSection({ initialService = '', onSuccessToast }) 
                       <div className={`w-11 h-11 rounded-xl ${item.bg} ${item.color} ${item.border} border flex items-center justify-center shrink-0 group-hover:scale-110 transition-transform duration-300 shadow-lg`}>
                         <item.icon className="w-5 h-5" />
                       </div>
-                      <div>
+                      <div className="min-w-0 flex-1">
                         <h4 className="text-[11px] font-bold uppercase tracking-wider text-slate-400 mb-1">{item.label}</h4>
                         {item.lines.map((line, i) => (
                           <p 
                             key={i} 
-                            className={`text-sm font-semibold leading-snug ${i === 1 && item.label === 'Call or Text' ? 'text-blue-400 hover:text-blue-300 cursor-pointer transition-colors' : 'text-slate-200'}`}
+                            className={`text-sm font-semibold leading-snug break-all ${i === 1 && item.label === 'Call or Text' ? 'text-blue-400 hover:text-blue-300 cursor-pointer transition-colors' : 'text-slate-200'}`}
                           >
                             {line}
                           </p>
