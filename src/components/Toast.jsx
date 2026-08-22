@@ -1,7 +1,10 @@
 import React, { useEffect } from 'react';
 import { CheckCircle2, X } from 'lucide-react';
+import { useLanguage } from '@/i18n/LanguageContext';
 
 export const Toast = ({ message, onClose }) => {
+  const { t } = useLanguage();
+
   useEffect(() => {
     if (message) {
       const timer = setTimeout(() => {
@@ -13,6 +16,19 @@ export const Toast = ({ message, onClose }) => {
   }, [message, onClose]);
 
   if (!message) return null;
+
+  // Translation helper
+  const tr = (key, fallback) => {
+    try {
+      const result = t(key);
+      if (result === key || result === undefined || result === null) {
+        return fallback;
+      }
+      return result;
+    } catch (e) {
+      return fallback;
+    }
+  };
 
   return (
     <div className="fixed top-24 right-6 z-50 bg-slate-900 text-white px-5 py-4 rounded-2xl shadow-2xl border border-slate-700 flex items-center gap-3 animate-in slide-in-from-right duration-300 max-w-md">
@@ -27,10 +43,12 @@ export const Toast = ({ message, onClose }) => {
       <button
         onClick={onClose}
         className="p-1 text-slate-400 hover:text-white transition-colors"
-        aria-label="Close notification"
+        aria-label={tr('toast.close', 'Close notification')}
       >
         <X className="w-4 h-4" />
       </button>
     </div>
   );
 };
+
+export default Toast;

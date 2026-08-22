@@ -1,21 +1,35 @@
 import React, { useState } from 'react';
 import { WhatsAppIcon } from './SocialIcons';
 import { X, Send, Sparkles } from 'lucide-react';
+import { useLanguage } from '@/i18n/LanguageContext';
 
 export const WhatsAppWidget = () => {
+  const { t } = useLanguage();
   const [isOpen, setIsOpen] = useState(false);
   const [customMsg, setCustomMsg] = useState('');
 
+  // Translation helper
+  const tr = (key, fallback) => {
+    try {
+      const result = t(key);
+      if (result === key || result === undefined || result === null) {
+        return fallback;
+      }
+      return result;
+    } catch (e) {
+      return fallback;
+    }
+  };
+
   const prefilledOptions = [
-    'Hi BigTeeWise Digital! I want to inquire about Book Marketing & Author Branding.',
-    'Hi! I need a custom Book Cover & 3D Mockup Design quote.',
-    'Hi BigTeeWise! I want to discuss Digital Marketing & Social Media Strategy.',
+    tr('whatsapp.option1', 'Hi BigTeeWise Digital! I want to inquire about Book Marketing & Author Branding.'),
+    tr('whatsapp.option2', 'Hi! I need a custom Book Cover & 3D Mockup Design quote.'),
+    tr('whatsapp.option3', 'Hi BigTeeWise! I want to discuss Digital Marketing & Social Media Strategy.'),
   ];
 
   const sendWhatsApp = (text) => {
     const encoded = encodeURIComponent(text);
     const url = `https://wa.me/2348073527146?text=${encoded}`;
-
     window.open(url, '_blank');
   };
 
@@ -36,12 +50,12 @@ export const WhatsAppWidget = () => {
 
               <div>
                 <h4 className="font-extrabold text-sm leading-snug">
-                  BigTeeWise Digital Chat
+                  {tr('whatsapp.headerTitle', 'BigTeeWise Digital Chat')}
                 </h4>
 
                 <p className="text-[11px] text-emerald-100 flex items-center gap-1">
                   <span className="w-2 h-2 rounded-full bg-white animate-pulse" />
-                  <span>Online • UK Team</span>
+                  <span>{tr('whatsapp.headerStatus', 'Online • UK Team')}</span>
                 </p>
               </div>
             </div>
@@ -49,7 +63,7 @@ export const WhatsAppWidget = () => {
             <button
               onClick={() => setIsOpen(false)}
               className="p-1.5 rounded-full hover:bg-black/10 transition-colors text-white"
-              aria-label="Close WhatsApp chat"
+              aria-label={tr('whatsapp.closeLabel', 'Close WhatsApp chat')}
             >
               <X className="w-5 h-5" />
             </button>
@@ -63,17 +77,17 @@ export const WhatsAppWidget = () => {
 
               <p className="font-bold text-slate-900 flex items-center gap-1 text-blue-600">
                 <Sparkles className="w-3.5 h-3.5" />
-                BigTeeWise Team:
+                {tr('whatsapp.teamLabel', 'BigTeeWise Team:')}
               </p>
 
               <p>
-                Welcome! How can we help elevate your book or brand today?
+                {tr('whatsapp.welcomeMsg', 'Hello! 👋 How can we help you elevate your book or brand today?')}
               </p>
 
             </div>
 
             <p className="text-[11px] font-bold text-slate-400 uppercase tracking-wider px-1">
-              Quick Select Topic:
+              {tr('whatsapp.quickSelect', 'Quick Select Topic:')}
             </p>
 
             <div className="space-y-2">
@@ -99,7 +113,7 @@ export const WhatsAppWidget = () => {
 
             <input
               type="text"
-              placeholder="Type your WhatsApp message..."
+              placeholder={tr('whatsapp.placeholder', 'Type your WhatsApp message...')}
               value={customMsg}
               onChange={(e) => setCustomMsg(e.target.value)}
               onKeyDown={(e) => {
@@ -115,7 +129,7 @@ export const WhatsAppWidget = () => {
                 sendWhatsApp(customMsg || prefilledOptions[0])
               }
               className="w-9 h-9 rounded-full bg-[#25D366] text-white flex items-center justify-center shrink-0 hover:bg-emerald-600 transition-colors shadow-md"
-              aria-label="Send WhatsApp message"
+              aria-label={tr('whatsapp.sendBtn', 'Send WhatsApp message')}
             >
               <Send className="w-4 h-4" />
             </button>
@@ -129,7 +143,7 @@ export const WhatsAppWidget = () => {
       <button
         onClick={() => setIsOpen(!isOpen)}
         className="bg-[#25D366] hover:bg-[#20ba5a] text-white p-4 rounded-full shadow-2xl hover:scale-110 transition-all duration-300 flex items-center justify-center relative group"
-        aria-label="Open WhatsApp Chat"
+        aria-label={tr('whatsapp.tooltip', 'Chat with a strategist on WhatsApp')}
       >
         <WhatsAppIcon className="w-7 h-7 fill-white" />
 
@@ -139,3 +153,5 @@ export const WhatsAppWidget = () => {
     </div>
   );
 };
+
+export default WhatsAppWidget;

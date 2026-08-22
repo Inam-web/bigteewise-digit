@@ -1,12 +1,28 @@
 import React from 'react';
 import { X, Play, Sparkles, CheckCircle2 } from 'lucide-react';
 import { BUSINESS_INFO } from '../app/Data/content';
+import { useLanguage } from '@/i18n/LanguageContext';
 
 export const VideoModal = ({
   isOpen,
   onClose,
   onOpenQuoteModal,
 }) => {
+  const { t } = useLanguage();
+
+  // Translation helper
+  const tr = (key, fallback) => {
+    try {
+      const result = t(key);
+      if (result === key || result === undefined || result === null) {
+        return fallback;
+      }
+      return result;
+    } catch (e) {
+      return fallback;
+    }
+  };
+
   if (!isOpen) return null;
 
   return (
@@ -17,7 +33,7 @@ export const VideoModal = ({
         <button
           onClick={onClose}
           className="absolute top-6 right-6 p-2 rounded-full bg-slate-800 hover:bg-slate-700 text-white transition-colors z-10"
-          aria-label="Close modal"
+          aria-label={tr('videoModal.close', 'Close modal')}
         >
           <X className="w-5 h-5" />
         </button>
@@ -25,14 +41,13 @@ export const VideoModal = ({
         {/* Modal Header */}
         <div className="flex items-center gap-2 text-xs font-bold text-blue-400 uppercase tracking-wider mb-2">
           <Sparkles className="w-4 h-4 text-blue-400" />
-
           <span>
-            BigTeeWise Digital • Agency Reel
+            BigTeeWise Digital • {tr('videoModal.agencyReel', 'Agency Reel')}
           </span>
         </div>
 
         <h3 className="text-2xl font-extrabold text-white mb-4">
-          Where Creativity Meets Conversion
+          {tr('videoModal.title', 'Where Creativity Meets Conversion')}
         </h3>
 
         {/* Video Player / Showreel */}
@@ -40,7 +55,7 @@ export const VideoModal = ({
 
           <img
             src="https://images.pexels.com/photos/15543037/pexels-photo-15543037.jpeg?auto=compress&cs=tinysrgb&fit=crop&h=800&w=1200"
-            alt="Agency Showreel"
+            alt={tr('videoModal.showreelTitle', 'Agency Showreel')}
             className="absolute inset-0 w-full h-full object-cover opacity-30"
           />
 
@@ -54,27 +69,23 @@ export const VideoModal = ({
             </div>
 
             <h4 className="text-lg font-bold text-white">
-              BigTeeWise Digital Showreel 2025
+              {tr('videoModal.showreelTitle', 'BigTeeWise Digital Showreel 2025')}
             </h4>
 
             <p className="text-xs text-slate-300 leading-relaxed">
-              Discover how our team in the UK helps authors launch bestselling
-              books, design award-winning covers, and scale digital brand
-              performance.
+              {tr('videoModal.subtitle', 'Discover how our team in the UK helps authors launch bestselling books, design award-winning covers, and scale digital brand performance.')}
             </p>
 
             {/* Highlights */}
             <div className="flex flex-wrap justify-center gap-2 pt-2 text-[11px] text-blue-300">
               <span className="bg-slate-800/80 px-3 py-1 rounded-full border border-slate-700">
-                ★ 150+ Book Launches
+                ★ {tr('videoModal.highlight1', '150+ Book Launches')}
               </span>
-
               <span className="bg-slate-800/80 px-3 py-1 rounded-full border border-slate-700">
-                ★ Amazon #1 Bestsellers
+                ★ {tr('videoModal.highlight2', 'Amazon #1 Bestsellers')}
               </span>
-
               <span className="bg-slate-800/80 px-3 py-1 rounded-full border border-slate-700">
-                ★ Full Digital Ads
+                ★ {tr('videoModal.highlight3', 'Full Digital Ads')}
               </span>
             </div>
 
@@ -85,11 +96,11 @@ export const VideoModal = ({
         <div className="flex flex-col sm:flex-row items-center justify-between gap-4 pt-2 border-t border-slate-800">
 
           <div className="text-xs text-slate-400">
-            Headquartered in{' '}
+            {tr('videoModal.headquartered', 'Headquartered in')}{' '}
             <strong className="text-white">
               {BUSINESS_INFO.location}
             </strong>{' '}
-            • Global Clients
+            • {tr('videoModal.globalClients', 'Global Clients')}
           </div>
 
           {/* Strategy Session */}
@@ -100,8 +111,7 @@ export const VideoModal = ({
             }}
             className="w-full sm:w-auto bg-blue-600 hover:bg-blue-500 text-white font-bold text-xs px-6 py-3 rounded-full transition-colors flex items-center justify-center gap-2"
           >
-            <span>Book Strategy Session</span>
-
+            <span>{tr('videoModal.ctaButton', 'Book Strategy Session')}</span>
             <CheckCircle2 className="w-4 h-4" />
           </button>
 
@@ -111,3 +121,5 @@ export const VideoModal = ({
     </div>
   );
 };
+
+export default VideoModal;

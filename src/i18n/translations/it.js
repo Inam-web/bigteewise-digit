@@ -488,27 +488,259 @@ export const it = {
     tooltip: "Chatta con uno strategist su WhatsApp",
   },
 
-  portfolioPage: {
-    heroBadge: "I Nostri Lavori e Case Study",
-    heroTitlePre: "Creiamo Brand Che",
-    heroTitleHighlight: "Catturano l'Attenzione",
-    heroTitlePost: "e Generano Valore",
-    heroDescription: "Scopri la nostra selezione di copertine bestseller, mockup 3D fotorealistici, identità per autori e campagne pubblicitarie multicanale.",
-    filterAll: "Tutti i Progetti",
-    filterBookCovers: "Copertine Libri",
-    filterAuthorBranding: "Author Branding",
-    filterBookMarketing: "Book Marketing",
-    filter3DMockups: "Mockup 3D",
-    projectDetails: "Visualizza Case Study",
-    clientLabel: "Cliente",
-    categoryLabel: "Categoria",
-    challengeTitle: "La Sfida",
-    solutionTitle: "La Nostra Soluzione",
-    resultsTitle: "Risultati Misurabili",
-    backToPortfolio: "Torna a tutti i progetti",
-    readyToStart: "Ti ispirano i nostri risultati? Costruiamo insieme la tua prossima storia di successo.",
-    startProjectCta: "Inizia il Tuo Progetto",
+  portfolio: {
+  backToPortfolio: "Portfolio",
+  visit: "Visita",
+  live: "Dal Vivo",
+  back: "Indietro",
+  caseStudy: "Caso di Studio",
+  client: "Cliente",
+  year: "Anno",
+  role: "Ruolo",
+  tag1: "Sito Web dell'Autore",
+  tag2: "Esperienza del Libro",
+  tag3: "Design Editoriale",
+  tag4: "Percorso del Lettore",
+  scrollToExplore: "Scorri per esplorare",
+  marquee1: "Piattaforma dell'Autore",
+  marquee2: "Esperienza del Libro",
+  marquee3: "Design Editoriale",
+  marquee4: "Narrativa Visuale",
+  marquee5: "Percorso del Lettore",
+  marquee6: "Identità Digitale",
+  project: "PROGETTO",
+  theStory: "La Storia",
+  sector: "Settore",
+  platform: "Piattaforma",
+  outcome: "Risultato",
+  storyHeading: "Una storia costruita su oltre cinquant'anni di memoria viva e su tutto ciò che è accaduto tra le fotografie.",
+  philosophy: "Filosofia",
+  guidingThought: "Il pensiero guida dietro il design",
+  historicalArc: "Arco Storico",
+  timelineHeading: "Cinquant'anni di memoria viva.",
+  timelineSubheading: "Conservata per la prossima generazione.",
+  timelineDesc: "Una narrazione cronologica che unisce L'Avana, Madrid e Valencia in un'eredità letteraria unificata.",
+  epoch: "Epoca",
+  statBooks: "Libri Pubblicati",
+  statHistory: "Anni di Storia",
+  statRating: "Valutazione dei Lettori",
+  statDesign: "Design Personalizzato",
+  theTrilogy: "La Trilogia",
+  trilogyHeading: "Tre libri. Una vita.",
+  scrollToMove: "Scorri per muoverti nella libreria",
+  theWork: "Il Lavoro",
+  workHeading: "Un mondo digitale costruito attorno alla storia.",
+  workDesc: "Invece di presentare il sito come una convenzionale raccolta di screenshot, l'interfaccia diventa una tela editoriale dove ogni elemento visivo ha il suo ritmo.",
+  digitalIdentity: "Identità Digitale",
+  desktopExperience: "Esperienza Desktop",
+  editorialDetail: "Dettaglio Editoriale",
+  readerJourney: "Percorso del Lettore",
+  responsiveSystem: "Sistema Responsive",
+  designAndCraft: "Design e Artigianalità",
+  craftHeading: "Realizzato come un archivio museale.",
+  craftDesc: "Ogni componente dell'interfaccia, scelta tipografica e palette cromatica è stata adattata per rispettare la gravità emotiva della storia degli autori.",
+  pillar: "Pilastro",
+  theAuthors: "Gli Autori",
+  authorsHeading: "Due voci. Una storia condivisa.",
+  author: "Autore",
+  readerFeedback: "Opinioni dei Lettori",
+  reviewsHeading: "Parole reali.",
+  reviewsSubheading: "Lettori reali.",
+  reviewsDesc: "La storia è continuata oltre le pagine attraverso le persone che l'hanno scoperta, letta e hanno condiviso la loro esperienza.",
+  prevReview: "Recensione precedente",
+  nextReview: "Recensione successiva",
+  viewOriginal: "Visualizza Originale",
+  goToReview: "Vai alla recensione",
+  reviewsHint: "Clicca su un'immagine per vedere l'originale — trascina per navigare",
+  closeReview: "Chiudi recensione",
+  funnelHeading: "Trasformare l'interesse in lettori.",
+  funnelDesc: "Un'esperienza strutturata in tre fasi per accogliere i lettori, instaurare fiducia e guidare l'acquisto di libri su Amazon Spagna.",
+  stage: "Fase",
+  scope: "Ambito",
+  scopeHeading: "Ogni punto di contatto connesso.",
+  ctaHeading: "Esplora la storia oltre il caso di studio.",
+  ctaDesc: "Visita la piattaforma dell'autore per esplorare la trilogia, gli autori, la loro storia e il percorso del lettore.",
+  visitAuthorWebsite: "Visita il Sito dell'Autore",
+  exploreBooks: "Esplora i Libri",
+  projectOne: "Progetto 01",
+  backToBigTeeWise: "Torna a BigTeeWise",
+  caseStudyLabel: "Caso di Studio",
+  p2Tag1: "Marketing del Libro",
+  p2Tag2: "Amazon A+",
+  p2Tag3: "Sito Web dell'Autore",
+  p2Tag4: "Trailer Cinematografico",
+  p2Tag5: "Ottimizzazione SEO",
+  p2Tag6: "Impaginazione Libro",
+  coverShowcase: "Vetrina della Copertina",
+  p2CoverHeading: "Una storia che abbraccia decenni, continenti e i segreti tra sorelle.",
+  featuredProject: "Progetto In Evidenza",
+  storyArchitecture: "Architettura della Storia",
+  p2NarrativeHeading: "Doppia linea temporale. Quattro anelli ereditati.",
+  p2NarrativeSubheading: "Una promessa di famiglia sepolta da tempo.",
+  p2NarrativeDesc: "La strategia di marketing si è basata direttamente sulla doppia narrazione del libro per attrarre lettori appassionati di romanzi storici e viaggi nel tempo.",
+  p2GuidingThought: "Il pensiero guida dietro la strategia di marketing",
+  theSolution: "La Soluzione",
+  p2SolutionHeading: "Cinque pilastri della presenza digitale.",
+  amazonAplus: "Strategia Amazon A+",
+  p2AplusHeading: "Trasformare i visitatori di Amazon in acquirenti.",
+  p2AplusDesc: "Moduli visivi personalizzati progettati per evidenziare la dinamica dei personaggi, i ganci emotivi e il branding della serie direttamente nella scheda Amazon.",
+  module: "Modulo",
+  theExperience: "L'Esperienza",
+  p2ExperienceHeading: "Progettato attorno al percorso del lettore.",
+  p2ExperienceDesc: "Ogni punto di contatto, dalla scoperta su Amazon al sito web dell'autore, è stato concepito per immergere i lettori nell'atmosfera di The Sea Stone Sisters e guidarli nella storia.",
+  readerExperiencePreview: "Anteprima dell'Esperienza del Lettore",
+  digitalTouchpoints: "Punti di Contatto Digitali",
+  theAuthor: "L'Autore",
+  p2AuthorHeading: "Eleanor Buchanan.",
+  location: "Posizione",
+  genre: "Genere",
+  series: "Serie",
+  timeline: "Linea Temporale",
+  marketingEcosystem: "Ecosistema di Marketing",
+  p2EcosystemHeading: "Quattro canali che guidano la crescita commerciale.",
+  p2EcosystemDesc: "Una strategia multilivello di acquisizione lettori per mantenere vendite mensili costanti e un'elevata visibilità nei motori di ricerca.",
+  channel: "Canale",
+  p2ScopeHeading: "Ogni elemento connesso.",
+  results: "Risultati",
+  p2CtaHeading: "Esplora la storia e scopri l'opera di Eleanor Buchanan.",
+  p2CtaDesc: "Visita la scheda Amazon per scoprire il libro o esplora la presenza dell'autrice su Goodreads.",
+  amazonListing: "Scheda Amazon",
+  goodreads: "Goodreads",
+  projectTwo: "Progetto 02",
+  backToTop: "Torna in alto",
+  project1: {
+    intro: "Un'esperienza digitale cinematografica per una trilogia letteraria reale plasmata da esilio, amore, fede, memoria e redenzione.",
+    story: "Tra l'Amore e le Ombre segue oltre cinquant'anni di vita condivisa. Il progetto doveva presentare questa storia con l'intimità di un archivio personale dando ai libri una casa digitale moderna e chiara.",
+    challenge: "L'esperienza doveva collegare la trilogia, gli autori, la loro storia, l'archivio visivo e il percorso del lettore senza far sembrare il sito un semplice catalogo.",
+    philosophy: "Le fotografie mostrano i sorrisi, ma non le lacrime. Mostrano le feste, ma non le notti di incertezza. La storia vive in tutto ciò che sta in mezzo.",
+    book1: "Il primo volume introduce una storia di amore, fede e perseveranza segnata dall'esilio e dalla separazione.",
+    book2: "Il secondo volume approfondisce una Spagna che si risveglia alla democrazia, dove la storia familiare rivela una verità inaspettata.",
+    book3: "Il terzo volume segue la ricostruzione di una vita a Valencia attraverso l'arte, la fede, la famiglia e l'amore.",
+    book4: "Tre capitoli di un viaggio profondamente personale, trasformati in un'eredità letteraria per la prossima generazione.",
+    author1: "Filologo e scrittore spagnolo di Madrid, la cui vita e opera sono segnate dall'esilio, dall'appartenenza e dalla ricerca d'identità in tre continenti.",
+    author2: "Scrittrice e artista cubana la cui prospettiva porta la resiliente voce femminile al centro della trilogia.",
+    deliverable1: "Sito web dell'autore e presentazione della trilogia",
+    deliverable2: "Narrativa visiva incentrata sul libro",
+    deliverable3: "Acquisizione lettori e anteprima del primo capitolo",
+    deliverable4: "Biografia degli autori e storia personale",
+    deliverable5: "Galleria d'archivio e narrazione",
+    deliverable6: "Punti di contatto Amazon e scoperta dei libri",
+    timeline1: {
+      title: "Esilio e Separazione",
+      desc: "Lasciare L'Avana durante un turbolento conflitto politico, abbandonando case e famiglie per preservare l'identità e la memoria in lettere manoscritte."
+    },
+    timeline2: {
+      title: "Transizione e Scoperta",
+      desc: "Navigare nel risveglio democratico in Spagna, dove documenti di famiglia sepolti da tempo hanno rivelato legami inaspettati tra i continenti."
+    },
+    timeline3: {
+      title: "Rinascita e Arte",
+      desc: "Ricostruire la vita a Valencia attraverso la letteratura, le belle arti e la resilienza spirituale, ponendo le basi della trilogia."
+    },
+    timeline4: {
+      title: "Eredità Digitale",
+      desc: "Trasformare oltre cinquant'anni di archivio personale in una trilogia letteraria pubblicata e in una piattaforma autore immersiva."
+    },
+    craft1: {
+      title: "Palette e Texture d'Archivio",
+      desc: "Toni monocromatici profondi abbinati a sfumature seppia che richiamano i vecchi album fotografici e la carta d'epoca."
+    },
+    craft2: {
+      title: "Tipografia Filologica",
+      desc: "Raffinata tipografia con grazie che onora la tradizione letteraria spagnola e bilancia la co-paternità dell'opera di Fábregas & Brieva."
+    },
+    craft3: {
+      title: "Atmosfera Documentale",
+      desc: "Integrazione di fotografie storiche, copertine originali e testimonianze dei lettori in una cornice editoriale fluida."
+    },
+    funnel1: {
+      title: "Scoperta dell'Archivio",
+      desc: "Ganci storici avvincenti ed estratti visivi invitano i lettori a scoprire la storia dietro le memorie di 50 anni."
+    },
+    funnel2: {
+      title: "Estratto del Primo Capitolo",
+      desc: "L'accesso immediato all'anteprima consente ai lettori di immergersi in Destinos Cruzados prima dell'acquisto."
+    },
+    funnel3: {
+      title: "Acquisto Diretto su Amazon",
+      desc: "Punti di contatto fluidi che conducono direttamente alle edizioni cartacee e Kindle su Amazon Spagna con recensioni a 5★."
+    }
   },
+  project2: {
+    intro: "Un impegno completo di marketing editoriale e presentazione digitale per una saga familiare coinvolgente di amore, perdita, segreti e ritorni a casa.",
+    story: "The Sea Stone Sisters unisce una linea temporale storica che inizia nel 1931 con una storia contemporanea ambientata in varie location internazionali. Attraversando decenni e continenti, la storia segue quattro sorelle divise dalle circostanze e unite da anelli ereditati, antichi menhir e un mistero familiare custodito a lungo.",
+    challenge: "Il progetto doveva creare una presenza online coerente ed elegante per mostrare l'atmosfera del libro, migliorare la scheda Amazon, offrire all'autrice un sito professionale e fornire materiale promozionale in grado di attirare nuovi lettori.",
+    philosophy: "Quattro sorelle. Un mistero. La storia vive negli spazi tra gli anelli ereditati e i segreti custoditi.",
+    solution1: {
+      title: "Contenuti Amazon A+",
+      text: "Creazione di contenuti visivi avanzati per la pagina Amazon per completare la descrizione del libro, trasmetterne i temi e offrire un'esperienza d'acquisto immersiva."
+    },
+    solution2: {
+      title: "Sito Web dell'Autore",
+      text: "Realizzazione di un sito web professionale per offrire ai lettori uno spazio dedicato in cui scoprire Eleanor Buchanan e le sue opere."
+    },
+    solution3: {
+      title: "Impaginazione del Libro",
+      text: "Formattazione professionale dell'interno del libro per garantire una lettura pulita, elegante e piacevole."
+    },
+    solution4: {
+      title: "Trailer Cinematografico del Libro",
+      text: "Ideazione di un trailer promozionale cinematografico per trasmettere visivamente le ambientazioni, le emozioni, il mistero e l'atmosfera del romanzo."
+    },
+    solution5: {
+      title: "Ottimizzazione SEO",
+      text: "Posizionamento sui motori di ricerca ottimizzato per migliorare la reperibilità del libro e intercettare i lettori interessati al genere."
+    },
+    deliverable1: "Contenuti Amazon A+",
+    deliverable2: "Sito web dell'autore",
+    deliverable3: "Impaginazione professionale del libro",
+    deliverable4: "Trailer cinematografico del libro",
+    deliverable5: "Ottimizzazione SEO",
+    deliverable6: "Posizionamento digitale incentrato sul lettore",
+    deliverable7: "Identità visiva coerente su tutti i canali di marketing",
+    results: "Il progetto ha consolidato la presenza commerciale di The Sea Stone Sisters, generando oltre $2.800 di vendite mensili e un forte coinvolgimento nelle principali community di lettura.",
+    narrative1: {
+      title: "Arco Storico del 1931",
+      desc: "Quattro sorelle separate nella Gran Bretagna prima della guerra, legate da un giuramento segreto fatto presso un antico menhir in Cornovaglia."
+    },
+    narrative2: {
+      title: "Scoperta nel Presente",
+      desc: "Anelli d'epoca ereditati rivelano indizi negli archivi di York, Londra e location internazionali per svelare la verità sulla famiglia."
+    },
+    narrative3: {
+      title: "Posizionamento di Genere",
+      desc: "Testi pubblicitari ed elementi visivi studiati appositamente per i lettori di Kate Morton, Lucinda Riley e romanzi d'amore con viaggi nel tempo."
+    },
+    aplus1: {
+      title: "Banner d'Atmosfera del Brand",
+      desc: "Grafiche ad alto impatto a tutta pagina che comunicano l'atmosfera costiera, la profondità storica e la carica emotiva del romanzo."
+    },
+    aplus2: {
+      title: "Dettaglio Sorelle e Reliquie",
+      desc: "Focus visivo dettagliato sulle quattro sorelle, i loro anelli unici e il loro ruolo nel mistero della doppia linea temporale."
+    },
+    aplus3: {
+      title: "Griglia di Confronto della Serie",
+      desc: "Elemento promozionale incentrato sulla conversione per spingere i lettori al preordine e ai successivi capitoli della serie."
+    },
+    ecosystem1: {
+      title: "Trailer Cinematografico",
+      desc: "Video promozionale ad alta qualità distribuito su Meta, Instagram Reels e YouTube Shorts per generare interesse iniziale."
+    },
+    ecosystem2: {
+      title: "Amazon PPC e Categorie",
+      desc: "Campagne pubblicitarie mirate per dominare le parole chiave del genere Romance Storico e Fiction Britannica."
+    },
+    ecosystem3: {
+      title: "Goodreads e Campagna ARC",
+      desc: "Attività coordinata che ha portato a oltre 1.860 valutazioni e una media di 4,6/5 stelle sulle principali piattaforme di recensione."
+    },
+    ecosystem4: {
+      title: "SEO e Autorità dell'Autore",
+      desc: "Sito dell'autore ottimizzato per le ricerche per affermare Eleanor Buchanan come autrice di riferimento nel romanzo storico."
+    }
+  }
+},
 
   serviceDetailPage: {
     backToServices: "Torna a Tutti i Servizi",

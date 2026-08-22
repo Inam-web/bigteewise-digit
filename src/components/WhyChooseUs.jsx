@@ -5,13 +5,66 @@ import Image from 'next/image';
 import { Play, DollarSign, Users, Award, ShieldCheck, ArrowRight, Sparkles, Target, TrendingUp, Star, CheckCircle2 } from 'lucide-react';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
+import { useLanguage } from '@/i18n/LanguageContext';
 
 if (typeof window !== 'undefined') {
   gsap.registerPlugin(ScrollTrigger);
 }
 
 export default function WhyChooseUs({ onOpenQuoteModal, onOpenVideoModal }) {
+  const { t } = useLanguage();
   const sectionRef = useRef(null);
+
+  // Translation helper
+  const tr = (key, fallback) => {
+    try {
+      const result = t(key);
+      if (result === key || result === undefined || result === null) {
+        return fallback;
+      }
+      return result;
+    } catch (e) {
+      return fallback;
+    }
+  };
+
+  const features = [
+    {
+      icon: <DollarSign className="w-5 h-5 sm:w-6 sm:h-6" />,
+      title: tr('whyChooseUs.features.0.title', 'Conversion & ROI Focus'),
+      description: tr('whyChooseUs.features.0.desc', "We don't just design pretty graphics—we build campaigns engineered for actual sales, book downloads, and lead acquisition."),
+      stat: '150+',
+      statLabel: tr('whyChooseUs.statProjects', 'Projects Delivered')
+    },
+    {
+      icon: <Users className="w-5 h-5 sm:w-6 sm:h-6" />,
+      title: tr('whyChooseUs.features.1.title', 'Author Branding Experts'),
+      description: tr('whyChooseUs.features.1.desc', 'Deep specialized knowledge in Amazon KDP algorithms, reader funnels, book covers, and press kits.'),
+      stat: '2000+',
+      statLabel: tr('whyChooseUs.statAuthors', 'Authors Served')
+    },
+    {
+      icon: <ShieldCheck className="w-5 h-5 sm:w-6 sm:h-6" />,
+      title: tr('whyChooseUs.features.2.title', '8+ Years Expertise'),
+      description: tr('whyChooseUs.features.2.desc', 'Proven track record with over 150+ successful projects, Bestseller book launches, and corporate growth campaigns.'),
+      stat: '99%',
+      statLabel: tr('whyChooseUs.statSatisfaction', 'Satisfaction Rate')
+    },
+    {
+      icon: <Award className="w-5 h-5 sm:w-6 sm:h-6" />,
+      title: tr('whyChooseUs.features.3.title', 'Bespoke Design Quality'),
+      description: tr('whyChooseUs.features.3.desc', 'Award-winning 3D mockups, book covers, and visual identities crafted to set your brand apart in competitive markets.'),
+      stat: '4.9★',
+      statLabel: tr('whyChooseUs.statRating', 'Client Rating')
+    },
+  ];
+
+  const stats = [
+    { value: '150+', label: tr('whyChooseUs.statProjects', 'Projects Delivered') },
+    { value: '2000+', label: tr('whyChooseUs.statAuthors', 'Happy Authors') },
+    { value: '99%', label: tr('whyChooseUs.statSatisfaction', 'Satisfaction Rate') },
+    { value: '4.9★', label: tr('whyChooseUs.statRating', 'Client Rating') },
+  ];
 
   useEffect(() => {
     const ctx = gsap.context(() => {
@@ -189,37 +242,6 @@ export default function WhyChooseUs({ onOpenQuoteModal, onOpenVideoModal }) {
     return () => ctx.revert();
   }, []);
 
-  const features = [
-    {
-      icon: <DollarSign className="w-5 h-5 sm:w-6 sm:h-6" />,
-      title: 'Conversion & ROI Focus',
-      description: "We don't just design pretty graphics—we build campaigns engineered for actual sales, book downloads, and lead acquisition.",
-      stat: '150+',
-      statLabel: 'Projects Delivered'
-    },
-    {
-      icon: <Users className="w-5 h-5 sm:w-6 sm:h-6" />,
-      title: 'Author Branding Experts',
-      description: 'Deep specialized knowledge in Amazon KDP algorithms, reader funnels, book covers, and press kits.',
-      stat: '2000+',
-      statLabel: 'Authors Served'
-    },
-    {
-      icon: <ShieldCheck className="w-5 h-5 sm:w-6 sm:h-6" />,
-      title: '8+ Years Expertise',
-      description: 'Proven track record with over 150+ successful projects, Bestseller book launches, and corporate growth campaigns.',
-      stat: '99%',
-      statLabel: 'Satisfaction Rate'
-    },
-    {
-      icon: <Award className="w-5 h-5 sm:w-6 sm:h-6" />,
-      title: 'Bespoke Design Quality',
-      description: 'Award-winning 3D mockups, book covers, and visual identities crafted to set your brand apart in competitive markets.',
-      stat: '4.9★',
-      statLabel: 'Client Rating'
-    },
-  ];
-
   return (
     <section 
       ref={sectionRef} 
@@ -243,16 +265,16 @@ export default function WhyChooseUs({ onOpenQuoteModal, onOpenVideoModal }) {
           <div className="space-y-3 max-w-2xl">
             <div className="why-header-item inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-blue-500/10 border border-blue-500/30 text-blue-400 text-xs sm:text-sm font-bold tracking-wide uppercase">
               <span className="text-blue-400 font-extrabold">//</span>
-              <span>Why Choose Us</span>
+              <span>{tr('whyChooseUs.badge', 'Why Choose Us')}</span>
             </div>
 
             <h2 className="why-header-item text-3xl sm:text-4xl lg:text-5xl font-extrabold tracking-tight leading-tight">
-              Why Trust BigTeeWise Digital <br className="hidden sm:inline" />
-              for <span className="text-blue-400">Your Growth?</span>
+              {tr('whyChooseUs.heading', 'Why Trust BigTeeWise Digital')} <br className="hidden sm:inline" />
+              {tr('whyChooseUs.headingHighlight', 'for Your Growth?')}
             </h2>
 
             <p className="why-header-item text-slate-400 text-sm sm:text-base leading-relaxed max-w-xl">
-              We combine creative excellence with strategic thinking to deliver measurable results for authors and businesses worldwide.
+              {tr('whyChooseUs.subheading', 'We combine creative excellence with strategic thinking to deliver measurable results for authors and businesses worldwide.')}
             </p>
           </div>
 
@@ -260,7 +282,7 @@ export default function WhyChooseUs({ onOpenQuoteModal, onOpenVideoModal }) {
             onClick={onOpenQuoteModal}
             className="why-header-item bg-blue-600 hover:bg-blue-500 active:scale-95 text-white font-bold text-sm px-7 sm:px-8 py-3.5 rounded-full shadow-lg shadow-blue-600/30 hover:shadow-blue-600/50 hover:-translate-y-0.5 transition-all duration-300 flex items-center justify-center gap-2 self-start lg:self-auto group"
           >
-            <span>Get A Free Consultation</span>
+            <span>{tr('whyChooseUs.ctaButton', 'Get A Free Consultation')}</span>
             <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
           </button>
         </div>
@@ -273,7 +295,7 @@ export default function WhyChooseUs({ onOpenQuoteModal, onOpenVideoModal }) {
             <div className="relative h-[380px] sm:h-[450px] lg:h-[520px] w-full rounded-3xl overflow-hidden border border-slate-700/80 shadow-2xl shadow-blue-600/10 group">
               <Image
                 src="https://images.pexels.com/photos/32082430/pexels-photo-32082430.jpeg?auto=compress&cs=tinysrgb&fit=crop&h=800&w=1000"
-                alt="BigTeeWise Team Consultation"
+                alt={tr('whyChooseUs.altText', 'BigTeeWise Team Consultation')}
                 fill
                 quality={85}
                 sizes="(max-width: 1024px) 100vw, 50vw"
@@ -284,14 +306,14 @@ export default function WhyChooseUs({ onOpenQuoteModal, onOpenVideoModal }) {
               {/* Top Badge */}
               <div className="absolute top-4 left-4 bg-white/95 backdrop-blur-md rounded-xl px-3 py-2 border border-white/20 shadow-lg flex items-center gap-2 z-20">
                 <Sparkles className="w-3.5 h-3.5 text-blue-600" />
-                <span className="text-[10px] sm:text-xs font-bold text-slate-900">Creative Strategy Studio</span>
+                <span className="text-[10px] sm:text-xs font-bold text-slate-900">{tr('whyChooseUs.studioTag', 'Creative Strategy Studio')}</span>
               </div>
 
               {/* Play Button Overlay */}
               <button
                 onClick={onOpenVideoModal}
                 className="absolute inset-0 m-auto w-16 h-16 sm:w-20 sm:h-20 rounded-full bg-blue-600 text-white flex items-center justify-center shadow-2xl shadow-blue-600/40 hover:scale-110 hover:bg-blue-500 transition-all duration-300 group/btn z-20"
-                title="Watch Agency Showreel"
+                title={tr('whyChooseUs.watchVideo', 'Watch Agency Showreel')}
               >
                 <Play className="w-7 h-7 sm:w-8 sm:h-8 fill-white ml-0.5 group-hover/btn:scale-110 transition-transform" />
                 <span className="why-pulse-ring absolute inset-0 rounded-full border-2 border-blue-400/50 pointer-events-none" />
@@ -301,10 +323,10 @@ export default function WhyChooseUs({ onOpenQuoteModal, onOpenVideoModal }) {
               <div className="absolute bottom-4 left-4 right-4 p-4 sm:p-5 rounded-2xl bg-slate-900/95 backdrop-blur-md border border-slate-700 z-20 shadow-xl">
                 <div className="flex items-center gap-2 mb-1.5">
                   <CheckCircle2 className="w-3.5 h-3.5 text-blue-400" />
-                  <p className="text-[10px] text-blue-400 font-bold uppercase tracking-wider">Based in UK, United Kingdom</p>
+                  <p className="text-[10px] text-blue-400 font-bold uppercase tracking-wider">{tr('whyChooseUs.locationBadge', 'Based in UK, United Kingdom')}</p>
                 </div>
                 <p className="text-xs sm:text-sm font-semibold text-slate-200 leading-relaxed">
-                  Serving authors & corporate clients worldwide with world-class standard
+                  {tr('whyChooseUs.locationDesc', 'Serving authors & corporate clients worldwide with world-class standard')}
                 </p>
               </div>
 
@@ -354,22 +376,12 @@ export default function WhyChooseUs({ onOpenQuoteModal, onOpenVideoModal }) {
 
         {/* Stats Bar - Additional Trust Signal */}
         <div className="why-stats-container mt-12 sm:mt-16 lg:mt-20 grid grid-cols-2 sm:grid-cols-4 gap-4 sm:gap-6">
-          <div className="why-stat-number bg-slate-800/40 backdrop-blur-sm rounded-2xl p-4 sm:p-5 border border-slate-700/50 text-center hover:border-blue-500/30 transition-all duration-300">
-            <div className="text-2xl sm:text-3xl font-black text-blue-400">150+</div>
-            <div className="text-[10px] sm:text-xs text-slate-400 font-semibold uppercase tracking-wider mt-0.5">Projects Delivered</div>
-          </div>
-          <div className="why-stat-number bg-slate-800/40 backdrop-blur-sm rounded-2xl p-4 sm:p-5 border border-slate-700/50 text-center hover:border-blue-500/30 transition-all duration-300">
-            <div className="text-2xl sm:text-3xl font-black text-blue-400">2000+</div>
-            <div className="text-[10px] sm:text-xs text-slate-400 font-semibold uppercase tracking-wider mt-0.5">Happy Authors</div>
-          </div>
-          <div className="why-stat-number bg-slate-800/40 backdrop-blur-sm rounded-2xl p-4 sm:p-5 border border-slate-700/50 text-center hover:border-blue-500/30 transition-all duration-300">
-            <div className="text-2xl sm:text-3xl font-black text-blue-400">99%</div>
-            <div className="text-[10px] sm:text-xs text-slate-400 font-semibold uppercase tracking-wider mt-0.5">Satisfaction Rate</div>
-          </div>
-          <div className="why-stat-number bg-slate-800/40 backdrop-blur-sm rounded-2xl p-4 sm:p-5 border border-slate-700/50 text-center hover:border-blue-500/30 transition-all duration-300">
-            <div className="text-2xl sm:text-3xl font-black text-blue-400">4.9★</div>
-            <div className="text-[10px] sm:text-xs text-slate-400 font-semibold uppercase tracking-wider mt-0.5">Client Rating</div>
-          </div>
+          {stats.map((stat, index) => (
+            <div key={index} className="why-stat-number bg-slate-800/40 backdrop-blur-sm rounded-2xl p-4 sm:p-5 border border-slate-700/50 text-center hover:border-blue-500/30 transition-all duration-300">
+              <div className="text-2xl sm:text-3xl font-black text-blue-400">{stat.value}</div>
+              <div className="text-[10px] sm:text-xs text-slate-400 font-semibold uppercase tracking-wider mt-0.5">{stat.label}</div>
+            </div>
+          ))}
         </div>
 
       </div>

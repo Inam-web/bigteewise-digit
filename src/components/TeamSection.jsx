@@ -11,6 +11,7 @@ import {
   Sparkles,
   MoveUpRight,
 } from 'lucide-react';
+import { useLanguage } from '@/i18n/LanguageContext';
 
 if (typeof window !== 'undefined') {
   gsap.registerPlugin(ScrollTrigger);
@@ -109,6 +110,7 @@ const getInitials = (member) => {
 ========================================================= */
 
 export const TeamSection = () => {
+  const { t } = useLanguage();
   const sectionRef = useRef(null);
   const orbRef = useRef(null);
   const imageRef = useRef(null);
@@ -129,6 +131,19 @@ export const TeamSection = () => {
 
   const member = members[active];
   const accent = getAccent(member, active);
+
+  // Translation helper
+  const tr = (key, fallback) => {
+    try {
+      const result = t(key);
+      if (result === key || result === undefined || result === null) {
+        return fallback;
+      }
+      return result;
+    } catch (e) {
+      return fallback;
+    }
+  };
 
   /* =======================================================
      IMAGE PRELOADING
@@ -339,7 +354,6 @@ export const TeamSection = () => {
     const statEl = statsRef.current;
     const value = member.stat.value;
 
-    // Check if value is numeric
     const numericValue = parseFloat(value);
     if (isNaN(numericValue)) return;
 
@@ -520,10 +534,8 @@ export const TeamSection = () => {
         aria-hidden="true"
         className="pointer-events-none absolute inset-0"
       >
-        {/* Base gradient */}
         <div className="absolute inset-0 bg-[linear-gradient(165deg,#ffffff_0%,#f8fbff_52%,#ffffff_100%)]" />
 
-        {/* Grid pattern */}
         <div
           className="team-bg-grid absolute inset-0 opacity-[0.02] sm:opacity-[0.025]"
           style={{
@@ -535,7 +547,6 @@ export const TeamSection = () => {
           }}
         />
 
-        {/* Primary orb - responsive sizing */}
         <div
           ref={orbRef}
           className="team-orb absolute -right-32 top-12 h-[300px] w-[300px] rounded-full blur-3xl sm:-right-40 sm:top-16 sm:h-[400px] sm:w-[400px] md:-right-48 md:h-[500px] md:w-[500px] lg:-right-52 lg:top-24 lg:h-[600px] lg:w-[600px]"
@@ -549,10 +560,8 @@ export const TeamSection = () => {
           }}
         />
 
-        {/* Secondary orb */}
         <div className="absolute -bottom-40 -left-24 h-[300px] w-[300px] rounded-full bg-blue-100/25 blur-3xl sm:-bottom-48 sm:-left-32 sm:h-[400px] sm:w-[400px] md:-bottom-60 md:-left-48 md:h-[500px] md:w-[500px] lg:h-[600px] lg:w-[600px]" />
 
-        {/* Top divider */}
         <div className="absolute left-0 right-0 top-0 h-px bg-gradient-to-r from-transparent via-blue-200 to-transparent" />
       </div>
 
@@ -565,23 +574,21 @@ export const TeamSection = () => {
             {/* Label */}
             <div className="team-reveal mb-4 inline-flex items-center gap-2 rounded-full border border-blue-100 bg-blue-50/70 px-3 py-1.5 text-[9px] font-bold uppercase tracking-[0.2em] text-blue-600 backdrop-blur-md sm:mb-6 sm:px-3.5 sm:py-2 sm:text-[10px]">
               <span className="h-1.5 w-1.5 rounded-full bg-blue-600 shadow-[0_0_0_4px_rgba(37,99,235,.1)]" />
-              Our Team
+              {tr('team.badge', 'Our Team')}
               <span className="text-blue-300">/</span>
               BigTeeWise Digital
             </div>
 
-            {/* Heading - improved clamp for small screens */}
+            {/* Heading */}
             <h2 className="team-reveal text-[clamp(2.2rem,6vw,6.8rem)] font-black leading-[0.9] tracking-[-0.04em] text-slate-950 sm:leading-[0.86] sm:tracking-[-0.065em]">
-              The minds
+              {tr('team.heading', 'The minds')}
               <br />
-              <span className="text-blue-600">behind the work.</span>
+              <span className="text-blue-600">{tr('team.headingHighlight', 'behind the work.')}</span>
             </h2>
 
             {/* Description */}
             <p className="team-reveal mt-5 max-w-2xl text-sm leading-7 text-slate-500 sm:mt-8 sm:text-base sm:leading-7">
-              A collective of specialists across creative direction,
-              publishing, design, marketing and content — bringing different
-              disciplines together to create work that matters.
+              {tr('team.subheading', 'A collective of specialists across creative direction, publishing, design, marketing and content — bringing different disciplines together to create work that matters.')}
             </p>
           </div>
 
@@ -589,17 +596,17 @@ export const TeamSection = () => {
           <div className="team-reveal flex items-center gap-4 sm:gap-5">
             <div className="hidden text-right sm:block">
               <div className="text-[9px] font-bold uppercase tracking-[0.18em] text-slate-400 sm:text-[10px]">
-                Featured
+                {tr('team.featured', 'Featured')}
               </div>
               <div className="mt-1 text-xs font-bold text-slate-800 sm:text-sm">
-                5 / 15 Specialists
+                {tr('team.featuredCount', '5 / 15 Specialists')}
               </div>
             </div>
 
             <div className="flex gap-2">
               <button
                 type="button"
-                aria-label="Previous team member"
+                aria-label={tr('team.prevLabel', 'Previous team member')}
                 disabled={active === 0 || transitioning}
                 onClick={() => changeMember(Math.max(active - 1, 0))}
                 className="magnetic-btn group flex h-10 w-10 items-center justify-center rounded-full border border-slate-200 bg-white text-slate-700 shadow-sm transition-all duration-300 hover:-translate-x-0.5 hover:border-slate-900 hover:bg-slate-950 hover:text-white disabled:pointer-events-none disabled:opacity-30 sm:h-12 sm:w-12"
@@ -612,7 +619,7 @@ export const TeamSection = () => {
 
               <button
                 type="button"
-                aria-label="Next team member"
+                aria-label={tr('team.nextLabel', 'Next team member')}
                 disabled={active === members.length - 1 || transitioning}
                 onClick={() =>
                   changeMember(Math.min(active + 1, members.length - 1))
@@ -639,7 +646,6 @@ export const TeamSection = () => {
             ref={imageRef}
             className="group relative aspect-[4/5] overflow-hidden bg-slate-100 sm:aspect-[4/5] md:aspect-[3/4] lg:aspect-auto lg:min-h-[580px] xl:min-h-[680px]"
           >
-            {/* Person Image - proper fitting without awkward crop */}
             {member.image ? (
               <img
                 key={member.id}
@@ -668,10 +674,8 @@ export const TeamSection = () => {
               </div>
             )}
 
-            {/* Main overlay - gradient from bottom for text readability */}
             <div className="absolute inset-0 bg-gradient-to-t from-slate-950/80 via-slate-950/10 to-slate-950/5" />
 
-            {/* Accent overlay */}
             <div
               className="absolute inset-0 opacity-15 mix-blend-screen sm:opacity-20"
               style={{
@@ -683,14 +687,12 @@ export const TeamSection = () => {
               }}
             />
 
-            {/* Featured badge */}
             <div className="absolute left-4 top-4 sm:left-6 sm:top-6 md:left-7 md:top-7">
               <div className="rounded-full border border-white/20 bg-black/20 px-3 py-1.5 text-[8px] font-bold uppercase tracking-[0.2em] text-white backdrop-blur-xl sm:px-4 sm:py-2 sm:text-[9px]">
-                Featured Specialist
+                {tr('team.featuredBadge', 'Featured Specialist')}
               </div>
             </div>
 
-            {/* Big index - positioned to not overlap on mobile */}
             <div
               ref={numberRef}
               className="absolute bottom-3 left-4 sm:bottom-5 sm:left-6 md:bottom-7 md:left-7"
@@ -700,7 +702,6 @@ export const TeamSection = () => {
               </span>
             </div>
 
-            {/* Bottom identity - moved to not overlap with index */}
             <div className="absolute bottom-4 right-4 max-w-[55%] text-right sm:bottom-6 sm:right-6 md:bottom-8 md:right-7">
               <div className="text-[8px] font-bold uppercase tracking-[0.2em] text-white/60 sm:text-[9px]">
                 {member.department}
@@ -718,7 +719,6 @@ export const TeamSection = () => {
             ref={contentRef}
             className="relative flex flex-col justify-between bg-white p-5 sm:p-7 md:p-10 lg:min-h-[580px] lg:p-12 xl:p-16"
           >
-            {/* Accent edge */}
             <div
               className="absolute right-0 top-0 h-full w-[2px] sm:w-[3px]"
               style={{
@@ -731,7 +731,6 @@ export const TeamSection = () => {
               }}
             />
 
-            {/* Top metadata */}
             <div>
               <div className="mb-6 flex items-center justify-between sm:mb-9">
                 <div className="flex items-center gap-2 sm:gap-3">
@@ -750,12 +749,10 @@ export const TeamSection = () => {
                 </span>
               </div>
 
-              {/* Name - improved responsive sizing */}
               <h3 className="max-w-xl text-[clamp(1.8rem,4.5vw,5rem)] font-black leading-[0.95] tracking-[-0.04em] text-slate-950 sm:leading-[0.9] sm:tracking-[-0.06em]">
                 {member.name}
               </h3>
 
-              {/* Role */}
               <p
                 className="mt-3 max-w-lg text-[10px] font-bold uppercase tracking-[0.1em] sm:mt-5 sm:text-xs md:text-sm"
                 style={{ color: accent }}
@@ -763,17 +760,15 @@ export const TeamSection = () => {
                 {member.role}
               </p>
 
-              {/* Bio */}
               <div className="mt-6 max-w-xl border-l-2 border-slate-100 pl-4 sm:mt-9 sm:pl-5 md:pl-6">
                 <p className="text-sm leading-7 text-slate-500 sm:text-[15px] sm:leading-7">
                   {member.bio}
                 </p>
               </div>
 
-              {/* Expertise */}
               <div className="mt-6 sm:mt-9">
                 <p className="mb-2 text-[9px] font-bold uppercase tracking-[0.2em] text-slate-400 sm:mb-3 sm:text-[9px]">
-                  Areas of expertise
+                  {tr('team.expertiseLabel', 'Areas of expertise')}
                 </p>
 
                 <div className="flex flex-wrap gap-1.5 sm:gap-2">
@@ -789,13 +784,11 @@ export const TeamSection = () => {
               </div>
             </div>
 
-            {/* Bottom information */}
             <div className="mt-8 border-t border-slate-100 pt-5 sm:mt-10 sm:pt-6 md:mt-12 md:pt-7">
               <div className="flex flex-col gap-5 sm:flex-row sm:items-end sm:justify-between sm:gap-7">
-                {/* Contribution */}
                 <div>
                   <p className="text-[9px] font-bold uppercase tracking-[0.2em] text-slate-400">
-                    Contribution
+                    {tr('team.contributionLabel', 'Contribution')}
                   </p>
 
                   <div className="mt-1 flex items-baseline gap-2 sm:mt-2">
@@ -813,7 +806,6 @@ export const TeamSection = () => {
                   </div>
                 </div>
 
-                {/* Socials */}
                 <div className="flex items-center gap-2">
                   {member.socials?.linkedin && (
                     <a
@@ -856,12 +848,10 @@ export const TeamSection = () => {
           </div>
         </div>
 
-       
         {/* =================================================
-            FEATURED MEMBER NAVIGATION (NEW APPROACH)
+            FEATURED MEMBER NAVIGATION
         ================================================= */}
         <div className="mt-8 sm:mt-10">
-          {/* Hide scrollbar completely but maintain functionality */}
           <style dangerouslySetInnerHTML={{ __html: `.hide-scrollbar::-webkit-scrollbar { display: none; } .hide-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }` }} />
           
           <div
@@ -883,7 +873,6 @@ export const TeamSection = () => {
                       : 'border-slate-200 bg-white hover:-translate-y-1 hover:border-slate-300 hover:shadow-md'
                   }`}
                 >
-                  {/* Top Row: Avatar & Arrow Icon */}
                   <div className="flex items-start justify-between">
                     <div
                       className="relative h-12 w-12 overflow-hidden rounded-full border-2 border-white/10 shadow-sm sm:h-14 sm:w-14"
@@ -914,7 +903,6 @@ export const TeamSection = () => {
                     </div>
                   </div>
 
-                  {/* Bottom Row: Text Details */}
                   <div className="mt-5">
                     <p className={`truncate text-[13px] font-bold sm:text-sm ${
                       selected ? 'text-white' : 'text-slate-900'
@@ -928,7 +916,6 @@ export const TeamSection = () => {
                     </p>
                   </div>
 
-                  {/* Ambient background glow for active state */}
                   {selected && (
                     <div
                       className="absolute -bottom-6 -right-6 h-24 w-24 rounded-full opacity-20 blur-xl transition-all duration-700"
@@ -940,7 +927,6 @@ export const TeamSection = () => {
             })}
           </div>
           
-          {/* Scroll indicator dots strictly for mobile viewing */}
           <div className="mt-2 flex justify-center gap-1.5 lg:hidden">
             {members.map((_, idx) => (
               <div 
@@ -973,29 +959,26 @@ export const TeamSection = () => {
                 <div className="mb-3 flex items-center gap-2 sm:mb-4">
                   <Sparkles size={12} className="text-blue-400 sm:size-3.5" />
                   <span className="text-[9px] font-bold uppercase tracking-[0.2em] text-blue-400 sm:text-[10px]">
-                    The wider team
+                    {tr('team.widerTeamLabel', 'The wider team')}
                   </span>
                 </div>
 
                 <h4 className="text-2xl font-black leading-tight tracking-[-0.04em] text-white sm:text-3xl md:text-4xl">
-                  15 people.
+                  {tr('team.widerTeamHeading', '15 people.')}
                   <br />
-                  <span className="text-slate-500">One creative standard.</span>
+                  <span className="text-slate-500">{tr('team.widerTeamHeadingHighlight', 'One creative standard.')}</span>
                 </h4>
 
                 <p className="mt-4 max-w-xl text-xs leading-6 text-slate-400 sm:mt-5 sm:text-sm sm:leading-7">
-                  The five specialists featured above represent only part of the
-                  wider team. Behind every project is a broader group working
-                  across campaign management, advertising, graphic arts,
-                  copywriting and community management.
+                  {tr('team.widerTeamDesc', 'The five specialists featured above represent only part of the wider team. Behind every project is a broader group working across campaign management, advertising, graphic arts, copywriting and community management.')}
                 </p>
               </div>
 
               <div className="grid grid-cols-2 gap-2 sm:grid-cols-4 lg:w-[480px]">
-                {['Campaigns', 'Ad Buying', 'Graphic Arts', 'Copywriting'].map(
-                  (item) => (
+                {tr('team.widerTeamSkills', ['Campaigns', 'Ad Buying', 'Graphic Arts', 'Copywriting']).map(
+                  (item, idx) => (
                     <div
-                      key={item}
+                      key={idx}
                       className="rounded-lg border border-white/10 bg-white/[0.04] px-3 py-4 text-center transition-all hover:-translate-y-0.5 hover:border-white/20 hover:bg-white/[0.08] sm:px-4 sm:py-5"
                     >
                       <span className="text-[9px] font-semibold leading-tight text-slate-300 sm:text-[10px]">
@@ -1032,8 +1015,7 @@ export const TeamSection = () => {
                 ))}
               </div>
               <span className="text-[10px] font-semibold leading-relaxed text-slate-500 sm:text-xs">
-                A multidisciplinary team built around quality, strategy and
-                creative execution.
+                {tr('team.widerTeamFooter', 'A multidisciplinary team built around quality, strategy and creative execution.')}
               </span>
             </div>
           </div>
@@ -1043,13 +1025,13 @@ export const TeamSection = () => {
             FOOTER META
         ================================================= */}
         <div className="mt-8 flex flex-col gap-3 text-[9px] font-bold uppercase tracking-[0.18em] text-slate-400 sm:mt-10 sm:flex-row sm:items-center sm:justify-between sm:text-[10px]">
-          <span>BigTeeWise Digital / Team</span>
+          <span>BigTeeWise Digital / {tr('team.metaTeam', 'Team')}</span>
           <span className="flex items-center gap-2">
             <span className="h-1.5 w-1.5 rounded-full bg-blue-600 sm:h-2 sm:w-2" />{' '}
-            Creative · Strategy · Execution
+            {tr('team.metaValues', 'Creative · Strategy · Execution')}
           </span>
           <span className="flex items-center gap-1.5 transition-colors hover:text-blue-500 cursor-pointer">
-            ← → Explore team <MoveUpRight size={11} className="sm:size-3" />
+            ← → {tr('team.exploreTeam', 'Explore team')} <MoveUpRight size={11} className="sm:size-3" />
           </span>
         </div>
       </div>

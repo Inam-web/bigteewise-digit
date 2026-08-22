@@ -32,6 +32,7 @@ import {
   Bookmark,
   BookOpen,
 } from 'lucide-react';
+import { useLanguage } from '@/i18n/LanguageContext';
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -415,8 +416,7 @@ function MagneticWrap({ children, strength = 0.35, className = '' }) {
 }
 
 /* ============================================================
-   CUSTOM CURSOR — event-delegated so dynamically mounted
-   buttons (modals, carousel) are always covered.
+   CUSTOM CURSOR
 ============================================================ */
 
 const CURSOR_SELECTOR = 'a, button, [role="button"], [data-cursor]';
@@ -494,7 +494,7 @@ function CustomCursor() {
 }
 
 /* ============================================================
-   FLOATING PARTICLES — lighter on small screens
+   FLOATING PARTICLES
 ============================================================ */
 
 function FloatingParticles({ count }) {
@@ -584,8 +584,7 @@ function ScrollProgress() {
 }
 
 /* ============================================================
-   PRELOADER — cinematic curtain with counter, wipes away
-   and hands off to the hero intro timeline.
+   PRELOADER
 ============================================================ */
 
 function Preloader({ onComplete }) {
@@ -704,8 +703,7 @@ function Preloader({ onComplete }) {
 }
 
 /* ============================================================
-   MARQUEE — GSAP loop with scroll-velocity boost.
-   Renders a static strip when motion is reduced.
+   MARQUEE
 ============================================================ */
 
 function Marquee({ children, speed = 1, direction = 'left', className = '' }) {
@@ -764,7 +762,7 @@ function Marquee({ children, speed = 1, direction = 'left', className = '' }) {
 }
 
 /* ============================================================
-   TEXT REVEAL (word by word, 3D flip up)
+   TEXT REVEAL
 ============================================================ */
 
 function TextReveal({ children, className = '', tag: Tag = 'div', delay = 0 }) {
@@ -860,7 +858,7 @@ function AnimatedCounter({ value, suffix = '', className = '' }) {
 }
 
 /* ============================================================
-   SECTION LABEL — consistent editorial kicker
+   SECTION LABEL
 ============================================================ */
 
 function SectionLabel({ children, tone = 'light', className = '' }) {
@@ -881,6 +879,7 @@ function SectionLabel({ children, tone = 'light', className = '' }) {
 ============================================================ */
 
 export default function PortfolioCaseStudy() {
+  const { t, locale } = useLanguage();
   const mainRef = useRef(null);
   const heroRef = useRef(null);
   const lenisRef = useRef(null);
@@ -892,6 +891,19 @@ export default function PortfolioCaseStudy() {
   const [activeProject, setActiveProject] = useState('project-01');
   const [selectedReview, setSelectedReview] = useState(null);
   const [reviewIndex, setReviewIndex] = useState(0);
+
+  // Translation helper
+  const tr = (key, fallback) => {
+    try {
+      const result = t(key);
+      if (result === key || result === undefined || result === null) {
+        return fallback;
+      }
+      return result;
+    } catch (e) {
+      return fallback;
+    }
+  };
 
   const nextReview = useCallback(
     () => setReviewIndex((c) => (c + 1) % PROJECT.reviews.length),
@@ -906,13 +918,11 @@ export default function PortfolioCaseStudy() {
   const handlePreloaderDone = useCallback(() => setIsLoaded(true), []);
 
   /* ==========================================================
-     LENIS SMOOTH SCROLL — skipped for reduced motion
+     LENIS SMOOTH SCROLL
   ========================================================== */
 
   useEffect(() => {
     if (prefersReducedMotion()) return;
-
-    // Skip Lenis on mobile for native touch scrolling feel
     if (window.innerWidth < 768) return;
 
     const lenis = new Lenis({
@@ -940,8 +950,7 @@ export default function PortfolioCaseStudy() {
   }, []);
 
   /* ==========================================================
-     NAV VISIBILITY — native scroll fallback for reduced motion
-     (the animated path lives inside the master GSAP effect)
+     NAV VISIBILITY
   ========================================================== */
 
   useEffect(() => {
@@ -961,7 +970,7 @@ export default function PortfolioCaseStudy() {
   }, []);
 
   /* ==========================================================
-     SMOOTH SCROLL TO ANCHOR (Lenis with native fallback)
+     SMOOTH SCROLL TO ANCHOR
   ========================================================== */
 
   const scrollTo = useCallback((target) => {
@@ -979,7 +988,7 @@ export default function PortfolioCaseStudy() {
   }, []);
 
   /* ==========================================================
-     HERO INTRO — runs once the preloader hands off
+     HERO INTRO
   ========================================================== */
 
   useLayoutEffect(() => {
@@ -1037,8 +1046,7 @@ export default function PortfolioCaseStudy() {
   }, [isLoaded]);
 
   /* ==========================================================
-     MASTER SCROLL SYSTEM — reveals, parallax, mask wipes and
-     the pinned horizontal books gallery (desktop only).
+     MASTER SCROLL SYSTEM
   ========================================================== */
 
   useLayoutEffect(() => {
@@ -1190,7 +1198,7 @@ export default function PortfolioCaseStudy() {
         });
       }
 
-      /* ---------- BOOKS — pinned horizontal gallery on lg ---------- */
+      /* ---------- BOOKS ---------- */
 
       const books = main.querySelector('.books-section');
       if (books) {
@@ -1364,7 +1372,7 @@ export default function PortfolioCaseStudy() {
         });
       }
 
-      /* ---------- CRAFT & DESIGN SYSTEM ---------- */
+      /* ---------- CRAFT ---------- */
 
       const craft = main.querySelector('.craft-section');
       if (craft) {
@@ -1377,7 +1385,7 @@ export default function PortfolioCaseStudy() {
         });
       }
 
-      /* ---------- READER FUNNEL ---------- */
+      /* ---------- FUNNEL ---------- */
 
       const funnel = main.querySelector('.funnel-section');
       if (funnel) {
@@ -1500,7 +1508,7 @@ export default function PortfolioCaseStudy() {
         });
       }
 
-      /* ---------- PROJECT 2 — MOCKUP (THE EXPERIENCE) ---------- */
+      /* ---------- PROJECT 2 — MOCKUP ---------- */
 
       const p2Mockup = main.querySelector('.p2-mockup-section');
       if (p2Mockup) {
@@ -1533,7 +1541,7 @@ export default function PortfolioCaseStudy() {
         });
       }
 
-      /* ---------- PROJECT 2 — NARRATIVE ARCHITECTURE ---------- */
+      /* ---------- PROJECT 2 — NARRATIVE ---------- */
 
       const p2Narrative = main.querySelector('.p2-narrative-section');
       if (p2Narrative) {
@@ -1546,7 +1554,7 @@ export default function PortfolioCaseStudy() {
         });
       }
 
-      /* ---------- PROJECT 2 — AMAZON A+ STRATEGY ---------- */
+      /* ---------- PROJECT 2 — AMAZON A+ ---------- */
 
       const p2Aplus = main.querySelector('.p2-aplus-section');
       if (p2Aplus) {
@@ -1559,7 +1567,7 @@ export default function PortfolioCaseStudy() {
         });
       }
 
-      /* ---------- PROJECT 2 — MARKETING ECOSYSTEM ---------- */
+      /* ---------- PROJECT 2 — ECOSYSTEM ---------- */
 
       const p2Ecosystem = main.querySelector('.p2-ecosystem-section');
       if (p2Ecosystem) {
@@ -1622,7 +1630,7 @@ export default function PortfolioCaseStudy() {
   }, []);
 
   /* ==========================================================
-     ACTIVE SECTION TRACKING (nav highlighting)
+     ACTIVE SECTION TRACKING
   ========================================================== */
 
   useEffect(() => {
@@ -1645,7 +1653,7 @@ export default function PortfolioCaseStudy() {
   }, []);
 
   /* ==========================================================
-     ACTIVE PROJECT TRACKING (for project switcher)
+     ACTIVE PROJECT TRACKING
   ========================================================== */
 
   useEffect(() => {
@@ -1663,7 +1671,7 @@ export default function PortfolioCaseStudy() {
   }, []);
 
   /* ==========================================================
-     MODAL — escape key, scroll lock, Lenis pause
+     MODAL
   ========================================================== */
 
   useLayoutEffect(() => {
@@ -1685,7 +1693,7 @@ export default function PortfolioCaseStudy() {
   }, [selectedReview]);
 
   /* ==========================================================
-     REVIEWS — pointer drag support (mouse + touch)
+     REVIEWS DRAG
   ========================================================== */
 
   const handleDragStart = useCallback((e) => {
@@ -1745,11 +1753,11 @@ export default function PortfolioCaseStudy() {
               <div className="flex items-center justify-between rounded-2xl border border-white/[0.08] bg-[#0a0a0a]/85 px-5 py-3 shadow-2xl backdrop-blur-2xl">
                 {/* Left: Portfolio Link */}
                 <Link
-                  href="/"
+                  href={`/${locale}`}
                   className="group flex items-center gap-2.5 text-[10px] font-medium uppercase tracking-[0.25em] text-white/50 transition-all duration-500 hover:text-white"
                 >
                   <ArrowLeft className="h-3 w-3 transition-transform duration-500 group-hover:-translate-x-0.5" />
-                  Portfolio
+                  {tr('portfolio.backToPortfolio', 'Portfolio')}
                 </Link>
 
                 {/* Center: Project Switcher */}
@@ -1788,8 +1796,8 @@ export default function PortfolioCaseStudy() {
                       rel="noreferrer"
                       className="group flex items-center gap-2 rounded-full border border-white/10 px-4 py-2 text-[10px] font-semibold uppercase tracking-[0.18em] text-white/70 transition-all duration-500 hover:border-white/25 hover:bg-white hover:text-black"
                     >
-                      <span className="hidden sm:inline">Visit</span>
-                      <span className="sm:hidden">Live</span>
+                      <span className="hidden sm:inline">{tr('portfolio.visit', 'Visit')}</span>
+                      <span className="sm:hidden">{tr('portfolio.live', 'Live')}</span>
                       <ArrowUpRight className="h-3 w-3 transition-transform duration-500 group-hover:-translate-y-0.5 group-hover:translate-x-0.5" />
                     </a>
                   </MagneticWrap>
@@ -1801,11 +1809,11 @@ export default function PortfolioCaseStudy() {
             <div className="md:hidden">
               <div className="flex items-center justify-between gap-2 rounded-xl border border-white/[0.08] bg-[#0a0a0a]/90 px-3.5 py-2.5 shadow-xl backdrop-blur-2xl">
                 <Link
-                  href="/"
+                  href={`/${locale}`}
                   className="flex items-center gap-1.5 text-[9px] font-medium uppercase tracking-[0.2em] text-white/50"
                 >
                   <ArrowLeft className="h-2.5 w-2.5" />
-                  <span>Back</span>
+                  <span>{tr('portfolio.back', 'Back')}</span>
                 </Link>
 
                 <div className="flex items-center gap-0.5 rounded-full border border-white/[0.06] bg-white/[0.02] p-0.5">
@@ -1834,7 +1842,7 @@ export default function PortfolioCaseStudy() {
                   rel="noreferrer"
                   className="flex items-center gap-1 text-[9px] font-semibold uppercase tracking-[0.15em] text-white/50"
                 >
-                  <span>Live</span>
+                  <span>{tr('portfolio.live', 'Live')}</span>
                   <ArrowUpRight className="h-2.5 w-2.5" />
                 </a>
               </div>
@@ -1860,14 +1868,14 @@ export default function PortfolioCaseStudy() {
             <div className="hero-text-block order-2 lg:order-1">
               <div className="mb-6 overflow-hidden">
                 <div className="hero-number flex flex-wrap items-center gap-x-4 gap-y-2 text-[10px] font-semibold uppercase tracking-[0.35em] text-white/40">
-                  <span>Case Study {PROJECT.number}</span>
+                  <span>{tr('portfolio.caseStudy', 'Case Study')} {PROJECT.number}</span>
                   <span className="h-px w-8 bg-white/20" />
                   <span className="text-white/25">{PROJECT.label}</span>
                 </div>
               </div>
 
               <h1 className="sr-only">
-                {PROJECT.title} {PROJECT.mutedTitle} — Case Study {PROJECT.number}
+                {PROJECT.title} {PROJECT.mutedTitle} — {tr('portfolio.caseStudy', 'Case Study')} {PROJECT.number}
               </h1>
 
               <div className="overflow-hidden">
@@ -1888,9 +1896,9 @@ export default function PortfolioCaseStudy() {
 
               <div className="hero-meta-grid mt-8 grid max-w-xl grid-cols-3 gap-4 border-y border-white/10 py-5">
                 {[
-                  { label: 'Client', value: 'A. E. Fábregas & S. B. Brieva' },
-                  { label: 'Year', value: PROJECT.year },
-                  { label: 'Role', value: 'Design & Development' },
+                  { label: tr('portfolio.client', 'Client'), value: PROJECT.client },
+                  { label: tr('portfolio.year', 'Year'), value: PROJECT.year },
+                  { label: tr('portfolio.role', 'Role'), value: 'Design & Development' },
                 ].map((item) => (
                   <div key={item.label} className="min-w-0">
                     <div className="text-[9px] uppercase tracking-[0.28em] text-white/30">{item.label}</div>
@@ -1902,7 +1910,7 @@ export default function PortfolioCaseStudy() {
               </div>
 
               <div className="mt-7 flex flex-wrap gap-2">
-                {['Author Website', 'Book Experience', 'Editorial Design', 'Reader Journey'].map((item) => (
+                {[tr('portfolio.tag1', 'Author Website'), tr('portfolio.tag2', 'Book Experience'), tr('portfolio.tag3', 'Editorial Design'), tr('portfolio.tag4', 'Reader Journey')].map((item) => (
                   <span
                     key={item}
                     className="hero-tag rounded-full border border-white/10 bg-white/[0.035] px-4 py-2 text-[10px] uppercase tracking-[0.16em] text-white/55 transition-all duration-500 hover:-translate-y-0.5 hover:border-white/25 hover:bg-white/[0.07] hover:text-white/80"
@@ -1931,7 +1939,7 @@ export default function PortfolioCaseStudy() {
           </div>
 
           <div className="scroll-hint absolute bottom-6 left-1/2 hidden -translate-x-1/2 flex-col items-center gap-3 text-[9px] uppercase tracking-[0.3em] text-white/30 lg:flex">
-            <span>Scroll to explore</span>
+            <span>{tr('portfolio.scrollToExplore', 'Scroll to explore')}</span>
             <ArrowDown className="h-3 w-3 animate-bounce" />
             <div className="mt-1 h-12 w-px bg-gradient-to-b from-white/25 to-transparent" />
           </div>
@@ -1940,7 +1948,7 @@ export default function PortfolioCaseStudy() {
         {/* ====== MARQUEE ====== */}
 
         <Marquee speed={0.8} className="border-y border-white/10 bg-[#0c0c0c] py-5">
-          {['Author Platform', 'Book Experience', 'Editorial Design', 'Visual Storytelling', 'Reader Journey', 'Digital Identity'].map((text, i) => (
+          {[tr('portfolio.marquee1', 'Author Platform'), tr('portfolio.marquee2', 'Book Experience'), tr('portfolio.marquee3', 'Editorial Design'), tr('portfolio.marquee4', 'Visual Storytelling'), tr('portfolio.marquee5', 'Reader Journey'), tr('portfolio.marquee6', 'Digital Identity')].map((text, i) => (
             <span key={i} className="mx-8 flex items-center gap-4 text-sm uppercase tracking-[0.2em] text-white/25">
               <Sparkles className="h-3 w-3" />
               {text}
@@ -1948,13 +1956,13 @@ export default function PortfolioCaseStudy() {
           ))}
         </Marquee>
 
-        {/* ====== PROJECT STRIP — next case study teaser ====== */}
+        {/* ====== PROJECT STRIP ====== */}
 
         <section className="project-strip border-b border-white/10 bg-[#0c0c0c] py-7">
           <div className="mx-auto flex max-w-7xl items-center justify-between px-5 sm:px-6">
             <div className="flex min-w-0 items-center gap-4">
               <span className="shrink-0 text-[10px] tracking-[0.25em] text-white/25">
-                PROJECT {PROJECT_TWO.number}
+                {tr('portfolio.project', 'PROJECT')} {PROJECT_TWO.number}
               </span>
               <span className="h-px w-10 shrink-0 bg-white/10" />
               <span className="truncate text-xs text-white/45">
@@ -1970,12 +1978,12 @@ export default function PortfolioCaseStudy() {
         <section id="story" className="story-section px-5 py-24 sm:px-6 md:py-36 lg:py-44">
           <div className="mx-auto grid max-w-7xl gap-12 lg:grid-cols-[.7fr_1.3fr] lg:gap-16">
             <div>
-              <SectionLabel>The Story</SectionLabel>
+              <SectionLabel>{tr('portfolio.theStory', 'The Story')}</SectionLabel>
               <div className="mt-8 hidden flex-col gap-6 lg:flex">
                 {[
-                  { label: 'Sector', value: 'Publishing & Literature' },
-                  { label: 'Platform', value: 'Author Website & Book Experience' },
-                  { label: 'Outcome', value: '5★ rated reader journey on launch' },
+                  { label: tr('portfolio.sector', 'Sector'), value: 'Publishing & Literature' },
+                  { label: tr('portfolio.platform', 'Platform'), value: 'Author Website & Book Experience' },
+                  { label: tr('portfolio.outcome', 'Outcome'), value: '5★ rated reader journey on launch' },
                 ].map((fact) => (
                   <div key={fact.label} className="story-fact border-l border-white/10 pl-5">
                     <div className="text-[9px] uppercase tracking-[0.28em] text-white/30">{fact.label}</div>
@@ -1990,7 +1998,7 @@ export default function PortfolioCaseStudy() {
                 tag="h2"
                 className="max-w-5xl text-3xl font-medium leading-tight tracking-tight md:text-5xl lg:text-6xl"
               >
-                A story built from more than fifty years of life memory and everything that happened between the photographs.
+                {tr('portfolio.storyHeading', 'A story built from more than fifty years of life memory and everything that happened between the photographs.')}
               </TextReveal>
 
               <div className="deco-line h-px w-full origin-left bg-white/10" />
@@ -2006,9 +2014,9 @@ export default function PortfolioCaseStudy() {
 
               <div className="grid grid-cols-1 gap-4 sm:grid-cols-3 lg:hidden">
                 {[
-                  { label: 'Sector', value: 'Publishing & Literature' },
-                  { label: 'Platform', value: 'Author Website & Book Experience' },
-                  { label: 'Outcome', value: '5★ rated reader journey on launch' },
+                  { label: tr('portfolio.sector', 'Sector'), value: 'Publishing & Literature' },
+                  { label: tr('portfolio.platform', 'Platform'), value: 'Author Website & Book Experience' },
+                  { label: tr('portfolio.outcome', 'Outcome'), value: '5★ rated reader journey on launch' },
                 ].map((fact) => (
                   <div key={fact.label} className="story-fact rounded-xl border border-white/10 bg-white/[0.02] p-4">
                     <div className="text-[9px] uppercase tracking-[0.28em] text-white/30">{fact.label}</div>
@@ -2029,7 +2037,7 @@ export default function PortfolioCaseStudy() {
           </span>
 
           <div className="relative mx-auto max-w-6xl">
-            <SectionLabel>Philosophy</SectionLabel>
+            <SectionLabel>{tr('portfolio.philosophy', 'Philosophy')}</SectionLabel>
             <div className="philosophy-mark mt-8 h-px w-20 origin-left bg-white/25" />
 
             <TextReveal
@@ -2041,30 +2049,30 @@ export default function PortfolioCaseStudy() {
 
             <div className="mt-10 flex items-center gap-4 text-[10px] uppercase tracking-[0.28em] text-white/30">
               <span className="h-px w-8 bg-white/20" />
-              <span>The guiding thought behind the design</span>
+              <span>{tr('portfolio.guidingThought', 'The guiding thought behind the design')}</span>
             </div>
           </div>
         </section>
 
-        {/* ====== TIMELINE / HISTORICAL ARC ====== */}
+        {/* ====== TIMELINE ====== */}
 
         <section className="timeline-section border-t border-white/10 bg-[#0c0c0c] px-5 py-24 sm:px-6 md:py-36 lg:py-44">
           <div className="mx-auto max-w-7xl">
             <div className="mb-14 flex flex-col justify-between gap-6 md:mb-20 md:flex-row md:items-end">
               <div>
-                <SectionLabel>Historical Arc</SectionLabel>
+                <SectionLabel>{tr('portfolio.historicalArc', 'Historical Arc')}</SectionLabel>
                 <TextReveal
                   tag="h2"
                   className="mt-5 max-w-4xl text-4xl font-semibold leading-[0.95] tracking-[-0.045em] sm:text-5xl md:text-6xl"
                 >
-                  Fifty years of living memory.
+                  {tr('portfolio.timelineHeading', 'Fifty years of living memory.')}
                 </TextReveal>
                 <p className="mt-2 max-w-4xl text-4xl font-semibold leading-[0.95] tracking-[-0.045em] text-white/20 sm:text-5xl md:text-6xl">
-                  Preserved for the next generation.
+                  {tr('portfolio.timelineSubheading', 'Preserved for the next generation.')}
                 </p>
               </div>
               <p className="max-w-sm text-sm leading-relaxed text-white/40">
-                A chronological narrative connecting Havana, Madrid, and Valencia into a unified literary legacy.
+                {tr('portfolio.timelineDesc', 'A chronological narrative connecting Havana, Madrid, and Valencia into a unified literary legacy.')}
               </p>
             </div>
 
@@ -2076,7 +2084,7 @@ export default function PortfolioCaseStudy() {
                 >
                   <div className="mb-6 flex items-center justify-between border-b border-white/10 pb-4">
                     <span className="text-[10px] font-semibold uppercase tracking-[0.28em] text-white/30">
-                      Epoch 0{i + 1}
+                      {tr('portfolio.epoch', 'Epoch')} 0{i + 1}
                     </span>
                     <span className="rounded-full border border-white/15 bg-white/[0.04] px-3 py-1 text-xs font-bold tracking-wider text-white/80 transition-colors duration-500 group-hover:bg-white group-hover:text-black">
                       {item.era}
@@ -2100,10 +2108,10 @@ export default function PortfolioCaseStudy() {
         <section className="stats-section border-b border-white/10 bg-[#0c0c0c] px-5 py-16 sm:px-6 md:py-20">
           <div className="mx-auto grid max-w-7xl grid-cols-2 gap-3 md:grid-cols-4 md:gap-4">
             {[
-              { value: 3, suffix: '', label: 'Books Published' },
-              { value: 50, suffix: '+', label: 'Years of History' },
-              { value: 5, suffix: '★', label: 'Reader Rating' },
-              { value: 100, suffix: '%', label: 'Custom Design' },
+              { value: 3, suffix: '', label: tr('portfolio.statBooks', 'Books Published') },
+              { value: 50, suffix: '+', label: tr('portfolio.statHistory', 'Years of History') },
+              { value: 5, suffix: '★', label: tr('portfolio.statRating', 'Reader Rating') },
+              { value: 100, suffix: '%', label: tr('portfolio.statDesign', 'Custom Design') },
             ].map((stat) => (
               <div
                 key={stat.label}
@@ -2123,22 +2131,22 @@ export default function PortfolioCaseStudy() {
           </div>
         </section>
 
-        {/* ====== BOOKS — pinned horizontal gallery / responsive grid ====== */}
+        {/* ====== BOOKS ====== */}
 
         <section id="books" className="books-section relative overflow-hidden">
           <div className="mx-auto max-w-7xl px-5 py-20 sm:px-6 md:py-28 lg:pb-14 lg:pt-28">
             <div className="flex flex-col justify-between gap-8 md:flex-row md:items-end">
               <div>
-                <SectionLabel>The Trilogy</SectionLabel>
+                <SectionLabel>{tr('portfolio.theTrilogy', 'The Trilogy')}</SectionLabel>
                 <TextReveal
                   tag="h2"
                   className="mt-5 max-w-3xl text-4xl font-semibold tracking-tight md:text-6xl"
                 >
-                  Three books. One life.
+                  {tr('portfolio.trilogyHeading', 'Three books. One life.')}
                 </TextReveal>
               </div>
               <div className="books-hint hidden items-center gap-3 text-[10px] uppercase tracking-[0.28em] text-white/30 lg:flex">
-                <span>Scroll to move through the shelf</span>
+                <span>{tr('portfolio.scrollToMove', 'Scroll to move through the shelf')}</span>
                 <ArrowRight className="h-3.5 w-3.5" />
               </div>
             </div>
@@ -2200,22 +2208,22 @@ export default function PortfolioCaseStudy() {
           ))}
         </Marquee>
 
-        {/* ====== WORK — light editorial showcase ====== */}
+        {/* ====== WORK ====== */}
 
         <section id="work" className="work-section overflow-hidden bg-[#eae8e2] px-5 py-24 text-[#111] sm:px-6 md:py-36 lg:py-44">
           <div className="mx-auto max-w-7xl">
             <div className="work-intro mb-16 grid gap-10 lg:mb-24 lg:grid-cols-[1.3fr_.7fr] lg:items-end">
               <div>
-                <SectionLabel tone="dark">The Work</SectionLabel>
+                <SectionLabel tone="dark">{tr('portfolio.theWork', 'The Work')}</SectionLabel>
                 <TextReveal
                   tag="h2"
                   className="mt-6 max-w-5xl text-[clamp(2.6rem,6.5vw,6.5rem)] font-semibold leading-[0.92] tracking-[-0.055em]"
                 >
-                  A digital world built around the story.
+                  {tr('portfolio.workHeading', 'A digital world built around the story.')}
                 </TextReveal>
               </div>
               <p className="reveal-copy max-w-sm text-sm leading-7 text-black/50">
-                Rather than presenting the website as a conventional collection of screenshots, the interface becomes an editorial canvas where every visual has its own rhythm.
+                {tr('portfolio.workDesc', 'Rather than presenting the website as a conventional collection of screenshots, the interface becomes an editorial canvas where every visual has its own rhythm.')}
               </p>
             </div>
 
@@ -2232,10 +2240,10 @@ export default function PortfolioCaseStudy() {
               </div>
               <div className="work-caption flex flex-col justify-between gap-4 px-2 py-4 md:flex-row md:items-center md:px-5 md:py-5">
                 <div>
-                  <span className="text-[9px] uppercase tracking-[0.25em] text-black/35">01 / Digital Identity</span>
-                  <p className="mt-2 text-sm text-black/60">The central experience connects literature, memory and discovery.</p>
+                  <span className="text-[9px] uppercase tracking-[0.25em] text-black/35">01 / {tr('portfolio.digitalIdentity', 'Digital Identity')}</span>
+                  <p className="mt-2 text-sm text-black/60">{tr('portfolio.workDesc', 'The central experience connects literature, memory and discovery.')}</p>
                 </div>
-                <span className="text-[10px] uppercase tracking-[0.2em] text-black/30">Desktop Experience</span>
+                <span className="text-[10px] uppercase tracking-[0.2em] text-black/30">{tr('portfolio.desktopExperience', 'Desktop Experience')}</span>
               </div>
             </div>
 
@@ -2252,8 +2260,8 @@ export default function PortfolioCaseStudy() {
                     />
                   </div>
                   <div className="work-caption px-2 py-4 md:py-5">
-                    <span className="text-[9px] uppercase tracking-[0.25em] text-black/35">02 / Editorial Detail</span>
-                    <p className="mt-2 text-sm leading-6 text-black/55">Quiet typography and generous composition keep the story at the center.</p>
+                    <span className="text-[9px] uppercase tracking-[0.25em] text-black/35">02 / {tr('portfolio.editorialDetail', 'Editorial Detail')}</span>
+                    <p className="mt-2 text-sm leading-6 text-black/55">{tr('portfolio.workDesc', 'Quiet typography and generous composition keep the story at the center.')}</p>
                   </div>
                 </div>
               </div>
@@ -2271,10 +2279,10 @@ export default function PortfolioCaseStudy() {
                   </div>
                   <div className="work-caption flex flex-col justify-between gap-4 px-2 py-4 md:flex-row md:items-center md:px-1 md:py-5">
                     <div>
-                      <span className="text-[9px] uppercase tracking-[0.25em] text-black/35">03 / Reader Journey</span>
-                      <p className="mt-2 max-w-lg text-sm leading-6 text-black/55">The interface guides visitors naturally from the visual archive into the books and authors.</p>
+                      <span className="text-[9px] uppercase tracking-[0.25em] text-black/35">03 / {tr('portfolio.readerJourney', 'Reader Journey')}</span>
+                      <p className="mt-2 max-w-lg text-sm leading-6 text-black/55">{tr('portfolio.workDesc', 'The interface guides visitors naturally from the visual archive into the books and authors.')}</p>
                     </div>
-                    <span className="text-[10px] uppercase tracking-[0.2em] text-black/30">Responsive System</span>
+                    <span className="text-[10px] uppercase tracking-[0.2em] text-black/30">{tr('portfolio.responsiveSystem', 'Responsive System')}</span>
                   </div>
                 </div>
               </div>
@@ -2282,22 +2290,22 @@ export default function PortfolioCaseStudy() {
           </div>
         </section>
 
-        {/* ====== EDITORIAL CRAFT & DESIGN SYSTEM ====== */}
+        {/* ====== CRAFT ====== */}
 
         <section className="craft-section border-t border-white/10 bg-[#111] px-5 py-24 sm:px-6 md:py-36 lg:py-44">
           <div className="mx-auto max-w-7xl">
             <div className="mb-14 flex flex-col justify-between gap-6 md:mb-20 md:flex-row md:items-end">
               <div>
-                <SectionLabel>Design & Craft</SectionLabel>
+                <SectionLabel>{tr('portfolio.designAndCraft', 'Design & Craft')}</SectionLabel>
                 <TextReveal
                   tag="h2"
                   className="mt-5 max-w-4xl text-4xl font-semibold leading-[0.95] tracking-[-0.045em] sm:text-5xl md:text-6xl"
                 >
-                  Crafted like a museum archive.
+                  {tr('portfolio.craftHeading', 'Crafted like a museum archive.')}
                 </TextReveal>
               </div>
               <p className="max-w-sm text-sm leading-relaxed text-white/40">
-                Every interface component, typography choice, and color palette decision was tailored to respect the emotional gravitas of the authors&apos; history.
+                {tr('portfolio.craftDesc', 'Every interface component, typography choice, and color palette decision was tailored to respect the emotional gravitas of the authors\' history.')}
               </p>
             </div>
 
@@ -2309,7 +2317,7 @@ export default function PortfolioCaseStudy() {
                 >
                   <div className="mb-8 flex items-center justify-between">
                     <span className="text-[10px] uppercase tracking-[0.25em] text-white/30">
-                      Pillar 0{i + 1}
+                      {tr('portfolio.pillar', 'Pillar')} 0{i + 1}
                     </span>
                     <Sparkles className="h-4 w-4 text-white/20 transition-all duration-500 group-hover:scale-110 group-hover:text-white/60" />
                   </div>
@@ -2331,12 +2339,12 @@ export default function PortfolioCaseStudy() {
         <section className="authors-section px-5 py-24 sm:px-6 md:py-36 lg:py-44">
           <div className="mx-auto max-w-7xl">
             <div className="mb-12 md:mb-16">
-              <SectionLabel>The Authors</SectionLabel>
+              <SectionLabel>{tr('portfolio.theAuthors', 'The Authors')}</SectionLabel>
               <TextReveal
                 tag="h2"
                 className="mt-5 max-w-4xl text-4xl font-semibold tracking-tight md:text-6xl"
               >
-                Two voices. One shared history.
+                {tr('portfolio.authorsHeading', 'Two voices. One shared history.')}
               </TextReveal>
             </div>
 
@@ -2352,7 +2360,7 @@ export default function PortfolioCaseStudy() {
 
                   <div className="mb-10 flex items-center justify-between md:mb-12">
                     <span className="rounded-full border border-white/10 px-3 py-1 text-[9px] uppercase tracking-[0.25em] text-white/30">
-                      Author 0{i + 1}
+                      {tr('portfolio.author', 'Author')} 0{i + 1}
                     </span>
                     <ArrowUpRight className="h-5 w-5 text-white/20 transition-all duration-500 group-hover:-translate-y-1 group-hover:translate-x-1 group-hover:text-white/60" />
                   </div>
@@ -2367,7 +2375,7 @@ export default function PortfolioCaseStudy() {
           </div>
         </section>
 
-        {/* ====== REVIEWS — draggable carousel ====== */}
+        {/* ====== REVIEWS ====== */}
 
         <section
           id="reviews"
@@ -2376,23 +2384,23 @@ export default function PortfolioCaseStudy() {
           <div className="mx-auto max-w-7xl">
             <div className="mb-10 flex flex-col justify-between gap-8 md:mb-14 md:flex-row md:items-end">
               <div className="content-reveal">
-                <SectionLabel>Reader Feedback</SectionLabel>
+                <SectionLabel>{tr('portfolio.readerFeedback', 'Reader Feedback')}</SectionLabel>
                 <h2 className="mt-5 max-w-4xl text-4xl font-semibold leading-[0.95] tracking-[-0.045em] sm:text-5xl md:text-6xl lg:text-7xl">
-                  Real words.
-                  <span className="block text-white/20">Real readers.</span>
+                  {tr('portfolio.reviewsHeading', 'Real words.')}
+                  <span className="block text-white/20">{tr('portfolio.reviewsSubheading', 'Real readers.')}</span>
                 </h2>
               </div>
 
               <div className="content-reveal flex items-end gap-6">
                 <p className="max-w-sm text-sm leading-relaxed text-white/40">
-                  The story continued beyond the pages through the people who discovered it, read it and shared their experience.
+                  {tr('portfolio.reviewsDesc', 'The story continued beyond the pages through the people who discovered it, read it and shared their experience.')}
                 </p>
                 <div className="hidden shrink-0 gap-2 sm:flex">
                   <MagneticWrap strength={0.4}>
                     <button
                       type="button"
                       onClick={previousReview}
-                      aria-label="Previous review"
+                      aria-label={tr('portfolio.prevReview', 'Previous review')}
                       className="flex h-11 w-11 items-center justify-center rounded-full border border-white/10 bg-white/[0.025] text-white/50 transition-all duration-500 hover:border-white/30 hover:bg-white hover:text-black"
                     >
                       <ArrowLeft className="h-4 w-4" />
@@ -2402,7 +2410,7 @@ export default function PortfolioCaseStudy() {
                     <button
                       type="button"
                       onClick={nextReview}
-                      aria-label="Next review"
+                      aria-label={tr('portfolio.nextReview', 'Next review')}
                       className="flex h-11 w-11 items-center justify-center rounded-full border border-white/10 bg-white/[0.025] text-white/50 transition-all duration-500 hover:border-white/30 hover:bg-white hover:text-black"
                     >
                       <ArrowRight className="h-4 w-4" />
@@ -2448,7 +2456,7 @@ export default function PortfolioCaseStudy() {
                         <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-black/50 via-transparent to-transparent" />
                         <div className="pointer-events-none absolute bottom-3 left-3 flex items-center gap-2 rounded-full border border-white/15 bg-black/50 px-3 py-1.5 text-[8px] uppercase tracking-[0.2em] text-white/70 backdrop-blur-xl transition-all duration-500 group-hover:bg-white group-hover:text-black">
                           <Eye className="h-3 w-3" />
-                          View Original
+                          {tr('portfolio.viewOriginal', 'View Original')}
                         </div>
                       </div>
                     </button>
@@ -2485,7 +2493,7 @@ export default function PortfolioCaseStudy() {
                     key={i}
                     type="button"
                     onClick={() => setReviewIndex(i)}
-                    aria-label={`Go to review ${i + 1}`}
+                    aria-label={`${tr('portfolio.goToReview', 'Go to review')} ${i + 1}`}
                     className={`h-1 flex-1 rounded-full transition-all duration-500 ${
                       i === reviewIndex ? 'bg-white/60' : 'bg-white/10 hover:bg-white/25'
                     }`}
@@ -2501,7 +2509,7 @@ export default function PortfolioCaseStudy() {
               <button
                 type="button"
                 onClick={previousReview}
-                aria-label="Previous review"
+                aria-label={tr('portfolio.prevReview', 'Previous review')}
                 className="flex h-10 w-10 items-center justify-center rounded-full border border-white/10 text-white/50 transition-all hover:bg-white hover:text-black"
               >
                 <ArrowLeft className="h-4 w-4" />
@@ -2509,7 +2517,7 @@ export default function PortfolioCaseStudy() {
               <button
                 type="button"
                 onClick={nextReview}
-                aria-label="Next review"
+                aria-label={tr('portfolio.nextReview', 'Next review')}
                 className="flex h-10 w-10 items-center justify-center rounded-full border border-white/10 text-white/50 transition-all hover:bg-white hover:text-black"
               >
                 <ArrowRight className="h-4 w-4" />
@@ -2518,7 +2526,7 @@ export default function PortfolioCaseStudy() {
 
             <div className="mt-7 flex items-center gap-3 text-[9px] uppercase tracking-[0.2em] text-white/20">
               <Eye className="h-3 w-3" />
-              <span>Click a review image to view the original — drag to browse</span>
+              <span>{tr('portfolio.reviewsHint', 'Click a review image to view the original — drag to browse')}</span>
             </div>
           </div>
         </section>
@@ -2543,7 +2551,7 @@ export default function PortfolioCaseStudy() {
                 <button
                   type="button"
                   onClick={() => setSelectedReview(null)}
-                  aria-label="Close review"
+                  aria-label={tr('portfolio.closeReview', 'Close review')}
                   className="flex h-10 w-10 items-center justify-center rounded-full border border-white/10 bg-black/70 text-white/70 backdrop-blur-xl transition-all duration-300 hover:bg-white hover:text-black"
                 >
                   <X className="h-5 w-5" />
@@ -2565,22 +2573,22 @@ export default function PortfolioCaseStudy() {
           </div>
         )}
 
-        {/* ====== READER DISCOVERY FUNNEL ====== */}
+        {/* ====== READER FUNNEL ====== */}
 
         <section className="funnel-section border-t border-white/10 bg-[#090909] px-5 py-24 sm:px-6 md:py-36 lg:py-44">
           <div className="mx-auto max-w-7xl">
             <div className="mb-14 flex flex-col justify-between gap-6 md:mb-20 md:flex-row md:items-end">
               <div>
-                <SectionLabel>Reader Journey</SectionLabel>
+                <SectionLabel>{tr('portfolio.funnelHeading', 'Reader Journey')}</SectionLabel>
                 <TextReveal
                   tag="h2"
                   className="mt-5 max-w-4xl text-4xl font-semibold leading-[0.95] tracking-[-0.045em] sm:text-5xl md:text-6xl"
                 >
-                  Converting interest into readership.
+                  {tr('portfolio.funnelHeading', 'Converting interest into readership.')}
                 </TextReveal>
               </div>
               <p className="max-w-sm text-sm leading-relaxed text-white/40">
-                A structured three-step experience designed to welcome readers, establish trust, and drive book purchases on Amazon España.
+                {tr('portfolio.funnelDesc', 'A structured three-step experience designed to welcome readers, establish trust, and drive book purchases on Amazon España.')}
               </p>
             </div>
 
@@ -2592,7 +2600,7 @@ export default function PortfolioCaseStudy() {
                 >
                   <div className="mb-8 flex items-center justify-between">
                     <span className="rounded-full border border-white/10 bg-white/[0.03] px-3.5 py-1 text-[9px] uppercase tracking-[0.25em] text-white/40">
-                      Stage {step.step}
+                      {tr('portfolio.stage', 'Stage')} {step.step}
                     </span>
                     <ArrowUpRight className="h-5 w-5 text-white/20 transition-all duration-500 group-hover:-translate-y-1 group-hover:translate-x-1 group-hover:text-white/70" />
                   </div>
@@ -2614,12 +2622,12 @@ export default function PortfolioCaseStudy() {
         <section className="scope-section px-5 py-24 sm:px-6 md:py-36 lg:py-44">
           <div className="mx-auto grid max-w-7xl gap-12 lg:grid-cols-[.8fr_1.2fr] lg:gap-16">
             <div>
-              <SectionLabel>Scope</SectionLabel>
+              <SectionLabel>{tr('portfolio.scope', 'Scope')}</SectionLabel>
               <TextReveal
                 tag="h2"
                 className="mt-5 text-4xl font-semibold leading-tight tracking-tight md:text-6xl"
               >
-                Every touchpoint connected.
+                {tr('portfolio.scopeHeading', 'Every touchpoint connected.')}
               </TextReveal>
             </div>
 
@@ -2654,10 +2662,10 @@ export default function PortfolioCaseStudy() {
 
             <Sparkles className="cta-item relative mx-auto h-5 w-5 text-white/30" />
             <h2 className="cta-item relative mx-auto mt-7 max-w-3xl text-3xl font-semibold tracking-tight sm:text-4xl md:text-6xl">
-              Explore the story beyond the case study.
+              {tr('portfolio.ctaHeading', 'Explore the story beyond the case study.')}
             </h2>
             <p className="cta-item relative mx-auto mt-6 max-w-xl text-sm leading-7 text-white/40">
-              Visit the live author platform to explore the trilogy, the authors, their history and the reader journey.
+              {tr('portfolio.ctaDesc', 'Visit the live author platform to explore the trilogy, the authors, their history and the reader journey.')}
             </p>
 
             <div className="cta-item relative mt-10 flex flex-col justify-center gap-3 sm:flex-row">
@@ -2669,7 +2677,7 @@ export default function PortfolioCaseStudy() {
                   className="group inline-flex items-center justify-center gap-3 rounded-full bg-white px-6 py-3.5 text-sm font-semibold text-black transition-all duration-500 hover:scale-[1.04] hover:shadow-lg hover:shadow-white/20"
                 >
                   <Globe className="h-4 w-4" />
-                  Visit Author Website
+                  {tr('portfolio.visitAuthorWebsite', 'Visit Author Website')}
                   <ArrowUpRight className="h-4 w-4 transition-transform duration-500 group-hover:-translate-y-0.5 group-hover:translate-x-0.5" />
                 </a>
               </MagneticWrap>
@@ -2680,7 +2688,7 @@ export default function PortfolioCaseStudy() {
                   onClick={() => scrollTo('#books')}
                   className="group inline-flex items-center justify-center gap-3 rounded-full border border-white/15 px-6 py-3.5 text-sm font-semibold transition-all duration-500 hover:-translate-y-0.5 hover:bg-white/5"
                 >
-                  Explore Books
+                  {tr('portfolio.exploreBooks', 'Explore Books')}
                   <ArrowRight className="h-4 w-4 transition-transform duration-500 group-hover:translate-x-1" />
                 </button>
               </MagneticWrap>
@@ -2692,15 +2700,15 @@ export default function PortfolioCaseStudy() {
 
         <footer className="site-footer border-t border-white/10 px-5 py-8 sm:px-6 md:py-10">
           <div className="mx-auto flex max-w-7xl flex-col items-start justify-between gap-5 text-[10px] uppercase tracking-[0.2em] text-white/25 md:flex-row md:items-center">
-            <span>Project 01 — Entre el Amor y las Sombras</span>
+            <span>{tr('portfolio.projectOne', 'Project 01')} — Entre el Amor y las Sombras</span>
             <Link
-              href="/"
+              href={`/${locale}`}
               className="group flex items-center gap-2 text-white/40 transition-colors duration-500 hover:text-white"
             >
               <ArrowLeft className="h-3 w-3 transition-transform duration-500 group-hover:-translate-x-0.5" />
-              Back to BigTeeWise
+              {tr('portfolio.backToBigTeeWise', 'Back to BigTeeWise')}
             </Link>
-            <span>Case Study / {PROJECT.year}</span>
+            <span>{tr('portfolio.caseStudyLabel', 'Case Study')} / {PROJECT.year}</span>
           </div>
         </footer>
 
@@ -2718,7 +2726,7 @@ export default function PortfolioCaseStudy() {
             <div className="flex flex-col gap-12 md:flex-row md:items-end md:justify-between md:gap-16">
               <div className="md:max-w-3xl">
                 <div className="p2-intro-number mb-6 flex flex-wrap items-center gap-x-4 gap-y-2 text-[10px] font-semibold uppercase tracking-[0.35em] text-white/40">
-                  <span>Project {PROJECT_TWO.number}</span>
+                  <span>{tr('portfolio.project', 'PROJECT')} {PROJECT_TWO.number}</span>
                   <span className="h-px w-12 bg-white/20" />
                   <span className="text-white/25">{PROJECT_TWO.label}</span>
                 </div>
@@ -2742,10 +2750,10 @@ export default function PortfolioCaseStudy() {
               <div className="p2-intro-meta md:max-w-sm">
                 <div className="grid grid-cols-2 gap-5 border-y border-white/10 py-6">
                   {[
-                    { label: 'Client', value: PROJECT_TWO.client },
-                    { label: 'Year', value: PROJECT_TWO.year },
-                    { label: 'Genre', value: PROJECT_TWO.genre },
-                    { label: 'Series', value: PROJECT_TWO.series },
+                    { label: tr('portfolio.client', 'Client'), value: PROJECT_TWO.client },
+                    { label: tr('portfolio.year', 'Year'), value: PROJECT_TWO.year },
+                    { label: tr('portfolio.genre', 'Genre'), value: PROJECT_TWO.genre },
+                    { label: tr('portfolio.series', 'Series'), value: PROJECT_TWO.series },
                   ].map((item) => (
                     <div key={item.label}>
                       <div className="text-[9px] uppercase tracking-[0.28em] text-white/30">{item.label}</div>
@@ -2755,7 +2763,7 @@ export default function PortfolioCaseStudy() {
                 </div>
 
                 <div className="mt-6 flex flex-wrap gap-2">
-                  {['Book Marketing', 'Amazon A+', 'Author Website', 'Cinematic Trailer', 'SEO'].map((item) => (
+                  {[tr('portfolio.p2Tag1', 'Book Marketing'), tr('portfolio.p2Tag2', 'Amazon A+'), tr('portfolio.p2Tag3', 'Author Website'), tr('portfolio.p2Tag4', 'Cinematic Trailer'), tr('portfolio.p2Tag5', 'SEO Optimization')].map((item) => (
                     <span
                       key={item}
                       className="p2-intro-tag rounded-full border border-white/10 bg-white/[0.03] px-3 py-1.5 text-[9px] uppercase tracking-[0.16em] text-white/50 transition-all duration-500 hover:-translate-y-0.5 hover:border-white/25 hover:bg-white/[0.06] hover:text-white/80"
@@ -2778,7 +2786,7 @@ export default function PortfolioCaseStudy() {
             <div className="p2-hero-text order-2 lg:order-1">
               <div className="mb-6 overflow-hidden">
                 <div className="p2-hero-number flex flex-wrap items-center gap-x-4 gap-y-2 text-[10px] font-semibold uppercase tracking-[0.35em] text-white/40">
-                  <span>Case Study {PROJECT_TWO.number}</span>
+                  <span>{tr('portfolio.caseStudy', 'Case Study')} {PROJECT_TWO.number}</span>
                   <span className="h-px w-8 bg-white/20" />
                   <span className="text-white/25">{PROJECT_TWO.label}</span>
                 </div>
@@ -2802,9 +2810,9 @@ export default function PortfolioCaseStudy() {
 
               <div className="p2-hero-meta-grid mt-8 grid max-w-xl grid-cols-2 gap-4 border-y border-white/10 py-5 sm:grid-cols-3">
                 {[
-                  { label: 'Client', value: PROJECT_TWO.client },
-                  { label: 'Year', value: PROJECT_TWO.year },
-                  { label: 'Genre', value: PROJECT_TWO.genre },
+                  { label: tr('portfolio.client', 'Client'), value: PROJECT_TWO.client },
+                  { label: tr('portfolio.year', 'Year'), value: PROJECT_TWO.year },
+                  { label: tr('portfolio.genre', 'Genre'), value: PROJECT_TWO.genre },
                 ].map((item) => (
                   <div key={item.label} className="min-w-0">
                     <div className="text-[9px] uppercase tracking-[0.28em] text-white/30">{item.label}</div>
@@ -2816,7 +2824,7 @@ export default function PortfolioCaseStudy() {
               </div>
 
               <div className="mt-7 flex flex-wrap gap-2">
-                {['Book Marketing', 'Amazon A+', 'Author Website', 'Cinematic Trailer', 'SEO'].map((item) => (
+                {[tr('portfolio.p2Tag1', 'Book Marketing'), tr('portfolio.p2Tag2', 'Amazon A+'), tr('portfolio.p2Tag3', 'Author Website'), tr('portfolio.p2Tag4', 'Cinematic Trailer'), tr('portfolio.p2Tag5', 'SEO Optimization')].map((item) => (
                   <span
                     key={item}
                     className="p2-hero-tag rounded-full border border-white/10 bg-white/[0.035] px-4 py-2 text-[10px] uppercase tracking-[0.16em] text-white/55 transition-all duration-500 hover:-translate-y-0.5 hover:border-white/25 hover:bg-white/[0.07] hover:text-white/80"
@@ -2853,12 +2861,12 @@ export default function PortfolioCaseStudy() {
 
           <div className="relative mx-auto max-w-[1400px]">
             <div className="mb-10 flex flex-col items-center gap-4 text-center md:mb-14">
-              <SectionLabel className="justify-center">Cover Showcase</SectionLabel>
+              <SectionLabel className="justify-center">{tr('portfolio.coverShowcase', 'Cover Showcase')}</SectionLabel>
               <TextReveal
                 tag="h3"
                 className="p2-cover-heading max-w-2xl text-2xl font-medium tracking-tight md:text-3xl lg:text-4xl"
               >
-                A story spanning decades, continents, and the secrets between sisters.
+                {tr('portfolio.p2CoverHeading', 'A story spanning decades, continents, and the secrets between sisters.')}
               </TextReveal>
             </div>
 
@@ -2876,7 +2884,7 @@ export default function PortfolioCaseStudy() {
                 <div className="absolute bottom-0 left-0 right-0 p-5 sm:p-6 md:p-10">
                   <div className="flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
                     <div>
-                      <span className="text-[10px] uppercase tracking-[0.3em] text-white/50">Featured Project</span>
+                      <span className="text-[10px] uppercase tracking-[0.3em] text-white/50">{tr('portfolio.featuredProject', 'Featured Project')}</span>
                       <h4 className="mt-2 text-xl font-semibold tracking-tight text-white md:text-2xl lg:text-3xl">
                         {PROJECT_TWO.title} {PROJECT_TWO.mutedTitle}
                       </h4>
@@ -2896,7 +2904,7 @@ export default function PortfolioCaseStudy() {
         {/* ====== PROJECT 2 — MARQUEE ====== */}
 
         <Marquee speed={0.8} className="border-y border-white/10 bg-[#0d1a2e] py-5">
-          {['Book Marketing', 'Amazon A+', 'Author Website', 'Cinematic Trailer', 'Book Formatting', 'SEO Optimization'].map((text, i) => (
+          {[tr('portfolio.p2Tag1', 'Book Marketing'), tr('portfolio.p2Tag2', 'Amazon A+'), tr('portfolio.p2Tag3', 'Author Website'), tr('portfolio.p2Tag4', 'Cinematic Trailer'), 'Book Formatting', 'SEO Optimization'].map((text, i) => (
             <span key={i} className="mx-8 flex items-center gap-4 text-sm uppercase tracking-[0.2em] text-white/25">
               <Sparkles className="h-3 w-3" />
               {text}
@@ -2909,12 +2917,12 @@ export default function PortfolioCaseStudy() {
         <section className="p2-story-section bg-[#0a1628] px-5 py-24 sm:px-6 md:py-36 lg:py-44">
           <div className="mx-auto grid max-w-7xl gap-12 lg:grid-cols-[.7fr_1.3fr] lg:gap-16">
             <div>
-              <SectionLabel>The Story</SectionLabel>
+              <SectionLabel>{tr('portfolio.theStory', 'The Story')}</SectionLabel>
               <div className="mt-8 hidden flex-col gap-6 lg:flex">
                 {[
-                  { label: 'Genre', value: PROJECT_TWO.genre },
-                  { label: 'Series', value: PROJECT_TWO.series },
-                  { label: 'Timeline', value: '1931 — Present Day' },
+                  { label: tr('portfolio.genre', 'Genre'), value: PROJECT_TWO.genre },
+                  { label: tr('portfolio.series', 'Series'), value: PROJECT_TWO.series },
+                  { label: tr('portfolio.timeline', 'Timeline'), value: '1931 — Present Day' },
                 ].map((fact) => (
                   <div key={fact.label} className="p2-story-fact border-l border-white/10 pl-5">
                     <div className="text-[9px] uppercase tracking-[0.28em] text-white/30">{fact.label}</div>
@@ -2929,7 +2937,7 @@ export default function PortfolioCaseStudy() {
                 tag="h2"
                 className="p2-story-heading max-w-5xl text-3xl font-medium leading-tight tracking-tight md:text-5xl lg:text-6xl"
               >
-                Four sisters separated by circumstance, connected by inherited rings and ancient standing stones.
+                {tr('portfolio.p2StoryHeading', 'Four sisters separated by circumstance, connected by inherited rings and ancient standing stones.')}
               </TextReveal>
 
               <div className="p2-deco-line h-px w-full origin-left bg-white/10" />
@@ -2945,9 +2953,9 @@ export default function PortfolioCaseStudy() {
 
               <div className="grid grid-cols-1 gap-4 sm:grid-cols-3 lg:hidden">
                 {[
-                  { label: 'Genre', value: PROJECT_TWO.genre },
-                  { label: 'Series', value: PROJECT_TWO.series },
-                  { label: 'Timeline', value: '1931 — Present Day' },
+                  { label: tr('portfolio.genre', 'Genre'), value: PROJECT_TWO.genre },
+                  { label: tr('portfolio.series', 'Series'), value: PROJECT_TWO.series },
+                  { label: tr('portfolio.timeline', 'Timeline'), value: '1931 — Present Day' },
                 ].map((fact) => (
                   <div key={fact.label} className="p2-story-fact rounded-xl border border-white/10 bg-white/[0.02] p-4">
                     <div className="text-[9px] uppercase tracking-[0.28em] text-white/30">{fact.label}</div>
@@ -2959,25 +2967,25 @@ export default function PortfolioCaseStudy() {
           </div>
         </section>
 
-        {/* ====== PROJECT 2 — NARRATIVE ARCHITECTURE ====== */}
+        {/* ====== PROJECT 2 — NARRATIVE ====== */}
 
         <section className="p2-narrative-section border-t border-white/10 bg-[#0d1a2e] px-5 py-24 sm:px-6 md:py-36 lg:py-44">
           <div className="mx-auto max-w-7xl">
             <div className="mb-14 flex flex-col justify-between gap-6 md:mb-20 md:flex-row md:items-end">
               <div>
-                <SectionLabel>Story Architecture</SectionLabel>
+                <SectionLabel>{tr('portfolio.storyArchitecture', 'Story Architecture')}</SectionLabel>
                 <TextReveal
                   tag="h2"
                   className="p2-narrative-heading mt-5 max-w-4xl text-4xl font-semibold leading-[0.95] tracking-[-0.045em] sm:text-5xl md:text-6xl"
                 >
-                  Dual timelines. Four heirloom rings.
+                  {tr('portfolio.p2NarrativeHeading', 'Dual timelines. Four heirloom rings.')}
                 </TextReveal>
                 <p className="mt-2 max-w-4xl text-4xl font-semibold leading-[0.95] tracking-[-0.045em] text-white/20 sm:text-5xl md:text-6xl">
-                  One long-buried family vow.
+                  {tr('portfolio.p2NarrativeSubheading', 'One long-buried family vow.')}
                 </p>
               </div>
               <p className="max-w-sm text-sm leading-relaxed text-white/40">
-                The marketing strategy anchored directly into the book&apos;s dual-narrative timeline to target avid fans of historical time-slip romance.
+                {tr('portfolio.p2NarrativeDesc', 'The marketing strategy anchored directly into the book\'s dual-narrative timeline to target avid fans of historical time-slip romance.')}
               </p>
             </div>
 
@@ -2989,7 +2997,7 @@ export default function PortfolioCaseStudy() {
                 >
                   <div className="mb-8 flex items-center justify-between">
                     <span className="rounded-full border border-white/10 px-3 py-1 text-[9px] uppercase tracking-[0.25em] text-white/30">
-                      Pillar 0{i + 1}
+                      {tr('portfolio.pillar', 'Pillar')} 0{i + 1}
                     </span>
                     <Compass className="h-4 w-4 text-blue-300/40 transition-all duration-500 group-hover:scale-110 group-hover:text-blue-300/80" />
                   </div>
@@ -3015,7 +3023,7 @@ export default function PortfolioCaseStudy() {
           </span>
 
           <div className="relative mx-auto max-w-6xl">
-            <SectionLabel>Philosophy</SectionLabel>
+            <SectionLabel>{tr('portfolio.philosophy', 'Philosophy')}</SectionLabel>
             <div className="p2-philosophy-mark mt-8 h-px w-20 origin-left bg-white/25" />
 
             <TextReveal
@@ -3027,7 +3035,7 @@ export default function PortfolioCaseStudy() {
 
             <div className="mt-10 flex items-center gap-4 text-[10px] uppercase tracking-[0.28em] text-white/30">
               <span className="h-px w-8 bg-white/20" />
-              <span>The guiding thought behind the marketing strategy</span>
+              <span>{tr('portfolio.p2GuidingThought', 'The guiding thought behind the marketing strategy')}</span>
             </div>
           </div>
         </section>
@@ -3055,17 +3063,17 @@ export default function PortfolioCaseStudy() {
           </div>
         </section>
 
-        {/* ====== PROJECT 2 — THE SOLUTION ====== */}
+        {/* ====== PROJECT 2 — SOLUTION ====== */}
 
         <section className="p2-solution-section bg-[#0a1628] px-5 py-24 sm:px-6 md:py-36 lg:py-44">
           <div className="mx-auto max-w-7xl">
             <div className="mb-12 md:mb-16">
-              <SectionLabel>The Solution</SectionLabel>
+              <SectionLabel>{tr('portfolio.theSolution', 'The Solution')}</SectionLabel>
               <TextReveal
                 tag="h2"
                 className="p2-solution-heading mt-5 max-w-4xl text-4xl font-semibold tracking-tight md:text-6xl"
               >
-                Five pillars of digital presence.
+                {tr('portfolio.p2SolutionHeading', 'Five pillars of digital presence.')}
               </TextReveal>
             </div>
 
@@ -3092,22 +3100,22 @@ export default function PortfolioCaseStudy() {
           </div>
         </section>
 
-        {/* ====== PROJECT 2 — AMAZON A+ VISUAL CONTENT ====== */}
+        {/* ====== PROJECT 2 — AMAZON A+ ====== */}
 
         <section className="p2-aplus-section border-t border-white/10 bg-[#0a1628] px-5 py-24 sm:px-6 md:py-36 lg:py-44">
           <div className="mx-auto max-w-7xl">
             <div className="mb-14 flex flex-col justify-between gap-6 md:mb-20 md:flex-row md:items-end">
               <div>
-                <SectionLabel>Amazon A+ Strategy</SectionLabel>
+                <SectionLabel>{tr('portfolio.amazonAplus', 'Amazon A+ Strategy')}</SectionLabel>
                 <TextReveal
                   tag="h2"
                   className="p2-aplus-heading mt-5 max-w-4xl text-4xl font-semibold leading-[0.95] tracking-[-0.045em] sm:text-5xl md:text-6xl"
                 >
-                  Turning Amazon scrollers into buyers.
+                  {tr('portfolio.p2AplusHeading', 'Turning Amazon scrollers into buyers.')}
                 </TextReveal>
               </div>
               <p className="max-w-sm text-sm leading-relaxed text-white/40">
-                Custom visual modules designed to highlight character dynamics, emotional hooks, and series branding directly on the Amazon book listing.
+                {tr('portfolio.p2AplusDesc', 'Custom visual modules designed to highlight character dynamics, emotional hooks, and series branding directly on the Amazon book listing.')}
               </p>
             </div>
 
@@ -3119,7 +3127,7 @@ export default function PortfolioCaseStudy() {
                 >
                   <div className="mb-8 flex items-center justify-between">
                     <span className="rounded-full border border-white/10 px-3 py-1 text-[9px] uppercase tracking-[0.25em] text-white/30">
-                      Module 0{i + 1}
+                      {tr('portfolio.module', 'Module')} 0{i + 1}
                     </span>
                     <Layers className="h-4 w-4 text-blue-300/40 transition-all duration-500 group-hover:scale-110 group-hover:text-blue-300/80" />
                   </div>
@@ -3136,25 +3144,25 @@ export default function PortfolioCaseStudy() {
           </div>
         </section>
 
-        {/* ====== PROJECT 2 — THE EXPERIENCE (MOCKUP) ====== */}
+        {/* ====== PROJECT 2 — EXPERIENCE (MOCKUP) ====== */}
 
         <section className="p2-mockup-section relative overflow-hidden border-y border-white/10 bg-[#0d1a2e] px-5 py-24 sm:px-6 md:py-36 lg:py-44">
           <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_0%,rgba(56,189,248,.04),transparent_60%)]" />
 
           <div className="relative mx-auto max-w-7xl">
             <div className="mb-12 md:mb-16">
-              <SectionLabel>The Experience</SectionLabel>
+              <SectionLabel>{tr('portfolio.theExperience', 'The Experience')}</SectionLabel>
               <TextReveal
                 tag="h2"
                 className="p2-mockup-heading mt-5 max-w-4xl text-4xl font-semibold tracking-tight md:text-6xl"
               >
-                Designed around the reader journey.
+                {tr('portfolio.p2ExperienceHeading', 'Designed around the reader journey.')}
               </TextReveal>
               <TextReveal
                 tag="p"
                 className="p2-mockup-subheading mt-6 max-w-2xl text-base leading-8 text-white/45 md:text-lg md:leading-9"
               >
-                Every touchpoint — from Amazon discovery to the author website — was crafted to immerse readers in the atmospheric world of The Sea Stone Sisters and guide them toward the story.
+                {tr('portfolio.p2ExperienceDesc', 'Every touchpoint — from Amazon discovery to the author website — was crafted to immerse readers in the atmospheric world of The Sea Stone Sisters and guide them toward the story.')}
               </TextReveal>
             </div>
 
@@ -3174,27 +3182,27 @@ export default function PortfolioCaseStudy() {
               </div>
 
               <div className="mt-4 flex items-center justify-between px-2 md:mt-5 md:px-4">
-                <span className="text-[10px] uppercase tracking-[0.25em] text-white/30">Reader Experience Preview</span>
+                <span className="text-[10px] uppercase tracking-[0.25em] text-white/30">{tr('portfolio.readerExperiencePreview', 'Reader Experience Preview')}</span>
                 <span className="flex items-center gap-2 text-[10px] uppercase tracking-[0.2em] text-white/25">
                   <Eye className="h-3 w-3" />
-                  <span>Digital Touchpoints</span>
+                  <span>{tr('portfolio.digitalTouchpoints', 'Digital Touchpoints')}</span>
                 </span>
               </div>
             </div>
           </div>
         </section>
 
-        {/* ====== PROJECT 2 — THE AUTHOR ====== */}
+        {/* ====== PROJECT 2 — AUTHOR ====== */}
 
         <section className="p2-author-section bg-[#0a1628] px-5 py-24 sm:px-6 md:py-36 lg:py-44">
           <div className="mx-auto max-w-7xl">
             <div className="mb-12 md:mb-16">
-              <SectionLabel>The Author</SectionLabel>
+              <SectionLabel>{tr('portfolio.theAuthor', 'The Author')}</SectionLabel>
               <TextReveal
                 tag="h2"
                 className="p2-author-heading mt-5 max-w-4xl text-4xl font-semibold tracking-tight md:text-6xl"
               >
-                Eleanor Buchanan.
+                {tr('portfolio.p2AuthorHeading', 'Eleanor Buchanan.')}
               </TextReveal>
             </div>
 
@@ -3205,7 +3213,7 @@ export default function PortfolioCaseStudy() {
 
               <div className="mb-10 flex items-center justify-between md:mb-12">
                 <span className="rounded-full border border-white/10 px-3 py-1 text-[9px] uppercase tracking-[0.25em] text-white/30">
-                  Author
+                  {tr('portfolio.author', 'Author')}
                 </span>
                 <ArrowUpRight className="h-5 w-5 text-white/20 transition-all duration-500 group-hover:-translate-y-1 group-hover:translate-x-1 group-hover:text-white/60" />
               </div>
@@ -3218,11 +3226,11 @@ export default function PortfolioCaseStudy() {
 
               <div className="relative mt-8 grid max-w-xl grid-cols-2 gap-4 border-t border-white/10 pt-6 sm:grid-cols-3">
                 <div>
-                  <div className="text-[9px] uppercase tracking-[0.28em] text-white/30">Location</div>
+                  <div className="text-[9px] uppercase tracking-[0.28em] text-white/30">{tr('portfolio.location', 'Location')}</div>
                   <div className="mt-1.5 text-xs text-white/60">{PROJECT_TWO.authorLocation}</div>
                 </div>
                 <div>
-                  <div className="text-[9px] uppercase tracking-[0.28em] text-white/30">Genre</div>
+                  <div className="text-[9px] uppercase tracking-[0.28em] text-white/30">{tr('portfolio.genre', 'Genre')}</div>
                   <div className="mt-1.5 text-xs text-white/60">{PROJECT_TWO.genre}</div>
                 </div>
                 <div>
@@ -3249,16 +3257,16 @@ export default function PortfolioCaseStudy() {
           <div className="mx-auto max-w-7xl">
             <div className="mb-14 flex flex-col justify-between gap-6 md:mb-20 md:flex-row md:items-end">
               <div>
-                <SectionLabel>Marketing Ecosystem</SectionLabel>
+                <SectionLabel>{tr('portfolio.marketingEcosystem', 'Marketing Ecosystem')}</SectionLabel>
                 <TextReveal
                   tag="h2"
                   className="p2-ecosystem-heading mt-5 max-w-4xl text-4xl font-semibold leading-[0.95] tracking-[-0.045em] sm:text-5xl md:text-6xl"
                 >
-                  Four channels driving commercial growth.
+                  {tr('portfolio.p2EcosystemHeading', 'Four channels driving commercial growth.')}
                 </TextReveal>
               </div>
               <p className="max-w-sm text-sm leading-relaxed text-white/40">
-                A multi-layered reader acquisition pipeline engineered to maintain consistent monthly sales and high search visibility.
+                {tr('portfolio.p2EcosystemDesc', 'A multi-layered reader acquisition pipeline engineered to maintain consistent monthly sales and high search visibility.')}
               </p>
             </div>
 
@@ -3270,7 +3278,7 @@ export default function PortfolioCaseStudy() {
                 >
                   <div className="mb-6 flex items-center justify-between border-b border-white/10 pb-4">
                     <span className="text-[10px] font-semibold uppercase tracking-[0.28em] text-white/30">
-                      Channel 0{i + 1}
+                      {tr('portfolio.channel', 'Channel')} 0{i + 1}
                     </span>
                     <TrendingUp className="h-4 w-4 text-blue-300/50 transition-colors duration-500 group-hover:text-blue-300" />
                   </div>
@@ -3292,12 +3300,12 @@ export default function PortfolioCaseStudy() {
         <section className="p2-scope-section bg-[#0a1628] px-5 py-24 sm:px-6 md:py-36 lg:py-44">
           <div className="mx-auto grid max-w-7xl gap-12 lg:grid-cols-[.8fr_1.2fr] lg:gap-16">
             <div>
-              <SectionLabel>Scope</SectionLabel>
+              <SectionLabel>{tr('portfolio.scope', 'Scope')}</SectionLabel>
               <TextReveal
                 tag="h2"
                 className="p2-scope-heading mt-5 text-4xl font-semibold leading-tight tracking-tight md:text-6xl"
               >
-                Every deliverable connected.
+                {tr('portfolio.p2ScopeHeading', 'Every deliverable connected.')}
               </TextReveal>
             </div>
 
@@ -3324,7 +3332,7 @@ export default function PortfolioCaseStudy() {
 
         <section className="p2-results-section border-y border-white/10 bg-[#0d1a2e] px-5 py-20 sm:px-6 md:py-28">
           <div className="mx-auto max-w-5xl text-center">
-            <SectionLabel className="justify-center">Results</SectionLabel>
+            <SectionLabel className="justify-center">{tr('portfolio.results', 'Results')}</SectionLabel>
             <TextReveal
               tag="p"
               className="p2-results-text mt-8 text-lg leading-8 text-white/60 md:text-xl md:leading-9 lg:text-2xl lg:leading-10"
@@ -3349,10 +3357,10 @@ export default function PortfolioCaseStudy() {
             </div>
 
             <h2 className="p2-cta-item relative mx-auto mt-6 max-w-3xl text-3xl font-semibold tracking-tight sm:text-4xl md:text-5xl">
-              Explore the story and discover Eleanor Buchanan&apos;s work.
+              {tr('portfolio.p2CtaHeading', 'Explore the story and discover Eleanor Buchanan\'s work.')}
             </h2>
             <p className="p2-cta-item relative mx-auto mt-6 max-w-xl text-sm leading-7 text-white/40">
-              Visit the Amazon listing to discover the book, or explore the author&apos;s presence on Goodreads.
+              {tr('portfolio.p2CtaDesc', 'Visit the Amazon listing to discover the book, or explore the author\'s presence on Goodreads.')}
             </p>
 
             <div className="p2-cta-item relative mt-10 flex flex-col justify-center gap-3 sm:flex-row">
@@ -3364,7 +3372,7 @@ export default function PortfolioCaseStudy() {
                   className="group inline-flex items-center justify-center gap-3 rounded-full bg-white px-6 py-3.5 text-sm font-semibold text-black transition-all duration-500 hover:scale-[1.04] hover:shadow-lg hover:shadow-white/20"
                 >
                   <Globe className="h-4 w-4" />
-                  Amazon Listing
+                  {tr('portfolio.amazonListing', 'Amazon Listing')}
                   <ArrowUpRight className="h-4 w-4 transition-transform duration-500 group-hover:-translate-y-0.5 group-hover:translate-x-0.5" />
                 </a>
               </MagneticWrap>
@@ -3377,7 +3385,7 @@ export default function PortfolioCaseStudy() {
                   className="group inline-flex items-center justify-center gap-3 rounded-full border border-white/15 px-6 py-3.5 text-sm font-semibold transition-all duration-500 hover:-translate-y-0.5 hover:bg-white/5"
                 >
                   <Star className="h-4 w-4" />
-                  Goodreads
+                  {tr('portfolio.goodreads', 'Goodreads')}
                   <ArrowUpRight className="h-4 w-4 transition-transform duration-500 group-hover:-translate-y-0.5 group-hover:translate-x-0.5" />
                 </a>
               </MagneticWrap>
@@ -3389,15 +3397,15 @@ export default function PortfolioCaseStudy() {
 
         <footer className="p2-footer border-t border-white/10 bg-[#0a1628] px-5 py-8 sm:px-6 md:py-10">
           <div className="mx-auto flex max-w-7xl flex-col items-start justify-between gap-5 text-[10px] uppercase tracking-[0.2em] text-white/25 md:flex-row md:items-center">
-            <span>Project 02 — The Sea Stone Sisters</span>
+            <span>{tr('portfolio.projectTwo', 'Project 02')} — The Sea Stone Sisters</span>
             <Link
-              href="/"
+              href={`/${locale}`}
               className="group flex items-center gap-2 text-white/40 transition-colors duration-500 hover:text-white"
             >
               <ArrowLeft className="h-3 w-3 transition-transform duration-500 group-hover:-translate-x-0.5" />
-              Back to BigTeeWise
+              {tr('portfolio.backToBigTeeWise', 'Back to BigTeeWise')}
             </Link>
-            <span>Case Study / {PROJECT_TWO.year}</span>
+            <span>{tr('portfolio.caseStudyLabel', 'Case Study')} / {PROJECT_TWO.year}</span>
           </div>
         </footer>
 
@@ -3411,7 +3419,7 @@ export default function PortfolioCaseStudy() {
                 if (lenisRef.current) lenisRef.current.scrollTo(0, { duration: 2.5 });
                 else window.scrollTo({ top: 0, behavior: 'auto' });
               }}
-              aria-label="Back to top"
+              aria-label={tr('portfolio.backToTop', 'Back to top')}
               className={`flex h-12 w-12 items-center justify-center rounded-full border border-white/10 bg-[#111]/80 text-white/50 backdrop-blur-xl transition-all duration-700 hover:bg-white hover:text-black ${
                 navVisible ? 'translate-y-0 opacity-100' : 'translate-y-4 opacity-0'
               }`}

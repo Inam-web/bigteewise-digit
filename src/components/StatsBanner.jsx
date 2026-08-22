@@ -1,11 +1,39 @@
 import React from 'react';
+import { useLanguage } from '@/i18n/LanguageContext';
 
 export const StatsBanner = () => {
+  const { t } = useLanguage();
+
+  // Translation helper
+  const tr = (key, fallback) => {
+    try {
+      const result = t(key);
+      if (result === key || result === undefined || result === null) {
+        return fallback;
+      }
+      return result;
+    } catch (e) {
+      return fallback;
+    }
+  };
+
   const stats = [
-    { value: '150+', label: 'Book & Brand Launches' },
-    { value: '2000+', label: 'Happy Clients & Readers' },
-    { value: '99%', label: 'Customer Satisfaction' },
-    { value: '8+', label: 'Years Experience in UK' },
+    { 
+      value: '150+', 
+      label: tr('statsBanner.launches', 'Book & Brand Launches') 
+    },
+    { 
+      value: '2000+', 
+      label: tr('statsBanner.clients', 'Happy Clients & Readers') 
+    },
+    { 
+      value: '99%', 
+      label: tr('statsBanner.satisfaction', 'Customer Satisfaction') 
+    },
+    { 
+      value: '8+', 
+      label: tr('statsBanner.experience', 'Years Experience in UK') 
+    },
   ];
 
   return (
