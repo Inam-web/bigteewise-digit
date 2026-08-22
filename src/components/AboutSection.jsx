@@ -6,17 +6,19 @@ import { Play, CheckCircle2, ArrowRight, Sparkles, Target, TrendingUp, Users, Sh
 import { BUSINESS_INFO } from '../app/Data/content';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
+import { useLanguage } from '@/i18n/LanguageContext';
 
 if (typeof window !== 'undefined') {
   gsap.registerPlugin(ScrollTrigger);
 }
 
 export default function AboutSection({ onOpenVideoModal, onOpenQuoteModal }) {
+  const { t } = useLanguage();
   const sectionRef = useRef(null);
 
   const aboutText =
     BUSINESS_INFO?.fullAbout ||
-    'BigTeeWise Digital is a full-service creative agency in UK, United Kingdom. We combine creative design, strategic marketing, and specialized book marketing & author branding to convert attention into measurable revenue.';
+    t('about.description1');
 
   useEffect(() => {
     if (!sectionRef.current) return;
@@ -147,6 +149,55 @@ export default function AboutSection({ onOpenVideoModal, onOpenQuoteModal }) {
     };
   }, []);
 
+  // Value points with translation keys
+  const values = [
+    {
+      icon: CheckCircle2,
+      title: t('about.values.authorPositioningTitle'),
+      desc: t('about.values.authorPositioningDesc'),
+    },
+    {
+      icon: TrendingUp,
+      title: t('about.values.conversionFocusedTitle'),
+      desc: t('about.values.conversionFocusedDesc'),
+    },
+    {
+      icon: Users,
+      title: t('about.values.audienceFirstTitle'),
+      desc: t('about.values.audienceFirstDesc'),
+    },
+    {
+      icon: ShieldCheck,
+      title: t('about.values.longTermValueTitle'),
+      desc: t('about.values.longTermValueDesc'),
+    },
+  ];
+
+  // Stats with translation keys
+  const stats = [
+    { value: t('about.stats.projectsValue'), label: t('about.stats.projectsLabel'), color: 'blue' },
+    { value: t('about.stats.clientsValue'), label: t('about.stats.clientsLabel'), color: 'dark' },
+    { value: t('about.stats.satisfactionValue'), label: t('about.stats.satisfactionLabel'), color: 'light' },
+  ];
+
+  const getStatColor = (color) => {
+    const colors = {
+      blue: 'bg-blue-600 text-white',
+      dark: 'bg-slate-950 text-white',
+      light: 'bg-slate-100 text-slate-900',
+    };
+    return colors[color] || colors.blue;
+  };
+
+  const getStatLabelColor = (color) => {
+    const colors = {
+      blue: 'text-blue-100',
+      dark: 'text-slate-400',
+      light: 'text-slate-500',
+    };
+    return colors[color] || colors.blue;
+  };
+
   return (
     <section
       ref={sectionRef}
@@ -161,10 +212,10 @@ export default function AboutSection({ onOpenVideoModal, onOpenQuoteModal }) {
       </div>
 
       <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        {/* Desktop editorial layout - FIXED */}
+        {/* Desktop editorial layout */}
         <div className="xl:grid xl:grid-cols-12 xl:gap-8">
           
-          {/* STICKY VISUAL AREA - Fixed position wrapper */}
+          {/* STICKY VISUAL AREA */}
           <div className="xl:col-span-6">
             <div className="xl:sticky xl:top-0 flex items-center min-h-screen">
               <div className="relative w-full h-[560px] sm:h-[620px] lg:h-[660px] xl:h-[700px] max-h-[760px]">
@@ -185,7 +236,7 @@ export default function AboutSection({ onOpenVideoModal, onOpenQuoteModal }) {
                   <div className="absolute top-4 left-4 px-3 py-2 rounded-full bg-white/95 backdrop-blur-sm shadow-lg flex items-center gap-2">
                     <span className="w-2 h-2 rounded-full bg-blue-600" />
                     <span className="text-[10px] sm:text-xs font-bold text-slate-800">
-                      Creative Strategy Studio
+                      {t('about.studioTag')}
                     </span>
                   </div>
 
@@ -239,35 +290,36 @@ export default function AboutSection({ onOpenVideoModal, onOpenQuoteModal }) {
                 <div className="about-reveal absolute -bottom-3 left-4 sm:left-8 z-50 bg-slate-950 text-white rounded-2xl px-4 py-3 shadow-2xl border border-slate-800">
                   <div className="flex items-center gap-2">
                     <Sparkles className="w-4 h-4 text-blue-400" />
-                    <span className="text-xs font-bold">Strategy • Creativity • Growth</span>
+                    <span className="text-xs font-bold">{t('about.floatingBadge')}</span>
                   </div>
                 </div>
               </div>
             </div>
           </div>
 
-          {/* SCROLLING CONTENT - This will determine section height */}
+          {/* SCROLLING CONTENT */}
           <div className="xl:col-span-6 relative z-50">
             <div className="about-scroll-content space-y-5 sm:space-y-6 py-8 xl:py-16">
-              {/* Added vertical padding to create enough scroll height */}
 
               {/* Intro */}
               <div className="about-scroll-card bg-white/95 backdrop-blur-md rounded-[2rem] border border-slate-200 shadow-sm p-6 sm:p-8 lg:p-10">
                 <div className="about-reveal inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-blue-50 border border-blue-100 text-blue-600 text-xs font-bold tracking-wide uppercase">
                   <span className="font-extrabold">{"//"}</span>
-                  <span>About BigTeeWise Digital</span>
+                  <span>{t('about.badge')}</span>
                 </div>
 
                 <h2 className="about-reveal mt-5 text-3xl sm:text-4xl lg:text-5xl font-extrabold tracking-tight leading-[1.08]">
-                  Transforming <span className="text-blue-600">Ideas & Books</span> into Digital Reality
+                  {t('about.titlePre')}{' '}
+                  <span className="text-blue-600">{t('about.titleHighlight')}</span>{' '}
+                  {t('about.titlePost')}
                 </h2>
 
                 <p className="about-reveal mt-5 text-sm sm:text-base lg:text-lg text-slate-600 leading-relaxed">
-                  {aboutText}
+                  {t('about.description1')}
                 </p>
 
                 <p className="about-reveal mt-4 text-sm sm:text-base text-slate-500 leading-relaxed">
-                  Our approach goes beyond attractive visuals. We connect strategy, storytelling, design, marketing and digital growth to create brand experiences that stand out and produce meaningful business outcomes.
+                  {t('about.description2')}
                 </p>
               </div>
 
@@ -278,27 +330,27 @@ export default function AboutSection({ onOpenVideoModal, onOpenQuoteModal }) {
                 <div className="relative">
                   <div className="flex items-center gap-2 text-blue-400 text-xs font-bold uppercase tracking-wider">
                     <Target className="w-4 h-4" />
-                    Our Approach
+                    {t('about.approachBadge')}
                   </div>
 
                   <h3 className="mt-3 text-2xl sm:text-3xl font-extrabold">
-                    Creative work backed by strategy.
+                    {t('about.approachHeading')}
                   </h3>
 
                   <div className="grid sm:grid-cols-2 gap-4 mt-6">
                     <div className="p-4 rounded-2xl bg-white/5 border border-white/10">
                       <Sparkles className="w-5 h-5 text-blue-400 mb-3" />
-                      <h4 className="font-bold">Creative Direction</h4>
+                      <h4 className="font-bold">{t('about.approach1Title')}</h4>
                       <p className="text-xs sm:text-sm text-slate-400 mt-2 leading-relaxed">
-                        Strong visual identities, book covers, campaigns and digital experiences built to be remembered.
+                        {t('about.approach1Desc')}
                       </p>
                     </div>
 
                     <div className="p-4 rounded-2xl bg-white/5 border border-white/10">
                       <TrendingUp className="w-5 h-5 text-blue-400 mb-3" />
-                      <h4 className="font-bold">Growth Strategy</h4>
+                      <h4 className="font-bold">{t('about.approach2Title')}</h4>
                       <p className="text-xs sm:text-sm text-slate-400 mt-2 leading-relaxed">
-                        Marketing systems designed to turn attention into engagement, leads and measurable growth.
+                        {t('about.approach2Desc')}
                       </p>
                     </div>
                   </div>
@@ -308,78 +360,39 @@ export default function AboutSection({ onOpenVideoModal, onOpenQuoteModal }) {
               {/* Value points */}
               <div className="about-scroll-card bg-white rounded-[2rem] border border-slate-200 shadow-sm p-6 sm:p-8">
                 <div className="about-reveal grid sm:grid-cols-2 gap-5">
-                  <div className="flex items-start gap-3">
-                    <div className="w-10 h-10 rounded-xl bg-blue-50 flex items-center justify-center shrink-0">
-                      <CheckCircle2 className="w-5 h-5 text-blue-600" />
-                    </div>
-                    <div>
-                      <h4 className="font-bold text-slate-900">Author Positioning</h4>
-                      <p className="text-sm text-slate-500 mt-1 leading-relaxed">
-                        Elevating authors into trusted industry authorities.
-                      </p>
-                    </div>
-                  </div>
-
-                  <div className="flex items-start gap-3">
-                    <div className="w-10 h-10 rounded-xl bg-blue-50 flex items-center justify-center shrink-0">
-                      <TrendingUp className="w-5 h-5 text-blue-600" />
-                    </div>
-                    <div>
-                      <h4 className="font-bold text-slate-900">Conversion-Focused</h4>
-                      <p className="text-sm text-slate-500 mt-1 leading-relaxed">
-                        Campaigns and designs created around real business goals.
-                      </p>
-                    </div>
-                  </div>
-
-                  <div className="flex items-start gap-3">
-                    <div className="w-10 h-10 rounded-xl bg-blue-50 flex items-center justify-center shrink-0">
-                      <Users className="w-5 h-5 text-blue-600" />
-                    </div>
-                    <div>
-                      <h4 className="font-bold text-slate-900">Audience First</h4>
-                      <p className="text-sm text-slate-500 mt-1 leading-relaxed">
-                        Every message is shaped around the people you want to reach.
-                      </p>
-                    </div>
-                  </div>
-
-                  <div className="flex items-start gap-3">
-                    <div className="w-10 h-10 rounded-xl bg-blue-50 flex items-center justify-center shrink-0">
-                      <ShieldCheck className="w-5 h-5 text-blue-600" />
-                    </div>
-                    <div>
-                      <h4 className="font-bold text-slate-900">Long-Term Value</h4>
-                      <p className="text-sm text-slate-500 mt-1 leading-relaxed">
-                        Building digital assets and strategies that continue working beyond launch day.
-                      </p>
-                    </div>
-                  </div>
+                  {values.map((value, index) => {
+                    const Icon = value.icon;
+                    return (
+                      <div key={index} className="flex items-start gap-3">
+                        <div className="w-10 h-10 rounded-xl bg-blue-50 flex items-center justify-center shrink-0">
+                          <Icon className="w-5 h-5 text-blue-600" />
+                        </div>
+                        <div>
+                          <h4 className="font-bold text-slate-900">{value.title}</h4>
+                          <p className="text-sm text-slate-500 mt-1 leading-relaxed">
+                            {value.desc}
+                          </p>
+                        </div>
+                      </div>
+                    );
+                  })}
                 </div>
               </div>
 
               {/* Stats */}
               <div className="about-scroll-card about-stats grid grid-cols-3 gap-2 sm:gap-3">
-                <div className="about-stat rounded-2xl bg-blue-600 text-white p-4 sm:p-5">
-                  <div className="text-2xl sm:text-3xl font-black">150+</div>
-                  <p className="text-[10px] sm:text-xs text-blue-100 font-semibold uppercase tracking-wide mt-1">
-                    Projects
-                  </p>
-                </div>
-
-                <div className="about-stat rounded-2xl bg-slate-950 text-white p-4 sm:p-5">
-                  <div className="text-2xl sm:text-3xl font-black">2000+</div>
-                  <p className="text-[10px] sm:text-xs text-slate-400 font-semibold uppercase tracking-wide mt-1">
-                    Clients
-                  </p>
-                </div>
-
-                <div className="about-stat rounded-2xl bg-slate-100 text-slate-900 p-4 sm:p-5">
-                  <div className="text-2xl sm:text-3xl font-black">99%</div>
-                  <p className="text-[10px] sm:text-xs text-slate-500 font-semibold uppercase tracking-wide mt-1">
-                    Satisfaction
-                  </p>
-                </div>
+                {stats.map((stat, index) => {
+                  const colorClass = getStatColor(stat.color);
+                  const labelColor = getStatLabelColor(stat.color);
+                  return (
+                    <div key={index} className={`about-stat rounded-2xl ${colorClass} p-4 sm:p-5`}>
+                      <div className="text-2xl sm:text-3xl font-black">{stat.value}</div>
+                      <p className={`text-[10px] sm:text-xs ${labelColor} font-semibold uppercase tracking-wide mt-1`}>
+                        {stat.label}
+                      </p>
+                    </div>
+                  );
+                })}
               </div>
 
               {/* Founder / CTA */}
@@ -387,9 +400,9 @@ export default function AboutSection({ onOpenVideoModal, onOpenQuoteModal }) {
                 <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-5">
                   <div className="flex items-center gap-3.5">
                     <div>
-                      <h4 className="font-bold text-slate-900">Peter Taiwo Godswill</h4>
+                      <h4 className="font-bold text-slate-900">{t('about.founderName')}</h4>
                       <p className="text-[10px] sm:text-xs text-blue-600 font-bold uppercase tracking-wider mt-1">
-                        Founder & Creative Director
+                        {t('about.founderRole')}
                       </p>
                     </div>
                   </div>
@@ -398,7 +411,7 @@ export default function AboutSection({ onOpenVideoModal, onOpenQuoteModal }) {
                     onClick={onOpenQuoteModal}
                     className="w-full sm:w-auto inline-flex items-center justify-center gap-2 bg-blue-600 hover:bg-blue-700 text-white font-bold text-sm px-6 py-3.5 rounded-full shadow-lg shadow-blue-600/20 transition-all duration-300 active:scale-95"
                   >
-                    Work With Us
+                    {t('about.workWithUs')}
                     <ArrowRight className="w-4 h-4" />
                   </button>
                 </div>

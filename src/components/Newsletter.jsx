@@ -2,8 +2,10 @@
 
 import React, { useState } from 'react';
 import { Mail, Send } from 'lucide-react';
+import { useLanguage } from '@/i18n/LanguageContext';
 
 export const Newsletter = ({ onSuccessToast }) => {
+  const { t } = useLanguage();
   const [email, setEmail] = useState('');
   const [subscribed, setSubscribed] = useState(false);
 
@@ -14,9 +16,7 @@ export const Newsletter = ({ onSuccessToast }) => {
 
     setSubscribed(true);
 
-    onSuccessToast(
-      'Thank you for subscribing to BigTeeWise Digital updates!'
-    );
+    onSuccessToast(t('newsletter.successMsg'));
 
     setEmail('');
   };
@@ -28,29 +28,23 @@ export const Newsletter = ({ onSuccessToast }) => {
         {/* Section Badge */}
         <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-blue-100 border border-blue-200 text-blue-700 text-xs sm:text-sm font-bold tracking-wide uppercase">
           <span className="text-blue-600 font-extrabold">//</span>
-          <span>Our Newsletter</span>
+          <span>{t('newsletter.badge')}</span>
         </div>
 
         {/* Heading */}
         <h2 className="text-2xl sm:text-3xl lg:text-4xl font-extrabold text-slate-900 tracking-tight">
-          Subscribe for{' '}
-          <span className="text-blue-600">
-            Expert Marketing Tips
-          </span>{' '}
-          & Special Author Offers
+          {t('newsletter.heading')}
         </h2>
 
         {/* Description */}
         <p className="text-slate-600 text-xs sm:text-sm max-w-xl mx-auto">
-          Get weekly publishing strategies, Amazon KDP ad tactics, and digital
-          marketing insights delivered straight to your inbox.
+          {t('newsletter.subheading')}
         </p>
 
         {/* Subscribed State */}
         {subscribed ? (
           <div className="bg-emerald-50 text-emerald-800 font-bold p-4 rounded-2xl border border-emerald-200 inline-block animate-in fade-in">
-            ✓ You are subscribed! Check your inbox for our latest author
-            launch checklist.
+            {t('newsletter.subscribedMessage')}
           </div>
         ) : (
           /* Newsletter Form */
@@ -64,7 +58,7 @@ export const Newsletter = ({ onSuccessToast }) => {
               <input
                 type="email"
                 required
-                placeholder="Enter Email Address..."
+                placeholder={t('newsletter.placeholder')}
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
                 className="w-full bg-white border border-slate-300 focus:border-blue-600 focus:ring-2 focus:ring-blue-600/20 rounded-full pl-11 pr-4 py-3.5 text-sm text-slate-900 focus:outline-none transition-all"
@@ -75,11 +69,16 @@ export const Newsletter = ({ onSuccessToast }) => {
               type="submit"
               className="w-full sm:w-auto bg-blue-600 hover:bg-blue-700 text-white font-bold text-sm px-8 py-3.5 rounded-full shadow-md shadow-blue-600/30 transition-all flex items-center justify-center gap-2 shrink-0"
             >
-              <span>Subscribe</span>
+              <span>{t('newsletter.subscribeBtn')}</span>
               <Send className="w-4 h-4" />
             </button>
           </form>
         )}
+
+        {/* Privacy Note */}
+        <p className="text-[10px] text-slate-400">
+          {t('newsletter.privacyNote')}
+        </p>
 
       </div>
     </section>

@@ -11,6 +11,7 @@ import {
 import { SERVICES } from '../app/Data/content';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
+import { useLanguage } from '@/i18n/LanguageContext';
 
 if (typeof window !== 'undefined') {
   gsap.registerPlugin(ScrollTrigger);
@@ -34,6 +35,7 @@ const SERVICE_IMAGES = {
 };
 
 export default function ServicesSection({ onOpenQuoteModal }) {
+  const { t } = useLanguage();
   const [selectedCategory, setSelectedCategory] = useState('all');
   const sectionRef = useRef(null);
 
@@ -59,6 +61,14 @@ export default function ServicesSection({ onOpenQuoteModal }) {
     if (selectedCategory === 'specialization') return service.isSpecialization;
     return service.category === selectedCategory;
   });
+
+  // Get translated category labels
+  const getCategoryLabel = (category) => {
+    if (category === 'specialization') return t('services.specialization') || 'Specialization';
+    if (category === 'marketing') return t('services.digitalMarketingTab') || 'Digital Marketing & SEO';
+    if (category === 'creative') return t('services.creativeDesignTab') || 'Creative Design & Branding';
+    return t('services.specialization') || 'Specialization';
+  };
 
   // GSAP Animations with unhurried durations, clearProps, and ScrollTrigger cleanup
   useEffect(() => {
@@ -131,6 +141,23 @@ export default function ServicesSection({ onOpenQuoteModal }) {
     return () => ctx.revert();
   }, [filteredServices]);
 
+  // Get translated service title
+  const getServiceTitle = (service) => {
+    // If service has a translation key, use it
+    if (service.translationKey) {
+      return t(service.translationKey) || service.title;
+    }
+    return service.title;
+  };
+
+  // Get translated service description
+  const getServiceDesc = (service) => {
+    if (service.descTranslationKey) {
+      return t(service.descTranslationKey) || service.fullDesc || service.shortDesc;
+    }
+    return service.fullDesc || service.shortDesc;
+  };
+
   return (
     <section ref={sectionRef} id="services" className="py-16 sm:py-24 bg-slate-50 relative overflow-hidden">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
@@ -140,15 +167,15 @@ export default function ServicesSection({ onOpenQuoteModal }) {
           <div className="space-y-3 max-w-2xl">
             <div className="services-header-item inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-blue-100/80 border border-blue-200 text-blue-700 text-xs sm:text-sm font-bold tracking-wide uppercase">
               <span className="text-blue-600 font-black">//</span>
-              <span>Our Services</span>
+              <span>{t('services.badge')}</span>
             </div>
 
             <h2 className="services-header-item text-3xl sm:text-4xl lg:text-5xl font-extrabold text-slate-900 tracking-tight leading-tight">
-              Services We Provide to <span className="text-blue-600">Elevate Your Brand</span>
+              {t('services.heading')}
             </h2>
 
             <p className="services-header-item text-slate-600 text-base leading-relaxed">
-              While we serve as a full-spectrum digital marketing and creative agency, <strong className="text-slate-900">Book Marketing & Author Branding</strong> represent our core areas of key specialization.
+              {t('services.subheading')}
             </p>
           </div>
 
@@ -157,7 +184,7 @@ export default function ServicesSection({ onOpenQuoteModal }) {
               onClick={() => onOpenQuoteModal && onOpenQuoteModal()}
               className="bg-blue-600 hover:bg-blue-700 active:scale-95 text-white font-bold text-sm px-6 py-3 rounded-full shadow-md shadow-blue-600/20 transition-all duration-300 flex items-center justify-center gap-2 touch-manipulation"
             >
-              <span>Request Custom Proposal</span>
+              <span>{t('services.requestProposal')}</span>
               <ArrowRight className="w-4 h-4" />
             </button>
           </div>
@@ -173,7 +200,7 @@ export default function ServicesSection({ onOpenQuoteModal }) {
                 : 'bg-white text-slate-600 hover:bg-slate-200 hover:text-slate-900'
             }`}
           >
-            All Services ({servicesList.length})
+            {t('services.allServices')} ({servicesList.length})
           </button>
 
           <button
@@ -185,7 +212,7 @@ export default function ServicesSection({ onOpenQuoteModal }) {
             }`}
           >
             <Star className="w-4 h-4 fill-amber-400 text-amber-500" />
-            <span>Key Specializations (Book & Author)</span>
+            <span>{t('services.specializationsTab')}</span>
           </button>
 
           <button
@@ -196,7 +223,7 @@ export default function ServicesSection({ onOpenQuoteModal }) {
                 : 'bg-white text-slate-600 hover:bg-slate-200 hover:text-slate-900'
             }`}
           >
-            Digital Marketing & SEO
+            {t('services.digitalMarketingTab')}
           </button>
 
           <button
@@ -207,7 +234,7 @@ export default function ServicesSection({ onOpenQuoteModal }) {
                 : 'bg-white text-slate-600 hover:bg-slate-200 hover:text-slate-900'
             }`}
           >
-            Creative Design & Branding
+            {t('services.creativeDesignTab')}
           </button>
         </div>
 
@@ -223,6 +250,10 @@ export default function ServicesSection({ onOpenQuoteModal }) {
               SERVICE_IMAGES[service.id] || 
               SERVICE_IMAGES['default'];
 
+            const serviceTitle = getServiceTitle(service);
+            const serviceDesc = getServiceDesc(service);
+            const categoryLabel = getCategoryLabel(service.category);
+
             return (
               <div 
                 key={service.id || index} 
@@ -235,7 +266,7 @@ export default function ServicesSection({ onOpenQuoteModal }) {
                   <div className="relative aspect-[4/3] sm:aspect-[1.1/1] rounded-none lg:rounded-[2.2rem] overflow-hidden shadow-none lg:shadow-lg border-none lg:border lg:border-slate-200/80 bg-transparent lg:bg-slate-100">
                     <Image 
                       src={serviceImage} 
-                      alt={service.title} 
+                      alt={serviceTitle} 
                       fill
                       sizes="(max-width: 768px) 100vw, (max-width: 1200px) 40vw, 500px"
                       quality={80}
@@ -252,7 +283,7 @@ export default function ServicesSection({ onOpenQuoteModal }) {
                           {service.statTopValue || '45+'}
                         </div>
                         <div className="text-[9px] font-bold text-slate-400 uppercase tracking-wider mt-0.5">
-                          {service.statTopLabel || 'PROJECTS'}
+                          {service.statTopLabel || t('services.projects') || 'PROJECTS'}
                         </div>
                       </div>
                     </div>
@@ -267,7 +298,7 @@ export default function ServicesSection({ onOpenQuoteModal }) {
                           {service.statBottomValue || '3x'}
                         </div>
                         <div className="text-[9px] font-bold text-slate-400 uppercase tracking-wider mt-0.5">
-                          {service.statBottomLabel || 'GROWTH'}
+                          {service.statBottomLabel || t('services.growth') || 'GROWTH'}
                         </div>
                       </div>
                     </div>
@@ -288,25 +319,25 @@ export default function ServicesSection({ onOpenQuoteModal }) {
                         <span className="bg-blue-600 text-white text-[10px] px-2 py-0.5 rounded-md font-black">
                           {stepNumber}
                         </span>
-                        <span>{service.category || 'SPECIALIZATION'}</span>
+                        <span>{categoryLabel}</span>
                       </div>
 
                       {service.isSpecialization && (
                         <span className="bg-gradient-to-r from-amber-500 to-amber-600 text-white text-[11px] font-extrabold px-3.5 py-1 rounded-full uppercase tracking-wider flex items-center gap-1 shadow-sm">
                           <Star className="w-3 h-3 fill-amber-300 text-amber-300" />
-                          <span>Specialization</span>
+                          <span>{t('services.specializationBadge')}</span>
                         </span>
                       )}
                     </div>
 
                     {/* Title */}
                     <h3 className="text-2xl sm:text-3xl lg:text-4xl font-extrabold text-slate-900 tracking-tight leading-tight">
-                      {service.title}
+                      {serviceTitle}
                     </h3>
 
                     {/* Description */}
                     <p className="text-slate-600 text-sm sm:text-base leading-relaxed">
-                      {service.fullDesc || service.shortDesc}
+                      {serviceDesc}
                     </p>
 
                     {/* Deliverables Grid */}
@@ -325,7 +356,7 @@ export default function ServicesSection({ onOpenQuoteModal }) {
                     {service.platforms && service.platforms.length > 0 && (
                       <div className="pt-1 flex flex-wrap items-center gap-2">
                         <span className="text-xs font-extrabold text-slate-400 uppercase tracking-wider mr-1">
-                          Platforms:
+                          {t('services.platforms')}:
                         </span>
                         {service.platforms.map((plat, pIdx) => (
                           <span key={pIdx} className="px-3 py-1 rounded-full bg-slate-100 text-slate-700 text-xs font-semibold">
@@ -341,7 +372,7 @@ export default function ServicesSection({ onOpenQuoteModal }) {
                         href={`/services/${service.id}`}
                         className="text-sm font-bold text-blue-600 hover:text-blue-700 flex items-center justify-center sm:justify-start gap-1.5 transition-colors duration-200"
                       >
-                        <span>Explore Details</span>
+                        <span>{t('services.learnMore')}</span>
                         <ArrowRight className="w-4 h-4" />
                       </Link>
 
@@ -349,7 +380,7 @@ export default function ServicesSection({ onOpenQuoteModal }) {
                         onClick={() => onOpenQuoteModal && onOpenQuoteModal(service.title)}
                         className="inline-flex items-center justify-center gap-2 bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 active:scale-95 text-white font-bold text-sm px-6 py-3.5 rounded-full shadow-lg shadow-blue-600/20 transition-all duration-300 touch-manipulation"
                       >
-                        <span>Inquire Now</span>
+                        <span>{t('services.inquireNow')}</span>
                         <ArrowRight className="w-4 h-4" />
                       </button>
                     </div>

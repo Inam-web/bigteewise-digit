@@ -9,6 +9,7 @@ import {
   ArrowUpRight, ChevronUp, Clock 
 } from 'lucide-react';
 import { FacebookIcon, TwitterXIcon, InstagramIcon, LinkedinIcon } from './SocialIcons';
+import { useLanguage } from '@/i18n/LanguageContext';
 
 const BUSINESS_INFO = {
   shortAbout: "Empowering authors and digital creators with strategic marketing, branding, and web design.",
@@ -27,6 +28,7 @@ const BUSINESS_INFO = {
 gsap.registerPlugin(ScrollTrigger);
 
 export const Footer = ({ onOpenQuoteModal }) => {
+  const { t } = useLanguage();
   const footerRef = useRef(null);
   const ctaCardRef = useRef(null);
   const brandColRef = useRef(null);
@@ -34,6 +36,28 @@ export const Footer = ({ onOpenQuoteModal }) => {
   const servicesColRef = useRef(null);
   const contactColRef = useRef(null);
   const copyrightRef = useRef(null);
+
+  // Navigation links with translation keys - UNIQUE KEYS
+  const footerLinks = {
+    navigation: [
+      { id: 'nav-home', label: t('nav.home'), href: '#home' },
+      { id: 'nav-about', label: t('nav.about'), href: '#about' },
+      { id: 'nav-services', label: t('nav.services'), href: '#services' },
+      { id: 'nav-portfolio', label: t('nav.portfolio'), href: '#portfolio' },
+      { id: 'nav-testimonials', label: t('nav.testimonials'), href: '#testimonials' },
+      { id: 'nav-team', label: t('team.metaTeam') || 'Our Team', href: '#team' },
+      { id: 'nav-faq', label: t('faq.badge') || 'FAQs', href: '#faq' },
+    ],
+    services: [
+      { id: 'svc-book-marketing', label: 'Book Marketing', href: '#services', featured: true },
+      { id: 'svc-author-branding', label: 'Author Branding', href: '#services', featured: true },
+      { id: 'svc-cover-design', label: 'Book Cover Design', href: '#services' },
+      { id: 'svc-3d-mockups', label: '3D Book Mockups', href: '#services' },
+      { id: 'svc-digital-ads', label: 'Digital Advertising', href: '#services' },
+      { id: 'svc-social-media', label: 'Social Media Marketing', href: '#services' },
+      { id: 'svc-seo', label: 'SEO & Content Strategy', href: '#services' },
+    ],
+  };
 
   useGSAP(() => {
     const mm = gsap.matchMedia();
@@ -75,27 +99,6 @@ export const Footer = ({ onOpenQuoteModal }) => {
     window.scrollTo({ top: 0, behavior: 'smooth' });
   };
 
-  const footerLinks = {
-    navigation: [
-      { label: 'Home', href: '#home' },
-      { label: 'About Us', href: '#about' },
-      { label: 'Services', href: '#services' },
-      { label: 'Portfolio', href: '#portfolio' },
-      { label: 'Testimonials', href: '#testimonials' },
-      { label: 'Our Team', href: '#team' },
-      { label: 'FAQs', href: '#faq' },
-    ],
-    services: [
-      { label: 'Book Marketing', href: '#services', featured: true },
-      { label: 'Author Branding', href: '#services', featured: true },
-      { label: 'Book Cover Design', href: '#services' },
-      { label: '3D Book Mockups', href: '#services' },
-      { label: 'Digital Advertising', href: '#services' },
-      { label: 'Social Media Marketing', href: '#services' },
-      { label: 'SEO & Content Strategy', href: '#services' },
-    ],
-  };
-
   return (
     <footer
       ref={footerRef}
@@ -118,14 +121,14 @@ export const Footer = ({ onOpenQuoteModal }) => {
             <div className="text-center lg:text-left space-y-3 max-w-xl">
               <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-blue-500/10 border border-blue-500/20 text-blue-400 text-[11px] font-bold uppercase tracking-wider mb-1">
                 <Sparkles className="w-3 h-3" />
-                <span>Start Today</span>
+                <span>{t('footer.ctaBadge')}</span>
               </div>
               <h2 className="text-2xl sm:text-3xl lg:text-4xl font-extrabold tracking-tight leading-tight">
-                Ready to Publish, Brand, <br className="hidden sm:block" />
-                and <span className="text-blue-500">Scale Your Impact?</span>
+                {t('footer.ctaHeadingPre')} <br className="hidden sm:block" />
+                {t('footer.ctaHeadingPost')} <span className="text-blue-500">{t('footer.ctaHeadingHighlight')}</span>
               </h2>
               <p className="text-slate-400 text-sm sm:text-base leading-relaxed">
-                Get a tailored strategy session with our team. No obligations, just actionable insights for your next book or brand launch.
+                {t('footer.ctaSubtext')}
               </p>
             </div>
 
@@ -134,7 +137,7 @@ export const Footer = ({ onOpenQuoteModal }) => {
                 onClick={onOpenQuoteModal}
                 className="w-full sm:w-auto group bg-blue-600 hover:bg-blue-500 text-white font-bold text-sm px-8 py-4 rounded-full shadow-lg shadow-blue-600/30 hover:shadow-blue-500/50 transition-all duration-300 flex items-center justify-center gap-2 active:scale-95"
               >
-                <span>Get Free Quote</span>
+                <span>{t('footer.ctaBtn')}</span>
                 <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform duration-300" />
               </button>
               <a
@@ -142,7 +145,7 @@ export const Footer = ({ onOpenQuoteModal }) => {
                 className="w-full sm:w-auto group bg-slate-800 hover:bg-slate-700 text-white font-bold text-sm px-8 py-4 rounded-full border border-slate-700 transition-all duration-300 flex items-center justify-center gap-2 active:scale-95"
               >
                 <Phone className="w-4 h-4 text-blue-400" />
-                <span>Call Us Now</span>
+                <span>{t('footer.ctaCall')}</span>
               </a>
             </div>
           </div>
@@ -167,7 +170,7 @@ export const Footer = ({ onOpenQuoteModal }) => {
               </a>
 
               <p className="text-slate-400 text-sm leading-relaxed max-w-xs">
-                {BUSINESS_INFO.shortAbout} We specialize in high-converting Book Marketing, Author Branding, and Digital Strategy based in UK, United Kingdom.
+                {t('footer.tagline')}
               </p>
 
               {/* Socials */}
@@ -194,7 +197,7 @@ export const Footer = ({ onOpenQuoteModal }) => {
               {/* Trust Pill */}
               <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-emerald-500/10 border border-emerald-500/15 text-emerald-400 text-xs font-bold">
                 <Clock className="w-3.5 h-3.5" />
-                <span>Avg. Response: Under 2 Hours</span>
+                <span>{t('footer.responseTime')}</span>
               </div>
             </div>
 
@@ -202,11 +205,11 @@ export const Footer = ({ onOpenQuoteModal }) => {
             <div ref={navColRef} className="lg:col-span-2 sm:pl-4 lg:pl-0">
               <h4 className="text-sm font-extrabold uppercase tracking-wider text-white mb-5 flex items-center gap-2">
                 <span className="w-1.5 h-1.5 rounded-full bg-blue-500" />
-                Navigate
+                {t('footer.navHeading')}
               </h4>
               <ul className="space-y-3">
                 {footerLinks.navigation.map((link) => (
-                  <li key={link.label}>
+                  <li key={link.id}>
                     <a 
                       href={link.href} 
                       className="group text-sm text-slate-400 hover:text-white transition-colors duration-200 flex items-center gap-1.5"
@@ -223,11 +226,11 @@ export const Footer = ({ onOpenQuoteModal }) => {
             <div ref={servicesColRef} className="lg:col-span-3 sm:pl-4 lg:pl-0">
               <h4 className="text-sm font-extrabold uppercase tracking-wider text-white mb-5 flex items-center gap-2">
                 <span className="w-1.5 h-1.5 rounded-full bg-blue-500" />
-                Services
+                {t('footer.servicesHeading')}
               </h4>
               <ul className="space-y-3">
                 {footerLinks.services.map((link) => (
-                  <li key={link.label}>
+                  <li key={link.id}>
                     <a 
                       href={link.href} 
                       className={`group text-sm transition-colors duration-200 flex items-center gap-2 ${
@@ -247,7 +250,7 @@ export const Footer = ({ onOpenQuoteModal }) => {
             <div ref={contactColRef} className="lg:col-span-3 sm:pl-4 lg:pl-0">
               <h4 className="text-sm font-extrabold uppercase tracking-wider text-white mb-5 flex items-center gap-2">
                 <span className="w-1.5 h-1.5 rounded-full bg-blue-500" />
-                Contact
+                {t('footer.contactHeading')}
               </h4>
               
               <div className="space-y-4">
@@ -285,7 +288,7 @@ export const Footer = ({ onOpenQuoteModal }) => {
               </div>
 
               <div className="mt-6 p-4 rounded-2xl bg-slate-800/40 border border-slate-700/50">
-                <p className="text-[11px] font-bold uppercase tracking-wider text-slate-500 mb-1">Social Handle</p>
+                <p className="text-[11px] font-bold uppercase tracking-wider text-slate-500 mb-1">{t('footer.socialHandle')}</p>
                 <p className="text-sm font-bold text-blue-400">{BUSINESS_INFO.socialHandle}</p>
               </div>
             </div>
@@ -299,9 +302,9 @@ export const Footer = ({ onOpenQuoteModal }) => {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
           <div className="flex flex-col sm:flex-row items-center justify-between gap-4">
             <div className="flex flex-col sm:flex-row items-center gap-2 sm:gap-4 text-xs text-slate-500 text-center sm:text-left">
-              <p>© 2025 BigTeeWise Digital. All Rights Reserved.</p>
+              <p>© 2025 BigTeeWise Digital. {t('footer.rightsReserved')}</p>
               <span className="hidden sm:block w-1 h-1 rounded-full bg-slate-700" />
-              <p>Crafted with precision in UK, United Kingdom.</p>
+              <p>{t('footer.crafted')}</p>
             </div>
 
             <div className="flex items-center gap-6">
@@ -309,21 +312,21 @@ export const Footer = ({ onOpenQuoteModal }) => {
                 href="#privacy"
                 onClick={(e) => {
                   e.preventDefault();
-                  alert("BigTeeWise Digital Privacy Policy: We safeguard all author manuscripts, creative assets, and client information with strict confidentiality.");
+                  alert(t('footer.privacyText'));
                 }}
                 className="text-xs text-slate-500 hover:text-blue-400 transition-colors duration-200"
               >
-                Privacy
+                {t('footer.privacyPolicy')}
               </a>
               <a
                 href="#terms"
                 onClick={(e) => {
                   e.preventDefault();
-                  alert("BigTeeWise Digital Terms: All creative graphics and campaign strategies are bespoke property for our clients upon project delivery.");
+                  alert(t('footer.termsText'));
                 }}
                 className="text-xs text-slate-500 hover:text-blue-400 transition-colors duration-200"
               >
-                Terms
+                {t('footer.termsOfService')}
               </a>
               
               {/* Back to Top */}

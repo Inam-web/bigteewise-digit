@@ -5,6 +5,7 @@ import { FAQS } from '@/app/Data/content';
 import { Plus, Minus, MessageSquare, PhoneCall, ArrowRight, Sparkles, HelpCircle, Mail, Clock, Shield, CheckCircle } from 'lucide-react';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
+import { useLanguage } from '@/i18n/LanguageContext';
 
 if (typeof window !== 'undefined') {
   gsap.registerPlugin(ScrollTrigger);
@@ -45,6 +46,7 @@ const EXTENDED_FAQS = [
 ];
 
 export default function FAQSection({ onOpenQuoteModal }) {
+  const { t } = useLanguage();
   const [openFaqId, setOpenFaqId] = useState(EXTENDED_FAQS[0]?.id || '');
   const sectionRef = useRef(null);
   const headerRef = useRef(null);
@@ -108,21 +110,21 @@ export default function FAQSection({ onOpenQuoteModal }) {
           <div className="space-y-3 max-w-2xl">
             <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-blue-50 border border-blue-100 text-blue-600 text-xs sm:text-sm font-bold tracking-wide uppercase">
               <span className="text-blue-600 font-extrabold">//</span>
-              <span>FAQs</span>
+              <span>{t('faq.badge')}</span>
             </div>
 
             <h2 className="text-3xl sm:text-4xl lg:text-5xl font-extrabold text-slate-900 tracking-tight leading-tight">
-              Questions? <span className="text-blue-600">We've got answers.</span>
+              {t('faq.heading')}
             </h2>
 
             <p className="text-slate-600 text-sm sm:text-base leading-relaxed">
-              Everything you need to know about our services, process, and how we help authors and brands grow.
+              {t('faq.subheading')}
             </p>
           </div>
 
           <div className="inline-flex items-center gap-2 text-xs text-slate-400 bg-slate-50 px-4 py-2 rounded-full border border-slate-200">
             <HelpCircle className="w-3.5 h-3.5 text-blue-500" />
-            <span>{EXTENDED_FAQS.length} Common Questions</span>
+            <span>{EXTENDED_FAQS.length} {t('faq.commonQuestions')}</span>
           </div>
         </div>
 
@@ -181,9 +183,9 @@ export default function FAQSection({ onOpenQuoteModal }) {
               </div>
 
               <div>
-                <h3 className="text-lg font-bold text-white">Still have questions?</h3>
+                <h3 className="text-lg font-bold text-white">{t('faq.stillHaveQuestions')}</h3>
                 <p className="text-slate-400 text-sm leading-relaxed mt-1">
-                  Our team will answer all your questions about book marketing, pricing, and timelines.
+                  {t('faq.supportText')}
                 </p>
               </div>
 
@@ -191,7 +193,7 @@ export default function FAQSection({ onOpenQuoteModal }) {
                 onClick={onOpenQuoteModal}
                 className="w-full bg-blue-600 hover:bg-blue-500 text-white font-bold text-sm py-3 rounded-full shadow-lg shadow-blue-600/30 hover:shadow-blue-600/50 transition-all duration-300 flex items-center justify-center gap-2 group"
               >
-                <span>Contact Us Now</span>
+                <span>{t('faq.contactUs')}</span>
                 <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
               </button>
             </div>
@@ -202,7 +204,7 @@ export default function FAQSection({ onOpenQuoteModal }) {
                 <div className="w-10 h-10 rounded-xl bg-blue-50 text-blue-600 flex items-center justify-center mx-auto mb-2 shrink-0">
                   <PhoneCall className="w-4 h-4" />
                 </div>
-                <p className="text-[9px] text-slate-400 font-bold uppercase tracking-wider mb-0.5">Call Us</p>
+                <p className="text-[9px] text-slate-400 font-bold uppercase tracking-wider mb-0.5">{t('faq.callUs')}</p>
                 <a 
                   href="tel:+2348073527146" 
                   className="text-xs font-extrabold text-slate-900 hover:text-blue-600 transition-colors block break-all leading-snug"
@@ -215,7 +217,7 @@ export default function FAQSection({ onOpenQuoteModal }) {
                 <div className="w-10 h-10 rounded-xl bg-blue-50 text-blue-600 flex items-center justify-center mx-auto mb-2 shrink-0">
                   <Mail className="w-4 h-4" />
                 </div>
-                <p className="text-[9px] text-slate-400 font-bold uppercase tracking-wider mb-0.5">Email Us</p>
+                <p className="text-[9px] text-slate-400 font-bold uppercase tracking-wider mb-0.5">{t('faq.emailUs')}</p>
                 <a 
                   href="mailto:petergodswill52@gmail.com" 
                   title="petergodswill52@gmail.com"
@@ -230,18 +232,18 @@ export default function FAQSection({ onOpenQuoteModal }) {
             <div className="grid grid-cols-3 gap-2">
               <div className="bg-slate-50/80 p-3 rounded-xl border border-slate-200 text-center hover:border-blue-300 transition-all duration-300">
                 <Clock className="w-4 h-4 text-blue-500 mx-auto mb-1" />
-                <span className="text-[9px] font-bold text-slate-600 block">Under 2hrs</span>
-                <span className="text-[7px] text-slate-400 uppercase tracking-wider">Response</span>
+                <span className="text-[9px] font-bold text-slate-600 block">{t('faq.under2hrs')}</span>
+                <span className="text-[7px] text-slate-400 uppercase tracking-wider">{t('faq.response')}</span>
               </div>
               <div className="bg-slate-50/80 p-3 rounded-xl border border-slate-200 text-center hover:border-blue-300 transition-all duration-300">
                 <Shield className="w-4 h-4 text-blue-500 mx-auto mb-1" />
                 <span className="text-[9px] font-bold text-slate-600 block">100%</span>
-                <span className="text-[7px] text-slate-400 uppercase tracking-wider">Satisfaction</span>
+                <span className="text-[7px] text-slate-400 uppercase tracking-wider">{t('faq.satisfaction')}</span>
               </div>
               <div className="bg-slate-50/80 p-3 rounded-xl border border-slate-200 text-center hover:border-blue-300 transition-all duration-300">
                 <Sparkles className="w-4 h-4 text-blue-500 mx-auto mb-1" />
                 <span className="text-[9px] font-bold text-slate-600 block">24/7</span>
-                <span className="text-[7px] text-slate-400 uppercase tracking-wider">Support</span>
+                <span className="text-[7px] text-slate-400 uppercase tracking-wider">{t('faq.support')}</span>
               </div>
             </div>
 

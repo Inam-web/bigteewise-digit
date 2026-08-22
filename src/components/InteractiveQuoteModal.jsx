@@ -16,6 +16,7 @@ import {
   AlertCircle,
 } from "lucide-react";
 import gsap from 'gsap';
+import { useLanguage } from '@/i18n/LanguageContext';
 
 export const InteractiveQuoteModal = ({
   isOpen,
@@ -23,11 +24,12 @@ export const InteractiveQuoteModal = ({
   preselectedService = "",
   onSuccessToast,
 }) => {
+  const { t } = useLanguage();
   const [selectedService, setSelectedService] = useState(
-    preselectedService || "Book Marketing"
+    preselectedService || t('quoteModal.bookMarketing') || "Book Marketing"
   );
-  const [bookType, setBookType] = useState("Non-Fiction / Business");
-  const [hasDesign, setHasDesign] = useState("No, Need Design");
+  const [bookType, setBookType] = useState(t('quoteModal.nonFiction') || "Non-Fiction / Business");
+  const [hasDesign, setHasDesign] = useState(t('quoteModal.needDesign') || "No, Need Design");
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [phone, setPhone] = useState("");
@@ -141,9 +143,7 @@ export const InteractiveQuoteModal = ({
       if (response.ok && data.success) {
         setSubmitted(true);
         if (onSuccessToast) {
-          onSuccessToast(
-            "Proposal request submitted! BigTeeWise Digital will contact you shortly."
-          );
+          onSuccessToast(t('quoteModal.successMessage'));
         }
 
         setTimeout(() => {
@@ -157,15 +157,11 @@ export const InteractiveQuoteModal = ({
           setErrorMessage("");
         }, 3000);
       } else {
-        setErrorMessage(
-          data.error || "Failed to submit request. Please try again."
-        );
+        setErrorMessage(data.error || t('quoteModal.errorMessage'));
       }
     } catch (err) {
       setIsSubmitting(false);
-      setErrorMessage(
-        "Network error. Please check your connection and try again."
-      );
+      setErrorMessage(t('quoteModal.networkError'));
     }
   };
 
@@ -185,7 +181,7 @@ export const InteractiveQuoteModal = ({
         <button
           onClick={onClose}
           className="absolute top-4 right-4 sm:top-6 sm:right-6 p-2 rounded-full bg-slate-100 hover:bg-slate-200 text-slate-600 hover:text-slate-900 transition-all duration-200 z-20"
-          aria-label="Close modal"
+          aria-label={t('quoteModal.closeModal')}
         >
           <X className="w-5 h-5" />
         </button>
@@ -198,24 +194,18 @@ export const InteractiveQuoteModal = ({
               </div>
 
               <h3 className="text-2xl font-extrabold text-slate-900">
-                Proposal Request Received! 🎉
+                {t('quoteModal.successTitle')}
               </h3>
 
               <p className="text-slate-600 text-sm max-w-md mx-auto leading-relaxed">
-                Thank you, <strong className="text-slate-900">{name}</strong>. Our lead strategist will
-                review your project details for{" "}
-                <span className="text-blue-600 font-semibold">
-                  {selectedService}
-                </span>{" "}
-                and send a tailored strategy breakdown to{" "}
-                <strong className="text-slate-900 break-all">{email}</strong>.
+                {t('quoteModal.successMessage')}
               </p>
 
               <button
                 onClick={onClose}
                 className="bg-blue-600 hover:bg-blue-700 text-white font-bold text-sm px-8 py-3.5 rounded-full shadow-lg shadow-blue-600/30 transition-all duration-300 hover:shadow-blue-600/50 hover:-translate-y-0.5 active:scale-95"
               >
-                Done & Close
+                {t('quoteModal.closeModal')}
               </button>
             </div>
           ) : (
@@ -228,18 +218,17 @@ export const InteractiveQuoteModal = ({
 
                 <div>
                   <span className="text-[10px] font-bold text-blue-600 uppercase tracking-wider">
-                    BigTeeWise Digital • Consultation
+                    BigTeeWise Digital • {t('quoteModal.consultation')}
                   </span>
 
                   <h3 className="text-xl sm:text-2xl font-extrabold text-slate-900">
-                    Request A Custom Proposal
+                    {t('quoteModal.headerTitle')}
                   </h3>
                 </div>
               </div>
 
               <p className="text-slate-600 text-xs sm:text-sm mb-6 leading-relaxed">
-                Fill in your book or project details below. We'll craft a custom
-                campaign breakdown tailored to your sales & branding goals.
+                {t('quoteModal.headerSubtitle')}
               </p>
 
               <form onSubmit={handleSubmit} className="space-y-5">
@@ -266,7 +255,7 @@ export const InteractiveQuoteModal = ({
                 <div className="space-y-1.5">
                   <label className="text-xs font-extrabold text-slate-800 uppercase tracking-wider flex items-center gap-1">
                     <Target className="w-3.5 h-3.5 text-blue-600" />
-                    Select Core Goal / Service <span className="text-red-500">*</span>
+                    {t('quoteModal.serviceLabel')} <span className="text-red-500">*</span>
                   </label>
 
                   <select
@@ -274,12 +263,12 @@ export const InteractiveQuoteModal = ({
                     onChange={(e) => setSelectedService(e.target.value)}
                     className="w-full bg-slate-50 border border-slate-200 focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 rounded-xl px-4 py-3 text-sm text-slate-900 font-medium outline-none transition-all"
                   >
-                    <option value="Book Marketing">
-                      📚 Book Marketing Campaign ⭐
+                    <option value={t('quoteModal.bookMarketing')}>
+                      📚 {t('quoteModal.bookMarketing')} ⭐
                     </option>
 
-                    <option value="Author Branding">
-                      👤 Author Personal Branding & EPK ⭐
+                    <option value={t('quoteModal.authorBranding')}>
+                      👤 {t('quoteModal.authorBranding')} ⭐
                     </option>
 
                     {SERVICES.filter((s) => !s.isSpecialization).map((s) => (
@@ -292,13 +281,15 @@ export const InteractiveQuoteModal = ({
 
                 {/* Conditional Book Options */}
                 {(selectedService.includes("Book") ||
-                  selectedService.includes("Author")) && (
+                  selectedService.includes("Author") ||
+                  selectedService.includes(t('quoteModal.bookMarketing')) ||
+                  selectedService.includes(t('quoteModal.authorBranding'))) && (
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 bg-gradient-to-br from-blue-50/80 to-indigo-50/80 p-4 rounded-2xl border border-blue-100/50">
                     {/* Book Type */}
                     <div className="space-y-1.5">
                       <label className="text-xs font-bold text-blue-900 flex items-center gap-1">
                         <BookOpen className="w-3.5 h-3.5 text-blue-600" />
-                        Book Genre / Type
+                        {t('quoteModal.bookTypeLabel')}
                       </label>
 
                       <select
@@ -306,20 +297,20 @@ export const InteractiveQuoteModal = ({
                         onChange={(e) => setBookType(e.target.value)}
                         className="w-full bg-white border border-slate-200 rounded-lg px-3 py-2.5 text-xs text-slate-800 outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 transition-all"
                       >
-                        <option value="Non-Fiction / Business">
-                          Non-Fiction / Business / Leadership
+                        <option value={t('quoteModal.nonFiction')}>
+                          {t('quoteModal.nonFiction')}
                         </option>
 
-                        <option value="Self-Help / Motivation">
-                          Self-Help & Personal Growth
+                        <option value={t('quoteModal.selfHelp')}>
+                          {t('quoteModal.selfHelp')}
                         </option>
 
-                        <option value="Fiction / Thriller / Romance">
-                          Fiction / Novel / Memoir
+                        <option value={t('quoteModal.fiction')}>
+                          {t('quoteModal.fiction')}
                         </option>
 
-                        <option value="Children's Book">
-                          Children's Book / Illustrated
+                        <option value={t('quoteModal.childrens')}>
+                          {t('quoteModal.childrens')}
                         </option>
                       </select>
                     </div>
@@ -328,7 +319,7 @@ export const InteractiveQuoteModal = ({
                     <div className="space-y-1.5">
                       <label className="text-xs font-bold text-blue-900 flex items-center gap-1">
                         <Sparkles className="w-3.5 h-3.5 text-blue-600" />
-                        Cover & 3D Mockup Status
+                        {t('quoteModal.designStatusLabel')}
                       </label>
 
                       <select
@@ -336,16 +327,16 @@ export const InteractiveQuoteModal = ({
                         onChange={(e) => setHasDesign(e.target.value)}
                         className="w-full bg-white border border-slate-200 rounded-lg px-3 py-2.5 text-xs text-slate-800 outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 transition-all"
                       >
-                        <option value="No, Need Design">
-                          Need New Cover & 3D Mockups
+                        <option value={t('quoteModal.needDesign')}>
+                          {t('quoteModal.needDesign')}
                         </option>
 
-                        <option value="Yes, Have Cover">
-                          Already Have Cover, Need Marketing
+                        <option value={t('quoteModal.haveCover')}>
+                          {t('quoteModal.haveCover')}
                         </option>
 
-                        <option value="Full Rebrand Needed">
-                          Complete Author Rebrand
+                        <option value={t('quoteModal.fullRebrand')}>
+                          {t('quoteModal.fullRebrand')}
                         </option>
                       </select>
                     </div>
@@ -358,13 +349,13 @@ export const InteractiveQuoteModal = ({
                   <div className="space-y-1.5">
                     <label className="text-xs font-bold text-slate-700 flex items-center gap-1">
                       <User className="w-3.5 h-3.5 text-slate-400" />
-                      Full Name <span className="text-red-500">*</span>
+                      {t('quoteModal.fullNameLabel')} <span className="text-red-500">*</span>
                     </label>
 
                     <input
                       type="text"
                       required
-                      placeholder="Your Name"
+                      placeholder={t('quoteModal.fullNamePlaceholder')}
                       value={name}
                       onChange={(e) => setName(e.target.value)}
                       className="w-full bg-slate-50 border border-slate-200 focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 rounded-xl px-3.5 py-2.5 text-sm text-slate-900 outline-none transition-all"
@@ -375,13 +366,13 @@ export const InteractiveQuoteModal = ({
                   <div className="space-y-1.5">
                     <label className="text-xs font-bold text-slate-700 flex items-center gap-1">
                       <Mail className="w-3.5 h-3.5 text-slate-400" />
-                      Email <span className="text-red-500">*</span>
+                      {t('quoteModal.emailLabel')} <span className="text-red-500">*</span>
                     </label>
 
                     <input
                       type="email"
                       required
-                      placeholder="you@email.com"
+                      placeholder={t('quoteModal.emailPlaceholder')}
                       value={email}
                       onChange={(e) => setEmail(e.target.value)}
                       className="w-full bg-slate-50 border border-slate-200 focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 rounded-xl px-3.5 py-2.5 text-sm text-slate-900 outline-none transition-all"
@@ -392,13 +383,13 @@ export const InteractiveQuoteModal = ({
                   <div className="space-y-1.5">
                     <label className="text-xs font-bold text-slate-700 flex items-center gap-1">
                       <Phone className="w-3.5 h-3.5 text-slate-400" />
-                      Phone / WhatsApp <span className="text-red-500">*</span>
+                      {t('quoteModal.phoneLabel')} <span className="text-red-500">*</span>
                     </label>
 
                     <input
                       type="tel"
                       required
-                      placeholder="+234..."
+                      placeholder={t('quoteModal.phonePlaceholder')}
                       value={phone}
                       onChange={(e) => setPhone(e.target.value)}
                       className="w-full bg-slate-50 border border-slate-200 focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 rounded-xl px-3.5 py-2.5 text-sm text-slate-900 outline-none transition-all"
@@ -410,16 +401,20 @@ export const InteractiveQuoteModal = ({
                 <div className="space-y-1.5">
                   <label className="text-xs font-bold text-slate-700 flex items-center gap-1">
                     <Calendar className="w-3.5 h-3.5 text-slate-400" />
-                    Project Timeline & Key Goals
+                    {t('quoteModal.projectNotesLabel')}
                   </label>
 
                   <textarea
                     rows={3}
-                    placeholder="Share your expected launch date, sales targets, or specific campaign requests..."
+                    placeholder={t('quoteModal.projectNotesPlaceholder')}
                     value={details}
                     onChange={(e) => setDetails(e.target.value)}
                     className="w-full bg-slate-50 border border-slate-200 focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 rounded-xl p-3.5 text-sm text-slate-900 outline-none transition-all resize-none"
                   />
+                </div>
+
+                <div className="text-[10px] text-slate-400 text-center">
+                  {t('quoteModal.privacyNotice')}
                 </div>
 
                 {/* Submit */}
@@ -431,20 +426,16 @@ export const InteractiveQuoteModal = ({
                   {isSubmitting ? (
                     <>
                       <span className="w-5 h-5 border-2 border-white/30 border-t-white rounded-full animate-spin" />
-                      <span>Submitting...</span>
+                      <span>{t('quoteModal.submitting')}</span>
                     </>
                   ) : (
                     <>
                       <Send className="w-4 h-4 group-hover:scale-110 transition-transform" />
-                      <span>Submit Proposal Request</span>
+                      <span>{t('quoteModal.submitQuote')}</span>
                       <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
                     </>
                   )}
                 </button>
-
-                <p className="text-center text-[10px] text-slate-400">
-                  By submitting, you agree to our privacy policy. We'll never share your information.
-                </p>
               </form>
             </div>
           )}

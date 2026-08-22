@@ -5,12 +5,14 @@ import { Calendar, Clock, ArrowRight, X, User, Tag, BookOpen, ChevronRight } fro
 import { blogPosts } from '@/app/Data/content';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
+import { useLanguage } from '@/i18n/LanguageContext';
 
 if (typeof window !== 'undefined') {
   gsap.registerPlugin(ScrollTrigger);
 }
 
 export default function BlogSection() {
+  const { t } = useLanguage();
   const [selectedPost, setSelectedPost] = useState(null);
   const sectionRef = useRef(null);
   const headerRef = useRef(null);
@@ -84,15 +86,15 @@ export default function BlogSection() {
         <div ref={headerRef} className="text-center max-w-3xl mx-auto mb-16 space-y-4">
           <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-blue-100/80 border border-blue-200 text-blue-700 text-xs sm:text-sm font-bold tracking-wide uppercase">
             <span className="font-extrabold text-blue-600">//</span>
-            <span>News & Insights</span>
+            <span>{t('blog.badge')}</span>
           </div>
 
           <h2 className="text-3xl sm:text-4xl lg:text-5xl font-extrabold text-slate-900 tracking-tight leading-tight">
-            Expert Insights on <span className="text-blue-600">Marketing & Design</span>
+            {t('blog.heading')}
           </h2>
 
           <p className="text-slate-600 text-sm sm:text-base leading-relaxed max-w-2xl mx-auto">
-            Actionable strategies on book marketing, Amazon optimization, author branding, and creative design trends that drive real results.
+            {t('blog.subheading')}
           </p>
         </div>
 
@@ -159,7 +161,7 @@ export default function BlogSection() {
                     <span className="text-xs font-bold text-slate-700 line-clamp-1">{post.author}</span>
                   </div>
                   <span className="text-xs font-bold text-blue-600 flex items-center gap-0.5 group-hover:gap-1.5 transition-all duration-300">
-                    Read <ChevronRight className="w-3.5 h-3.5" />
+                    {t('blog.readArticle')} <ChevronRight className="w-3.5 h-3.5" />
                   </span>
                 </div>
               </div>
@@ -252,14 +254,14 @@ export default function BlogSection() {
 
               <div className="pt-5 border-t border-slate-100 flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-4">
                 <p className="text-xs text-slate-500 font-medium">
-                  Want to implement these strategies? Let's discuss your project.
+                  {t('blog.ctaText')}
                 </p>
                 <button
                   type="button"
                   onClick={handleCloseModal}
                   className="inline-flex items-center justify-center gap-2 bg-slate-900 hover:bg-slate-800 active:bg-slate-950 text-white font-bold text-sm px-8 py-3 rounded-full transition-all duration-300 shadow-lg hover:shadow-xl active:scale-95 shrink-0"
                 >
-                  Close Article
+                  {t('blog.closeArticle')}
                 </button>
               </div>
             </div>

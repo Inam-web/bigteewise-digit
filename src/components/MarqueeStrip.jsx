@@ -1,41 +1,26 @@
 'use client';
 
 import React from 'react';
-
-const HIGHLIGHTS = [
-  {
-    index: '01',
-    title: 'Top Ranked',
-    subtitle: 'Amazon Bestseller Strategy',
-  },
-  {
-    index: '02',
-    title: 'Five Star',
-    subtitle: 'Client Rated Agency',
-  },
-  {
-    index: '03',
-    title: 'Worldwide',
-    subtitle: 'Global Author Reach',
-  },
-  {
-    index: '04',
-    title: '6+ Years',
-    subtitle: 'Proven Industry Mastery',
-  },
-  {
-    index: '05',
-    title: 'Real Growth',
-    subtitle: 'Measurable Campaign ROI',
-  },
-  {
-    index: '06',
-    title: '148+ Successes',
-    subtitle: 'Published & Scaled Brands',
-  },
-];
+import { useLanguage } from '@/i18n/LanguageContext';
 
 export default function MarqueeStrip() {
+  const { t } = useLanguage();
+
+  // Get marquee items from translations
+  const marqueeItemsData = t('marquee.items');
+
+  // Check if we have valid data, fallback to default if not
+  const HIGHLIGHTS = Array.isArray(marqueeItemsData) && marqueeItemsData.length > 0
+    ? marqueeItemsData
+    : [
+        { index: '01', title: 'Top Ranked', subtitle: 'Amazon Bestseller Strategy' },
+        { index: '02', title: 'Five Star', subtitle: 'Client Rated Agency' },
+        { index: '03', title: 'Worldwide', subtitle: 'Global Author Reach' },
+        { index: '04', title: '6+ Years', subtitle: 'Proven Industry Mastery' },
+        { index: '05', title: 'Real Growth', subtitle: 'Measurable Campaign ROI' },
+        { index: '06', title: '148+ Successes', subtitle: 'Published & Scaled Brands' },
+      ];
+
   const marqueeItems = [...HIGHLIGHTS, ...HIGHLIGHTS, ...HIGHLIGHTS];
 
   return (

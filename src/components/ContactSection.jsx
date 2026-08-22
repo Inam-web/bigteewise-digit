@@ -8,6 +8,7 @@ import {
 import { FacebookIcon, TwitterXIcon, InstagramIcon, LinkedinIcon } from './SocialIcons';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
+import { useLanguage } from '@/i18n/LanguageContext';
 
 if (typeof window !== 'undefined') {
   gsap.registerPlugin(ScrollTrigger);
@@ -32,11 +33,12 @@ const servicesList = [
 ];
 
 export default function ContactSection({ initialService = '', onSuccessToast }) {
+  const { t } = useLanguage();
   const [formData, setFormData] = useState({
     name: '',
     email: '',
     phone: '',
-    service: initialService || 'Book Marketing',
+    service: initialService || t('contact.form.serviceDefault') || 'Book Marketing',
     budget: '$1,000 - $3,000',
     message: '',
     website: '', // Honeypot field for anti-spam
@@ -50,6 +52,34 @@ export default function ContactSection({ initialService = '', onSuccessToast }) 
   const headerRef = useRef(null);
   const leftRef = useRef(null);
   const rightRef = useRef(null);
+
+  // Contact items with translation keys
+  const contactItems = [
+    {
+      icon: MapPin,
+      label: t('contact.info.location'),
+      lines: [businessInfo.address],
+      color: 'text-emerald-400',
+      bg: 'bg-emerald-500/10',
+      border: 'border-emerald-500/20',
+    },
+    {
+      icon: Phone,
+      label: t('contact.info.directCall'),
+      lines: [businessInfo.phone, businessInfo.email],
+      color: 'text-blue-400',
+      bg: 'bg-blue-500/10',
+      border: 'border-blue-500/20',
+    },
+    {
+      icon: Clock,
+      label: t('contact.info.hours'),
+      lines: [t('contact.info.hoursDetail'), 'Weekend: WhatsApp Only'],
+      color: 'text-amber-400',
+      bg: 'bg-amber-500/10',
+      border: 'border-amber-500/20',
+    },
+  ];
 
   useEffect(() => {
     const ctx = gsap.context(() => {
@@ -130,43 +160,16 @@ export default function ContactSection({ initialService = '', onSuccessToast }) 
       if (response.ok && data.success) {
         setSubmitted(true);
         if (typeof onSuccessToast === 'function') {
-          onSuccessToast("Thank you! Your quote request has been sent to BigTeeWise Digital.");
+          onSuccessToast(t('contact.form.successDesc'));
         }
       } else {
-        setErrorMessage(data.error || 'Failed to submit request. Please try again.');
+        setErrorMessage(data.error || t('contact.form.errorDesc'));
       }
     } catch (err) {
       setLoading(false);
-      setErrorMessage('Network error. Please check your connection and try again.');
+      setErrorMessage(t('contact.form.errorDesc'));
     }
   };
-
-  const contactItems = [
-    {
-      icon: MapPin,
-      label: 'Visit Us',
-      lines: [businessInfo.address],
-      color: 'text-emerald-400',
-      bg: 'bg-emerald-500/10',
-      border: 'border-emerald-500/20',
-    },
-    {
-      icon: Phone,
-      label: 'Call or Text',
-      lines: [businessInfo.phone, businessInfo.email],
-      color: 'text-blue-400',
-      bg: 'bg-blue-500/10',
-      border: 'border-blue-500/20',
-    },
-    {
-      icon: Clock,
-      label: 'Working Hours',
-      lines: ['Mon - Fri: 09:00 - 18:00 WAT', 'Weekend: WhatsApp Only'],
-      color: 'text-amber-400',
-      bg: 'bg-amber-500/10',
-      border: 'border-amber-500/20',
-    },
-  ];
 
   return (
     <section 
@@ -190,15 +193,15 @@ export default function ContactSection({ initialService = '', onSuccessToast }) 
         <div ref={headerRef} className="text-center max-w-3xl mx-auto mb-16 lg:mb-20 space-y-4">
           <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-blue-100/80 border border-blue-200 text-blue-700 text-xs sm:text-sm font-bold tracking-wide uppercase shadow-sm">
             <span className="font-extrabold text-blue-600">//</span>
-            <span>Start a Project</span>
+            <span>{t('contact.badge')}</span>
           </div>
 
           <h2 className="text-3xl sm:text-4xl lg:text-5xl font-extrabold text-slate-900 tracking-tight leading-tight">
-            Let's Build Something <span className="text-blue-600">Extraordinary</span> Together
+            {t('contact.heading')}
           </h2>
 
           <p className="text-slate-600 text-sm sm:text-base leading-relaxed max-w-2xl mx-auto">
-            Whether you're launching a book, scaling your brand, or need a full creative overhaul — our strategists are ready to craft your custom roadmap.
+            {t('contact.subheading')}
           </p>
         </div>
 
@@ -216,9 +219,9 @@ export default function ContactSection({ initialService = '', onSuccessToast }) 
               
               <div className="relative z-10 flex flex-col h-full">
                 <div className="mb-8">
-                  <h3 className="text-2xl font-extrabold tracking-tight mb-2">Contact Details</h3>
+                  <h3 className="text-2xl font-extrabold tracking-tight mb-2">{t('contact.info.title')}</h3>
                   <p className="text-slate-400 text-sm leading-relaxed">
-                    Reach out directly or fill out the form. We typically respond within 24 hours.
+                    {t('contact.info.subtitle')}
                   </p>
                 </div>
 
@@ -236,7 +239,7 @@ export default function ContactSection({ initialService = '', onSuccessToast }) 
                         {item.lines.map((line, i) => (
                           <p 
                             key={i} 
-                            className={`text-sm font-semibold leading-snug break-all ${i === 1 && item.label === 'Call or Text' ? 'text-blue-400 hover:text-blue-300 cursor-pointer transition-colors' : 'text-slate-200'}`}
+                            className={`text-sm font-semibold leading-snug break-all ${i === 1 && item.label === t('contact.info.directCall') ? 'text-blue-400 hover:text-blue-300 cursor-pointer transition-colors' : 'text-slate-200'}`}
                           >
                             {line}
                           </p>
@@ -248,7 +251,7 @@ export default function ContactSection({ initialService = '', onSuccessToast }) 
 
                 {/* Socials */}
                 <div className="pt-8 mt-8 border-t border-slate-800">
-                  <h4 className="text-[11px] font-bold uppercase tracking-wider text-slate-500 mb-4">Follow Our Journey</h4>
+                  <h4 className="text-[11px] font-bold uppercase tracking-wider text-slate-500 mb-4">{t('contact.socialHeading')}</h4>
                   <div className="flex items-center gap-3">
                     {[
                       { icon: FacebookIcon, href: businessInfo.socialLinks.facebook, color: 'hover:bg-[#1877F2]' },
@@ -272,7 +275,7 @@ export default function ContactSection({ initialService = '', onSuccessToast }) 
                 {/* Trust Badge */}
                 <div className="mt-6 inline-flex items-center gap-2 px-4 py-2.5 rounded-full bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 text-xs font-bold self-start">
                   <Zap className="w-3.5 h-3.5 fill-emerald-400" />
-                  <span>Avg. Response Time: 2 Hours</span>
+                  <span>{t('contact.responseTime')}</span>
                 </div>
               </div>
             </div>
@@ -294,9 +297,9 @@ export default function ContactSection({ initialService = '', onSuccessToast }) 
                   </div>
                   
                   <div className="space-y-2">
-                    <h3 className="text-2xl sm:text-3xl font-extrabold text-slate-900">Quote Request Sent!</h3>
+                    <h3 className="text-2xl sm:text-3xl font-extrabold text-slate-900">{t('contact.form.successTitle')}</h3>
                     <p className="text-slate-600 text-sm sm:text-base max-w-md mx-auto leading-relaxed">
-                      Thank you, <span className="font-bold text-slate-900">{formData.name}</span>. Our senior strategy team has received your brief and will send a tailored proposal shortly.
+                      {t('contact.form.successDesc')}
                     </p>
                   </div>
 
@@ -308,7 +311,7 @@ export default function ContactSection({ initialService = '', onSuccessToast }) 
                           name: '',
                           email: '',
                           phone: '',
-                          service: initialService || 'Book Marketing',
+                          service: initialService || t('contact.form.serviceDefault') || 'Book Marketing',
                           budget: '$1,000 - $3,000',
                           message: '',
                           website: '',
@@ -317,7 +320,7 @@ export default function ContactSection({ initialService = '', onSuccessToast }) 
                       }}
                       className="bg-slate-900 hover:bg-slate-800 text-white font-bold text-sm px-8 py-3 rounded-full transition-all shadow-lg hover:shadow-xl active:scale-95"
                     >
-                      Send Another Request
+                      {t('contact.form.sendAnother')}
                     </button>
                   </div>
                 </div>
@@ -346,18 +349,18 @@ export default function ContactSection({ initialService = '', onSuccessToast }) 
                     <div className="w-8 h-8 rounded-lg bg-blue-50 text-blue-600 flex items-center justify-center">
                       <MessageSquare className="w-4 h-4" />
                     </div>
-                    <h3 className="text-lg font-bold text-slate-900">Project Brief</h3>
+                    <h3 className="text-lg font-bold text-slate-900">{t('contact.form.projectBrief')}</h3>
                   </div>
 
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
                     {/* Name */}
                     <div className="space-y-2">
-                      <label className="text-[11px] font-extrabold text-slate-800 uppercase tracking-wider ml-1">Full Name *</label>
+                      <label className="text-[11px] font-extrabold text-slate-800 uppercase tracking-wider ml-1">{t('contact.form.nameLabel')} *</label>
                       <div className="relative">
                         <input
                           type="text"
                           required
-                          placeholder="John Doe"
+                          placeholder={t('contact.form.namePlaceholder')}
                           value={formData.name}
                           onChange={(e) => setFormData({ ...formData, name: e.target.value })}
                           onFocus={() => setFocusedField('name')}
@@ -371,12 +374,12 @@ export default function ContactSection({ initialService = '', onSuccessToast }) 
 
                     {/* Email */}
                     <div className="space-y-2">
-                      <label className="text-[11px] font-extrabold text-slate-800 uppercase tracking-wider ml-1">Email Address *</label>
+                      <label className="text-[11px] font-extrabold text-slate-800 uppercase tracking-wider ml-1">{t('contact.form.emailLabel')} *</label>
                       <div className="relative">
                         <input
                           type="email"
                           required
-                          placeholder="john@example.com"
+                          placeholder={t('contact.form.emailPlaceholder')}
                           value={formData.email}
                           onChange={(e) => setFormData({ ...formData, email: e.target.value })}
                           onFocus={() => setFocusedField('email')}
@@ -390,12 +393,12 @@ export default function ContactSection({ initialService = '', onSuccessToast }) 
 
                     {/* Phone */}
                     <div className="space-y-2">
-                      <label className="text-[11px] font-extrabold text-slate-800 uppercase tracking-wider ml-1">Phone / WhatsApp *</label>
+                      <label className="text-[11px] font-extrabold text-slate-800 uppercase tracking-wider ml-1">{t('contact.form.phoneLabel')} *</label>
                       <div className="relative">
                         <input
                           type="tel"
                           required
-                          placeholder="+234 800 000 0000"
+                          placeholder={t('contact.form.phonePlaceholder')}
                           value={formData.phone}
                           onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
                           onFocus={() => setFocusedField('phone')}
@@ -409,7 +412,7 @@ export default function ContactSection({ initialService = '', onSuccessToast }) 
 
                     {/* Service */}
                     <div className="space-y-2">
-                      <label className="text-[11px] font-extrabold text-slate-800 uppercase tracking-wider ml-1">Service Needed *</label>
+                      <label className="text-[11px] font-extrabold text-slate-800 uppercase tracking-wider ml-1">{t('contact.form.serviceLabel')} *</label>
                       <div className="relative">
                         <select
                           value={formData.service}
@@ -431,11 +434,11 @@ export default function ContactSection({ initialService = '', onSuccessToast }) 
 
                   {/* Message */}
                   <div className="space-y-2">
-                    <label className="text-[11px] font-extrabold text-slate-800 uppercase tracking-wider ml-1">Project Details *</label>
+                    <label className="text-[11px] font-extrabold text-slate-800 uppercase tracking-wider ml-1">{t('contact.form.messageLabel')} *</label>
                     <textarea
                       required
                       rows={4}
-                      placeholder="Tell us about your book, brand goals, timeline, and budget expectations..."
+                      placeholder={t('contact.form.messagePlaceholder')}
                       value={formData.message}
                       onChange={(e) => setFormData({ ...formData, message: e.target.value })}
                       onFocus={() => setFocusedField('message')}
@@ -457,11 +460,11 @@ export default function ContactSection({ initialService = '', onSuccessToast }) 
                         {loading ? (
                           <>
                             <span className="w-5 h-5 border-2 border-white/30 border-t-white rounded-full animate-spin" />
-                            <span>Sending Your Brief...</span>
+                            <span>{t('contact.form.submitting')}</span>
                           </>
                         ) : (
                           <>
-                            <span>Send Quote Request</span>
+                            <span>{t('contact.form.submitBtn')}</span>
                             <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform duration-300" />
                           </>
                         )}
@@ -472,7 +475,7 @@ export default function ContactSection({ initialService = '', onSuccessToast }) 
                     
                     <p className="text-center text-[11px] text-slate-400 font-medium mt-4 flex items-center justify-center gap-1.5">
                       <Sparkles className="w-3 h-3 text-amber-500" />
-                      Free consultation. No commitment required.
+                      {t('contact.form.freeConsultation')}
                     </p>
                   </div>
                 </form>

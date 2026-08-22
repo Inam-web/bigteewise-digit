@@ -14,6 +14,11 @@ export function middleware(request) {
     return NextResponse.next();
   }
 
+  // ✅ NEW: Redirect root path to /en
+  if (pathname === '/') {
+    return NextResponse.redirect(new URL('/en', request.url));
+  }
+
   // Check if pathname starts with a supported locale (e.g. /es, /it, /de)
   const segments = pathname.split('/').filter(Boolean);
   const maybeLocale = segments[0];

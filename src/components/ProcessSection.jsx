@@ -5,12 +5,14 @@ import { PROCESS_STEPS } from '../app/Data/content';
 import { FileSpreadsheet, Lightbulb, Layers, Smile, ArrowRight, Sparkles } from 'lucide-react';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
+import { useLanguage } from '@/i18n/LanguageContext';
 
 if (typeof window !== 'undefined') {
   gsap.registerPlugin(ScrollTrigger);
 }
 
 export default function ProcessSection({ onOpenQuoteModal }) {
+  const { t } = useLanguage();
   const sectionRef = useRef(null);
   const cardsRef = useRef([]);
 
@@ -21,7 +23,16 @@ export default function ProcessSection({ onOpenQuoteModal }) {
     Smile: <Smile className="w-5 h-5 sm:w-6 sm:h-6" />,
   };
 
-  const stepsList = PROCESS_STEPS || [];
+  // Get steps from translations if available, fallback to PROCESS_STEPS
+  const translatedSteps = t('process.steps');
+  const stepsList = Array.isArray(translatedSteps) && translatedSteps.length > 0
+    ? translatedSteps.map((step, index) => ({
+        number: step.number || `0${index + 1}`,
+        iconName: PROCESS_STEPS[index]?.iconName || 'Lightbulb',
+        title: step.title,
+        desc: step.desc,
+      }))
+    : PROCESS_STEPS || [];
 
   // Scroll to contact section function
   const scrollToContact = () => {
@@ -137,7 +148,6 @@ export default function ProcessSection({ onOpenQuoteModal }) {
         const desc = card.querySelector('.process-desc');
 
         card.addEventListener('mouseenter', () => {
-          // Icon animation
           if (icon) {
             gsap.to(icon, {
               scale: 1.15,
@@ -147,7 +157,6 @@ export default function ProcessSection({ onOpenQuoteModal }) {
             });
           }
 
-          // Number animation
           if (number) {
             gsap.to(number, {
               scale: 1.1,
@@ -157,7 +166,6 @@ export default function ProcessSection({ onOpenQuoteModal }) {
             });
           }
 
-          // Title color
           if (title) {
             gsap.to(title, {
               color: '#2563eb',
@@ -166,7 +174,6 @@ export default function ProcessSection({ onOpenQuoteModal }) {
             });
           }
 
-          // Description color
           if (desc) {
             gsap.to(desc, {
               color: '#1e293b',
@@ -261,20 +268,20 @@ export default function ProcessSection({ onOpenQuoteModal }) {
         <div className="text-center max-w-3xl mx-auto mb-14 sm:mb-20 space-y-3">
           <div className="process-header-item inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-blue-50 border border-blue-100 text-blue-700 text-xs sm:text-sm font-extrabold tracking-wide uppercase">
             <span className="text-blue-600 font-black">//</span>
-            <span>Our Work Process</span>
+            <span>{t('process.badge')}</span>
           </div>
 
           <h2 className="process-header-item text-3xl sm:text-4xl lg:text-5xl font-extrabold text-slate-900 tracking-tight leading-tight">
-            Our Proven <span className="text-blue-600">Work Process</span>
+            {t('process.heading')}
           </h2>
 
           <p className="process-header-item text-slate-600 text-sm sm:text-base leading-relaxed max-w-2xl mx-auto">
-            From initial strategy to scaled sales conversions, our structured step-by-step roadmap guarantees results for authors and businesses.
+            {t('process.subheading')}
           </p>
 
           <div className="process-header-item flex items-center justify-center gap-2 text-xs text-slate-400 mt-2">
             <Sparkles className="w-3 h-3 text-blue-500" />
-            <span>4 Steps to Success</span>
+            <span>{t('process.stepsCount')}</span>
             <Sparkles className="w-3 h-3 text-blue-500" />
           </div>
         </div>
@@ -354,13 +361,13 @@ export default function ProcessSection({ onOpenQuoteModal }) {
         <div className="process-header-item mt-14 sm:mt-20 text-center">
           <div className="inline-flex items-center gap-3 bg-slate-50 border border-slate-200 rounded-full px-4 sm:px-6 py-2.5 sm:py-3 shadow-sm hover:shadow-md transition-all duration-300">
             <span className="text-xs sm:text-sm text-slate-600 font-medium">
-              Ready to start your project?
+              {t('process.ctaText')}
             </span>
             <button 
               onClick={handleLetsTalk}
               className="inline-flex items-center gap-1.5 text-blue-600 hover:text-blue-700 font-bold text-xs sm:text-sm transition-colors duration-200 group cursor-pointer"
             >
-              <span>Let's talk</span>
+              <span>{t('process.ctaButton')}</span>
               <ArrowRight className="w-3.5 h-3.5 group-hover:translate-x-1 transition-transform duration-200" />
             </button>
           </div>

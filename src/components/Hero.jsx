@@ -17,8 +17,10 @@ import {
   Globe
 } from 'lucide-react';
 import gsap from 'gsap';
+import { useLanguage } from '@/i18n/LanguageContext';
 
 export default function Hero({ onOpenQuoteModal, onOpenVideoModal }) {
+  const { t } = useLanguage();
   const containerRef = useRef(null);
   const badgeRef = useRef(null);
   const headingRef = useRef(null);
@@ -35,6 +37,24 @@ export default function Hero({ onOpenQuoteModal, onOpenVideoModal }) {
   const platformsRef = useRef(null);
   const platformHeadingRef = useRef(null);
   const platformCardsRef = useRef([]);
+
+  // Features data with translation keys
+  const features = [
+    t('hero.feature1'),
+    t('hero.feature2'),
+    t('hero.feature3'),
+  ];
+
+  // Platforms data with translation keys
+  const platforms = [
+    { name: t('hero.platformAdobe'), label: t('hero.platformAdobeLabel'), color: 'blue', icon: Globe },
+    { name: t('hero.platformShopify'), label: t('hero.platformShopifyLabel'), color: 'emerald', icon: ShoppingBag },
+    { name: t('hero.platformAmazon'), label: t('hero.platformAmazonLabel'), color: 'orange', icon: BookOpen },
+    { name: t('hero.platformYouTube'), label: t('hero.platformYouTubeLabel'), color: 'red', icon: Play },
+    { name: t('hero.platformWordPress'), label: t('hero.platformWordPressLabel'), color: 'cyan', icon: Globe },
+    { name: t('hero.platformFacebook'), label: t('hero.platformFacebookLabel'), color: 'blue', icon: TrendingUp },
+    { name: t('hero.platformMailchimp'), label: t('hero.platformMailchimpLabel'), color: 'yellow', icon: Star },
+  ];
 
   useEffect(() => {
     if (!containerRef.current) return;
@@ -295,7 +315,7 @@ export default function Hero({ onOpenQuoteModal, onOpenVideoModal }) {
     return () => {
       ctx.revert();
     };
-  }, []);
+  }, [t]);
 
   const addFeatureRef = (el) => {
     if (el && !featuresRef.current.includes(el)) {
@@ -321,6 +341,43 @@ export default function Hero({ onOpenQuoteModal, onOpenVideoModal }) {
     }
   };
 
+  // Get color class for platform
+  const getColorClass = (color) => {
+    const colors = {
+      blue: 'hover:border-blue-500/50 hover:shadow-blue-500/5',
+      emerald: 'hover:border-emerald-500/50 hover:shadow-emerald-500/5',
+      orange: 'hover:border-orange-500/50 hover:shadow-orange-500/5',
+      red: 'hover:border-red-500/50 hover:shadow-red-500/5',
+      cyan: 'hover:border-cyan-500/50 hover:shadow-cyan-500/5',
+      yellow: 'hover:border-yellow-500/50 hover:shadow-yellow-500/5',
+    };
+    return colors[color] || colors.blue;
+  };
+
+  const getIconBgColor = (color) => {
+    const colors = {
+      blue: 'bg-blue-500/10 border-blue-500/20 group-hover:bg-blue-500/15 group-hover:border-blue-500/30',
+      emerald: 'bg-emerald-500/10 border-emerald-500/20 group-hover:bg-emerald-500/15 group-hover:border-emerald-500/30',
+      orange: 'bg-orange-500/10 border-orange-500/20 group-hover:bg-orange-500/15 group-hover:border-orange-500/30',
+      red: 'bg-red-500/10 border-red-500/20 group-hover:bg-red-500/15 group-hover:border-red-500/30',
+      cyan: 'bg-cyan-500/10 border-cyan-500/20 group-hover:bg-cyan-500/15 group-hover:border-cyan-500/30',
+      yellow: 'bg-yellow-500/10 border-yellow-500/20 group-hover:bg-yellow-500/15 group-hover:border-yellow-500/30',
+    };
+    return colors[color] || colors.blue;
+  };
+
+  const getIconColor = (color) => {
+    const colors = {
+      blue: 'text-blue-400',
+      emerald: 'text-emerald-400',
+      orange: 'text-orange-400',
+      red: 'text-red-400',
+      cyan: 'text-cyan-400',
+      yellow: 'text-yellow-400',
+    };
+    return colors[color] || colors.blue;
+  };
+
   return (
     <section
       ref={containerRef}
@@ -341,20 +398,20 @@ export default function Hero({ onOpenQuoteModal, onOpenVideoModal }) {
               className="inline-flex max-w-full items-center gap-2 px-3 sm:px-4 py-1.5 rounded-full bg-blue-500/10 border border-blue-500/30 text-blue-400 text-[11px] sm:text-xs font-semibold tracking-wide uppercase"
             >
               <span className="text-blue-500 font-bold shrink-0">//</span>
-              <span className="truncate">Premier Book Marketing & Digital Strategy</span>
+              <span className="truncate">{t('hero.badge')}</span>
             </div>
 
             <h1
               ref={headingRef}
               className="text-3xl sm:text-5xl lg:text-6xl font-extrabold tracking-tight leading-[1.15]"
             >
-              Where{' '}
+              {t('hero.titleLine1')}{' '}
               <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-400 via-blue-300 to-indigo-300">
-                Creativity Meets
+                {t('hero.titleLine2')}
               </span>{' '}
               <br className="hidden sm:inline" />
               <span className="relative inline-block text-blue-500">
-                Conversion.
+                {t('hero.titleLine3')}
                 <svg
                   className="absolute -bottom-2 left-0 w-full h-3 text-blue-500/40"
                   viewBox="0 0 100 20"
@@ -374,37 +431,20 @@ export default function Hero({ onOpenQuoteModal, onOpenVideoModal }) {
               ref={descRef}
               className="text-sm sm:text-lg text-slate-300 max-w-2xl font-normal leading-relaxed mx-auto lg:mx-0"
             >
-              BigTeeWise Digital is a full-service creative agency in UK, United Kingdom. We combine creative design, strategic marketing, and specialized{' '}
-              <span className="text-blue-400 font-semibold">
-                book marketing & author branding
-              </span>{' '}
-              to convert attention into measurable revenue.
+              {t('hero.description')}
             </p>
 
             <div className="flex flex-col sm:flex-row flex-wrap justify-center lg:justify-start gap-2.5 sm:gap-3 text-xs sm:text-sm text-slate-300 pt-1">
-              <div
-                ref={addFeatureRef}
-                className="flex items-center justify-center sm:justify-start gap-2 bg-slate-800/80 backdrop-blur-sm px-3.5 py-2 rounded-xl border border-slate-700/60"
-              >
-                <CheckCircle2 className="w-4 h-4 text-blue-400 shrink-0" />
-                <span>Author Branding Specialists</span>
-              </div>
-
-              <div
-                ref={addFeatureRef}
-                className="flex items-center justify-center sm:justify-start gap-2 bg-slate-800/80 backdrop-blur-sm px-3.5 py-2 rounded-xl border border-slate-700/60"
-              >
-                <CheckCircle2 className="w-4 h-4 text-blue-400 shrink-0" />
-                <span>Amazon Bestseller Campaigns</span>
-              </div>
-
-              <div
-                ref={addFeatureRef}
-                className="flex items-center justify-center sm:justify-start gap-2 bg-slate-800/80 backdrop-blur-sm px-3.5 py-2 rounded-xl border border-slate-700/60"
-              >
-                <CheckCircle2 className="w-4 h-4 text-blue-400 shrink-0" />
-                <span>Data-Driven Digital Ads</span>
-              </div>
+              {features.map((feature, index) => (
+                <div
+                  key={index}
+                  ref={addFeatureRef}
+                  className="flex items-center justify-center sm:justify-start gap-2 bg-slate-800/80 backdrop-blur-sm px-3.5 py-2 rounded-xl border border-slate-700/60"
+                >
+                  <CheckCircle2 className="w-4 h-4 text-blue-400 shrink-0" />
+                  <span>{feature}</span>
+                </div>
+              ))}
             </div>
 
             <div className="flex flex-col sm:flex-row items-center justify-center lg:justify-start gap-3.5 pt-3">
@@ -413,7 +453,7 @@ export default function Hero({ onOpenQuoteModal, onOpenVideoModal }) {
                 onClick={onOpenQuoteModal}
                 className="w-full sm:w-auto bg-blue-600 hover:bg-blue-500 active:scale-95 text-white font-bold text-sm sm:text-base px-7 py-3.5 sm:py-4 rounded-full shadow-lg shadow-blue-600/30 hover:shadow-blue-600/50 transition-all duration-300 flex items-center justify-center gap-3 group"
               >
-                <span>Market Your Book / Brand</span>
+                <span>{t('hero.ctaPrimary')}</span>
                 <ArrowRight className="w-5 h-5 group-hover:translate-x-1.5 transition-transform" />
               </button>
 
@@ -422,7 +462,7 @@ export default function Hero({ onOpenQuoteModal, onOpenVideoModal }) {
                 href="#services"
                 className="w-full sm:w-auto bg-slate-800/90 hover:bg-slate-700 active:scale-95 text-slate-200 hover:text-white font-semibold text-sm sm:text-base px-6 py-3.5 sm:py-4 rounded-full border border-slate-700 hover:border-slate-500 transition-all duration-300 text-center"
               >
-                View All Services
+                {t('hero.ctaSecondary')}
               </a>
             </div>
 
@@ -454,7 +494,7 @@ export default function Hero({ onOpenQuoteModal, onOpenVideoModal }) {
                 </div>
 
                 <p className="text-xs text-slate-400 font-medium">
-                  Trusted by 150+ Authors & Corporate Brands
+                  {t('hero.trustedBy')}
                 </p>
               </div>
             </div>
@@ -489,10 +529,10 @@ export default function Hero({ onOpenQuoteModal, onOpenVideoModal }) {
 
                 <div className="absolute bottom-3 left-3 right-3 sm:bottom-4 sm:left-4 sm:right-4 p-3 sm:p-4 rounded-2xl bg-slate-900/90 backdrop-blur-md border border-slate-700/80 z-10">
                   <p className="text-[10px] sm:text-xs text-blue-400 uppercase font-bold tracking-wider mb-0.5">
-                    Featured Specialization
+                    {t('hero.featuredSpecialization')}
                   </p>
                   <p className="text-xs sm:text-sm font-semibold text-white">
-                    Book Covers, 3D Mockups & Author Personal Branding
+                    {t('hero.featuredText')}
                   </p>
                 </div>
               </div>
@@ -506,9 +546,9 @@ export default function Hero({ onOpenQuoteModal, onOpenVideoModal }) {
                 </div>
 
                 <div>
-                  <div className="text-base sm:text-xl font-extrabold">150+</div>
+                  <div className="text-base sm:text-xl font-extrabold">{t('hero.stat1Number')}</div>
                   <div className="text-[10px] sm:text-xs font-semibold text-slate-500 uppercase tracking-wider">
-                    Book Launches
+                    {t('hero.stat1Label')}
                   </div>
                 </div>
               </div>
@@ -522,9 +562,9 @@ export default function Hero({ onOpenQuoteModal, onOpenVideoModal }) {
                 </div>
 
                 <div>
-                  <div className="text-base sm:text-xl font-extrabold">99%</div>
+                  <div className="text-base sm:text-xl font-extrabold">{t('hero.stat3Number')}</div>
                   <div className="text-[10px] sm:text-xs font-medium text-blue-100 uppercase tracking-wider">
-                    Client ROI
+                    {t('hero.stat3Label')}
                   </div>
                 </div>
               </div>
@@ -552,12 +592,12 @@ export default function Hero({ onOpenQuoteModal, onOpenVideoModal }) {
 
               <div className="absolute top-4 left-4 px-3 py-1.5 rounded-full bg-emerald-500/20 border border-emerald-400/30 backdrop-blur-md text-xs font-semibold text-emerald-300">
                 <span className="inline-block w-2 h-2 rounded-full bg-emerald-400 mr-2 animate-pulse" />
-                Available for projects
+                {t('hero.availableForProjects')}
               </div>
 
               <div className="absolute bottom-5 left-5">
-                <div className="text-4xl sm:text-5xl font-extrabold text-white">150+</div>
-                <p className="text-sm text-slate-300">Book & Brand Launches</p>
+                <div className="text-4xl sm:text-5xl font-extrabold text-white">{t('hero.stat1Number')}</div>
+                <p className="text-sm text-slate-300">{t('hero.stat1Label')}</p>
               </div>
             </div>
 
@@ -575,7 +615,7 @@ export default function Hero({ onOpenQuoteModal, onOpenVideoModal }) {
                   </div>
 
                   <span className="text-[10px] bg-slate-700 px-3 py-1 rounded-full text-slate-300">
-                    2000+ clients/readers
+                    {t('hero.clientsServed')}
                   </span>
                 </div>
 
@@ -583,7 +623,7 @@ export default function Hero({ onOpenQuoteModal, onOpenVideoModal }) {
                   4.9<span className="text-amber-400">★</span>
                 </div>
 
-                <p className="text-xs text-slate-400 mt-2">Client Satisfaction</p>
+                <p className="text-xs text-slate-400 mt-2">{t('hero.clientSatisfaction')}</p>
 
                 <div className="flex items-center gap-1 mt-5 text-amber-400 text-xs">
                   ★★★★★ <span className="text-slate-400 ml-1">4.9/5</span>
@@ -602,27 +642,25 @@ export default function Hero({ onOpenQuoteModal, onOpenVideoModal }) {
                   </div>
 
                   <span className="text-[10px] bg-white/10 px-3 py-1 rounded-full">
-                    Dedicated service
+                    {t('hero.dedicatedService')}
                   </span>
                 </div>
 
-                <div className="text-4xl sm:text-5xl font-extrabold">8+</div>
+                <div className="text-4xl sm:text-5xl font-extrabold">{t('hero.yearsExperience')}</div>
 
                 <p className="text-xs text-blue-100 mt-2">
-                  Years Experience in UK
+                  {t('hero.yearsLabel')}
                 </p>
 
                 <div className="flex flex-wrap gap-2 mt-5">
                   <span className="text-[10px] border border-white/30 rounded-full px-2.5 py-1">
-                    Books
+                    {t('hero.tagBooks')}
                   </span>
-
                   <span className="text-[10px] border border-white/30 rounded-full px-2.5 py-1">
-                    YouTube
+                    {t('hero.tagYouTube')}
                   </span>
-
                   <span className="text-[10px] border border-white/30 rounded-full px-2.5 py-1">
-                    eCommerce
+                    {t('hero.tagEcommerce')}
                   </span>
                 </div>
               </div>
@@ -634,31 +672,29 @@ export default function Hero({ onOpenQuoteModal, onOpenVideoModal }) {
                 <div className="flex-1">
                   <div className="inline-flex items-center gap-2 bg-blue-50 text-blue-600 rounded-full px-3 py-1 text-[10px] font-bold uppercase">
                     <BarChart3 className="w-3 h-3" />
-                    Proven Results
+                    {t('hero.provenResults')}
                   </div>
 
                   <h3 className="text-xl sm:text-2xl font-extrabold mt-3">
-                    Real Growth. Every Time.
+                    {t('hero.growthHeading')}
                   </h3>
 
                   <p className="text-sm text-slate-500 leading-relaxed mt-2 max-w-xl">
-                    From bestselling books and stronger author brands to growing digital channels and online stores, BigTeeWise turns creative ideas into measurable results.
+                    {t('hero.growthDescription')}
                   </p>
 
                   <div className="flex flex-wrap gap-4 mt-4 text-xs font-semibold text-slate-600">
                     <span className="flex items-center gap-1.5">
                       <BarChart3 className="w-4 h-4 text-emerald-500" />
-                      Data-backed
+                      {t('hero.dataBacked')}
                     </span>
-
                     <span className="flex items-center gap-1.5">
                       <BookOpen className="w-4 h-4 text-blue-500" />
-                      150+ Launches
+                      {t('hero.launchesCount')}
                     </span>
-
                     <span className="flex items-center gap-1.5">
                       <ShieldCheck className="w-4 h-4 text-blue-500" />
-                      Proven Strategy
+                      {t('hero.provenStrategy')}
                     </span>
                   </div>
                 </div>
@@ -671,9 +707,7 @@ export default function Hero({ onOpenQuoteModal, onOpenVideoModal }) {
                     sizes="160px"
                     className="object-cover"
                   />
-
                   <div className="absolute inset-0 bg-gradient-to-t from-slate-950/80 to-transparent" />
-
                   <div className="absolute bottom-3 left-3 text-white text-xs font-bold">
                     BigTeeWise Digital
                   </div>
@@ -689,174 +723,65 @@ export default function Hero({ onOpenQuoteModal, onOpenVideoModal }) {
           >
             <div className="flex items-center justify-center gap-2 text-xs sm:text-sm font-semibold text-slate-200">
               <span className="w-2.5 h-2.5 rounded-full bg-emerald-400 shadow-lg shadow-emerald-400/50" />
-              Now Taking New Projects
+              {t('hero.statusTakingProjects')}
             </div>
 
             <div className="flex items-center justify-center gap-2 text-xs sm:text-sm font-semibold text-slate-200 border-y sm:border-y-0 sm:border-x border-slate-700 py-3 sm:py-0">
               <CalendarCheck2 className="w-4 h-4 text-blue-400" />
-              Free Strategy Consultation
+              {t('hero.freeConsultation')}
             </div>
 
             <div className="flex items-center justify-center gap-2 text-xs sm:text-sm font-semibold text-slate-200">
               <ShieldCheck className="w-4 h-4 text-blue-400" />
-              Proven Results
+              {t('hero.provenResults')}
             </div>
           </div>
         </div>
 
         {/* PLATFORMS */}
         <div className="mt-14 sm:mt-16 lg:mt-20 pt-8 sm:pt-10 border-t border-slate-800/80">
-          {/* HEADING */}
           <div
             ref={platformHeadingRef}
             className="flex items-center justify-center gap-4 sm:gap-5 mb-7 sm:mb-8"
           >
             <span className="hidden sm:block w-10 sm:w-16 lg:w-20 h-px bg-slate-700" />
-
             <p className="text-[10px] sm:text-xs font-bold tracking-[0.22em] sm:tracking-[0.28em] text-slate-500 uppercase text-center whitespace-nowrap">
-              Platforms & Tools We Work With
+              {t('hero.platformsHeading')}
             </p>
-
             <span className="hidden sm:block w-10 sm:w-16 lg:w-20 h-px bg-slate-700" />
           </div>
 
-          {/* PLATFORM CARDS */}
           <div
             ref={platformsRef}
             className="flex flex-wrap justify-center gap-2.5 sm:gap-3"
           >
-            {/* ADOBE */}
-            <div
-              ref={addPlatformRef}
-              className="group w-[calc(50%-6px)] sm:w-auto sm:min-w-[175px] lg:min-w-[186px] flex items-center gap-3 px-3.5 sm:px-4 py-3.5 rounded-xl bg-slate-800/90 border border-slate-700/90 hover:border-blue-500/50 hover:bg-slate-800 hover:-translate-y-1 shadow-sm hover:shadow-lg hover:shadow-blue-500/5 transition-all duration-300"
-            >
-              <div className="w-9 h-9 sm:w-10 sm:h-10 rounded-lg bg-blue-500/10 border border-blue-500/20 flex items-center justify-center shrink-0 group-hover:bg-blue-500/15 group-hover:border-blue-500/30 transition-all duration-300">
-                <Globe className="w-5 h-5 text-blue-400" />
-              </div>
+            {platforms.map((platform, index) => {
+              const Icon = platform.icon;
+              const colorClass = getColorClass(platform.color);
+              const bgClass = getIconBgColor(platform.color);
+              const iconColor = getIconColor(platform.color);
 
-              <div className="min-w-0">
-                <p className="text-[11px] sm:text-xs font-bold text-white truncate">
-                  Adobe Creative
-                </p>
-                <p className="text-[9px] sm:text-[10px] text-slate-500 mt-0.5 truncate">
-                  Design & Visuals
-                </p>
-              </div>
-            </div>
+              return (
+                <div
+                  key={index}
+                  ref={addPlatformRef}
+                  className={`group w-[calc(50%-6px)] sm:w-auto sm:min-w-[175px] lg:min-w-[186px] flex items-center gap-3 px-3.5 sm:px-4 py-3.5 rounded-xl bg-slate-800/90 border border-slate-700/90 ${colorClass} hover:bg-slate-800 hover:-translate-y-1 shadow-sm hover:shadow-lg transition-all duration-300`}
+                >
+                  <div className={`w-9 h-9 sm:w-10 sm:h-10 rounded-lg border flex items-center justify-center shrink-0 transition-all duration-300 ${bgClass}`}>
+                    <Icon className={`w-5 h-5 ${iconColor}`} />
+                  </div>
 
-            {/* SHOPIFY */}
-            <div
-              ref={addPlatformRef}
-              className="group w-[calc(50%-6px)] sm:w-auto sm:min-w-[175px] lg:min-w-[186px] flex items-center gap-3 px-3.5 sm:px-4 py-3.5 rounded-xl bg-slate-800/90 border border-slate-700/90 hover:border-emerald-500/50 hover:bg-slate-800 hover:-translate-y-1 shadow-sm hover:shadow-lg hover:shadow-emerald-500/5 transition-all duration-300"
-            >
-              <div className="w-9 h-9 sm:w-10 sm:h-10 rounded-lg bg-emerald-500/10 border border-emerald-500/20 flex items-center justify-center shrink-0">
-                <ShoppingBag className="w-5 h-5 text-emerald-400" />
-              </div>
-
-              <div className="min-w-0">
-                <p className="text-[11px] sm:text-xs font-bold text-white truncate">
-                  Shopify
-                </p>
-                <p className="text-[9px] sm:text-[10px] text-slate-500 mt-0.5 truncate">
-                  E-Commerce
-                </p>
-              </div>
-            </div>
-
-            {/* AMAZON KDP */}
-            <div
-              ref={addPlatformRef}
-              className="group w-[calc(50%-6px)] sm:w-auto sm:min-w-[175px] lg:min-w-[186px] flex items-center gap-3 px-3.5 sm:px-4 py-3.5 rounded-xl bg-slate-800/90 border border-slate-700/90 hover:border-orange-500/50 hover:bg-slate-800 hover:-translate-y-1 shadow-sm hover:shadow-lg hover:shadow-orange-500/5 transition-all duration-300"
-            >
-              <div className="w-9 h-9 sm:w-10 sm:h-10 rounded-lg bg-orange-500/10 border border-orange-500/20 flex items-center justify-center shrink-0">
-                <BookOpen className="w-5 h-5 text-orange-400" />
-              </div>
-
-              <div className="min-w-0">
-                <p className="text-[11px] sm:text-xs font-bold text-white truncate">
-                  Amazon KDP
-                </p>
-                <p className="text-[9px] sm:text-[10px] text-slate-500 mt-0.5 truncate">
-                  Book Sales
-                </p>
-              </div>
-            </div>
-
-            {/* YOUTUBE */}
-            <div
-              ref={addPlatformRef}
-              className="group w-[calc(50%-6px)] sm:w-auto sm:min-w-[175px] lg:min-w-[186px] flex items-center gap-3 px-3.5 sm:px-4 py-3.5 rounded-xl bg-slate-800/90 border border-slate-700/90 hover:border-red-500/50 hover:bg-slate-800 hover:-translate-y-1 shadow-sm hover:shadow-lg hover:shadow-red-500/5 transition-all duration-300"
-            >
-              <div className="w-9 h-9 sm:w-10 sm:h-10 rounded-lg bg-red-500/10 border border-red-500/20 flex items-center justify-center shrink-0">
-                <Play className="w-5 h-5 text-red-400 fill-red-400/20" />
-              </div>
-
-              <div className="min-w-0">
-                <p className="text-[11px] sm:text-xs font-bold text-white truncate">
-                  YouTube Studio
-                </p>
-                <p className="text-[9px] sm:text-[10px] text-slate-500 mt-0.5 truncate">
-                  Channel Growth
-                </p>
-              </div>
-            </div>
-
-            {/* WORDPRESS */}
-            <div
-              ref={addPlatformRef}
-              className="group w-[calc(50%-6px)] sm:w-auto sm:min-w-[175px] lg:min-w-[186px] flex items-center gap-3 px-3.5 sm:px-4 py-3.5 rounded-xl bg-slate-800/90 border border-slate-700/90 hover:border-cyan-500/50 hover:bg-slate-800 hover:-translate-y-1 shadow-sm hover:shadow-lg hover:shadow-cyan-500/5 transition-all duration-300"
-            >
-              <div className="w-9 h-9 sm:w-10 sm:h-10 rounded-lg bg-cyan-500/10 border border-cyan-500/20 flex items-center justify-center shrink-0">
-                <Globe className="w-5 h-5 text-cyan-400" />
-              </div>
-
-              <div className="min-w-0">
-                <p className="text-[11px] sm:text-xs font-bold text-white truncate">
-                  WordPress
-                </p>
-                <p className="text-[9px] sm:text-[10px] text-slate-500 mt-0.5 truncate">
-                  Website Builds
-                </p>
-              </div>
-            </div>
-
-            {/* FACEBOOK ADS */}
-            <div
-              ref={addPlatformRef}
-              className="group w-[calc(50%-6px)] sm:w-auto sm:min-w-[175px] lg:min-w-[186px] flex items-center gap-3 px-3.5 sm:px-4 py-3.5 rounded-xl bg-slate-800/90 border border-slate-700/90 hover:border-blue-500/50 hover:bg-slate-800 hover:-translate-y-1 shadow-sm hover:shadow-lg hover:shadow-blue-500/5 transition-all duration-300"
-            >
-              <div className="w-9 h-9 sm:w-10 sm:h-10 rounded-lg bg-blue-500/10 border border-blue-500/20 flex items-center justify-center shrink-0">
-                <TrendingUp className="w-5 h-5 text-blue-400" />
-              </div>
-
-              <div className="min-w-0">
-                <p className="text-[11px] sm:text-xs font-bold text-white truncate">
-                  Facebook Ads
-                </p>
-                <p className="text-[9px] sm:text-[10px] text-slate-500 mt-0.5 truncate">
-                  Paid Social
-                </p>
-              </div>
-            </div>
-
-            {/* MAILCHIMP */}
-            <div
-              ref={addPlatformRef}
-              className="group w-[calc(50%-6px)] sm:w-auto sm:min-w-[175px] lg:min-w-[186px] flex items-center gap-3 px-3.5 sm:px-4 py-3.5 rounded-xl bg-slate-800/90 border border-slate-700/90 hover:border-yellow-500/50 hover:bg-slate-800 hover:-translate-y-1 shadow-sm hover:shadow-lg hover:shadow-yellow-500/5 transition-all duration-300"
-            >
-              <div className="w-9 h-9 sm:w-10 sm:h-10 rounded-lg bg-yellow-500/10 border border-yellow-500/20 flex items-center justify-center shrink-0">
-                <Star className="w-5 h-5 text-yellow-400" />
-              </div>
-
-              <div className="min-w-0">
-                <p className="text-[11px] sm:text-xs font-bold text-white truncate">
-                  Mailchimp
-                </p>
-                <p className="text-[9px] sm:text-[10px] text-slate-500 mt-0.5 truncate">
-                  Email Campaigns
-                </p>
-              </div>
-            </div>
+                  <div className="min-w-0">
+                    <p className="text-[11px] sm:text-xs font-bold text-white truncate">
+                      {platform.name}
+                    </p>
+                    <p className="text-[9px] sm:text-[10px] text-slate-500 mt-0.5 truncate">
+                      {platform.label}
+                    </p>
+                  </div>
+                </div>
+              );
+            })}
           </div>
         </div>
       </div>
