@@ -1,6 +1,5 @@
-// en.js
+// en.js - FULL WORKING VERSION
 export const en = {
-  // Navigation & Header
   nav: {
     home: "Home",
     about: "About",
@@ -20,7 +19,6 @@ export const en = {
     tagline: "Creative Agency & Author Branding",
   },
 
-  // Language selector
   language: {
     select: "Language",
     en: "English",
@@ -29,13 +27,13 @@ export const en = {
     de: "Deutsch",
   },
 
-  // Hero Section
   hero: {
     badge: "Specialized Book Marketing & Digital Growth Agency",
     titleLine1: "Elevate Your Brand.",
     titleLine2: "Dominate the Charts.",
     titleLine3: "Drive Real Revenue.",
-    description: "BigTeeWise Digital is a full-service creative agency in the United Kingdom. We combine creative design, strategic marketing, and specialized book marketing & author branding to convert attention into measurable revenue.",
+    description:
+      "BigTeeWise Digital is a full-service creative agency in the United Kingdom. We combine creative design, strategic marketing, and specialized book marketing & author branding to convert attention into measurable revenue.",
     ctaPrimary: "Market Your Book / Brand",
     ctaSecondary: "View All Services",
     watchVideo: "Watch Showreel",
@@ -62,7 +60,8 @@ export const en = {
     tagEcommerce: "eCommerce",
     provenResults: "Proven Results",
     growthHeading: "Real Growth. Every Time.",
-    growthDescription: "From bestselling books and stronger author brands to growing digital channels and online stores, BigTeeWise turns creative ideas into measurable results.",
+    growthDescription:
+      "From bestselling books and stronger author brands to growing digital channels and online stores, BigTeeWise turns creative ideas into measurable results.",
     dataBacked: "Data-backed",
     launchesCount: "150+ Launches",
     provenStrategy: "Proven Strategy",
@@ -85,7 +84,6 @@ export const en = {
     platformMailchimpLabel: "Email Campaigns",
   },
 
-  // Marquee
   marquee: {
     items: [
       { index: "01", title: "Top Ranked", subtitle: "Amazon Bestseller Strategy" },
@@ -97,22 +95,25 @@ export const en = {
     ],
   },
 
-  // About Section
   about: {
     badge: "About BigTeeWise Digital",
     titlePre: "Transforming",
     titleHighlight: "Ideas & Books",
     titlePost: "into Digital Reality",
-    description1: "BigTeeWise Digital is a full-service creative agency in the United Kingdom. We combine creative design, strategic marketing, and specialized book marketing & author branding to convert attention into measurable revenue.",
-    description2: "Our approach goes beyond attractive visuals. We connect strategy, storytelling, design, marketing and digital growth to create brand experiences that stand out and produce meaningful business outcomes.",
+    description1:
+      "BigTeeWise Digital is a full-service creative agency in the United Kingdom. We combine creative design, strategic marketing, and specialized book marketing & author branding to convert attention into measurable revenue.",
+    description2:
+      "Our approach goes beyond attractive visuals. We connect strategy, storytelling, design, marketing and digital growth to create brand experiences that stand out and produce meaningful business outcomes.",
     studioTag: "Creative Strategy Studio",
     floatingBadge: "Strategy • Creativity • Growth",
     approachBadge: "Our Approach",
     approachHeading: "Creative work backed by strategy.",
     approach1Title: "Creative Direction",
-    approach1Desc: "Strong visual identities, book covers, campaigns and digital experiences built to be remembered.",
+    approach1Desc:
+      "Strong visual identities, book covers, campaigns and digital experiences built to be remembered.",
     approach2Title: "Growth Strategy",
-    approach2Desc: "Marketing systems designed to turn attention into engagement, leads and measurable growth.",
+    approach2Desc:
+      "Marketing systems designed to turn attention into engagement, leads and measurable growth.",
     values: {
       authorPositioningTitle: "Author Positioning",
       authorPositioningDesc: "Elevating authors into trusted industry authorities.",
@@ -138,11 +139,11 @@ export const en = {
     workWithUs: "Work With Us",
   },
 
-  // Services Section
   services: {
     badge: "Our Capabilities",
     heading: "Tailored Growth & Creative Solutions",
-    subheading: "From Amazon bestseller campaigns to full-funnel digital brand scaling, we deliver end-to-end solutions built for measurable ROI.",
+    subheading:
+      "From Amazon bestseller campaigns to full-funnel digital brand scaling, we deliver end-to-end solutions built for measurable ROI.",
     specializationsTab: "Specialized Services",
     allServicesTab: "All Capabilities",
     deliverablesLabel: "Key Deliverables",
@@ -162,11 +163,11 @@ export const en = {
     inquireNow: "Inquire Now",
   },
 
-  // Process Section
   process: {
     badge: "How We Work",
     heading: "A Proven 4-Step Growth Blueprint",
-    subheading: "A systematic, battle-tested methodology designed to deliver seamless execution, predictable momentum, and measurable returns on your investment.",
+    subheading:
+      "A systematic, battle-tested methodology designed to deliver seamless execution, predictable momentum, and measurable returns on your investment.",
     steps: [
       {
         number: "01",
@@ -194,11 +195,11 @@ export const en = {
     ctaButton: "Let's talk",
   },
 
-  // Why Choose Us Section
   whyChooseUs: {
     badge: "Why BigTeeWise Digital",
     heading: "Engineered for Growth. Driven by Data.",
-    subheading: "We blend high-craft visual aesthetics with rigorous digital marketing analytics to deliver transformative business outcomes.",
+    subheading:
+      "We blend high-craft visual aesthetics with rigorous digital marketing analytics to deliver transformative business outcomes.",
     features: [
       {
         title: "Specialized Publishing Expertise",
@@ -218,7 +219,8 @@ export const en = {
       },
     ],
     guaranteeTitle: "Our Quality Guarantee",
-    guaranteeDesc: "We don't stop refining until your campaigns and creative assets meet our highest benchmarks for craft and conversion performance.",
+    guaranteeDesc:
+      "We don't stop refining until your campaigns and creative assets meet our highest benchmarks for craft and conversion performance.",
     ctaButton: "Get A Free Consultation",
     studioTag: "Creative Strategy Studio",
     watchVideo: "Watch Agency Showreel",
@@ -230,11 +232,11 @@ export const en = {
     statRating: "Client Rating",
   },
 
-  // Testimonials Section
   testimonials: {
     badge: "Client Success Stories",
     heading: "Trusted by Authors & Leaders Worldwide",
-    subheading: "Here is what our clients say about partnering with BigTeeWise Digital to accelerate their brand visibility and revenue.",
+    subheading:
+      "Here is what our clients say about partnering with BigTeeWise Digital to accelerate their brand visibility and revenue.",
     verifiedReview: "Verified Client Review",
     trustedBy: "Trusted by 2000+ clients worldwide",
     prevLabel: "Previous Testimonial",
@@ -244,11 +246,11 @@ export const en = {
     basedOn: "Based on 500+ Reviews",
   },
 
-  // Team Section
   team: {
     badge: "Meet The Minds",
     heading: "The Creative Strategists Behind Your Success",
-    subheading: "A multidisciplinary collective of digital marketers, 3D visual artists, copywriters, and campaign architects committed to your growth.",
+    subheading:
+      "A multidisciplinary collective of digital marketers, 3D visual artists, copywriters, and campaign architects committed to your growth.",
     viewSpecialties: "Specialties & Focus Areas",
     featured: "Featured",
     featuredCount: "5 / 15 Specialists",
@@ -259,7 +261,8 @@ export const en = {
     contributionLabel: "Contribution",
     widerTeamLabel: "The wider team",
     widerTeamHeading: "15 people. One creative standard.",
-    widerTeamDesc: "The five specialists featured above represent only part of the wider team. Behind every project is a broader group working across campaign management, advertising, graphic arts, copywriting and community management.",
+    widerTeamDesc:
+      "The five specialists featured above represent only part of the wider team. Behind every project is a broader group working across campaign management, advertising, graphic arts, copywriting and community management.",
     widerTeamSkills: ["Campaigns", "Ad Buying", "Graphic Arts", "Copywriting"],
     widerTeamFooter: "A multidisciplinary team built around quality, strategy and creative execution.",
     metaTeam: "Team",
@@ -267,11 +270,11 @@ export const en = {
     exploreTeam: "Explore team",
   },
 
-  // Blog Section
   blog: {
     badge: "Insights & Strategy",
     heading: "Latest Marketing & Branding Intel",
-    subheading: "Actionable playbooks, publishing insights, and creative masterclasses from our agency strategists.",
+    subheading:
+      "Actionable playbooks, publishing insights, and creative masterclasses from our agency strategists.",
     readArticle: "Read Full Article",
     readTimeSuffix: "read",
     ctaText: "Want to implement these strategies? Let's discuss your project.",
@@ -280,8 +283,10 @@ export const en = {
       {
         id: 1,
         title: "7 Proven Steps to Hit Amazon #1 Bestseller in 2025/2026",
-        snippet: "Discover how top authors combine KDP category selection, pre-order buzz, and targeted Meta ads to dominate Amazon launch week.",
-        image: "https://images.pexels.com/photos/4050301/pexels-photo-4050301.jpeg?auto=compress&cs=tinysrgb&w=600",
+        snippet:
+          "Discover how top authors combine KDP category selection, pre-order buzz, and targeted Meta ads to dominate Amazon launch week.",
+        image:
+          "https://images.pexels.com/photos/4050301/pexels-photo-4050301.jpeg?auto=compress&cs=tinysrgb&w=600",
         category: "Book Marketing",
         date: "June 15, 2025",
         readTime: "6 min read",
@@ -291,8 +296,10 @@ export const en = {
       {
         id: 2,
         title: "Why High-Impact 3D Book Mockups Double Your Ad Click-Through Rate",
-        snippet: "Flat book cover images are no longer enough on crowded social feeds. Learn how photorealistic 3D assets turn casual scrollers into buyers.",
-        image: "https://images.pexels.com/photos/13501804/pexels-photo-13501804.jpeg?auto=compress&cs=tinysrgb&w=600",
+        snippet:
+          "Flat book cover images are no longer enough on crowded social feeds. Learn how photorealistic 3D assets turn casual scrollers into buyers.",
+        image:
+          "https://images.pexels.com/photos/13501804/pexels-photo-13501804.jpeg?auto=compress&cs=tinysrgb&w=600",
         category: "Design",
         date: "June 10, 2025",
         readTime: "4 min read",
@@ -302,8 +309,10 @@ export const en = {
       {
         id: 3,
         title: "Building an Author Brand That Commands 5-Figure Keynotes & Bookings",
-        snippet: "Your book is your premium business card. Here is how executive authors leverage personal branding to open high-paying corporate doors.",
-        image: "https://images.pexels.com/photos/1181675/pexels-photo-1181675.jpeg?auto=compress&cs=tinysrgb&w=600",
+        snippet:
+          "Your book is your premium business card. Here is how executive authors leverage personal branding to open high-paying corporate doors.",
+        image:
+          "https://images.pexels.com/photos/1181675/pexels-photo-1181675.jpeg?auto=compress&cs=tinysrgb&w=600",
         category: "Author Branding",
         date: "June 5, 2025",
         readTime: "5 min read",
@@ -313,11 +322,11 @@ export const en = {
     ],
   },
 
-  // FAQ Section
   faq: {
     badge: "Frequently Asked Questions",
     heading: "Everything You Need to Know",
-    subheading: "Clear, straightforward answers about our workflow, deliverables, pricing, and campaign timelines.",
+    subheading:
+      "Clear, straightforward answers about our workflow, deliverables, pricing, and campaign timelines.",
     stillHaveQuestions: "Still have questions? Let's talk directly.",
     contactUs: "Contact Our Team",
     commonQuestions: "Common Questions",
@@ -330,11 +339,11 @@ export const en = {
     support: "Support",
   },
 
-  // Newsletter Section
   newsletter: {
     badge: "Exclusive Industry Intel",
     heading: "Stay Ahead in Book Marketing & Digital Growth",
-    subheading: "Join 5,000+ authors and digital entrepreneurs receiving our monthly growth strategies, case studies, and publishing trends.",
+    subheading:
+      "Join 5,000+ authors and digital entrepreneurs receiving our monthly growth strategies, case studies, and publishing trends.",
     placeholder: "Enter your email address...",
     subscribeBtn: "Subscribe Now",
     subscribing: "Subscribing...",
@@ -343,11 +352,11 @@ export const en = {
     subscribedMessage: "You are subscribed! Check your inbox for our latest author launch checklist.",
   },
 
-  // Contact Section
   contact: {
     badge: "Get in Touch",
     heading: "Let's Build Something Exceptional Together",
-    subheading: "Ready to launch your book, elevate your brand identity, or scale your digital advertising? Contact us today for a bespoke strategy session.",
+    subheading:
+      "Ready to launch your book, elevate your brand identity, or scale your digital advertising? Contact us today for a bespoke strategy session.",
     form: {
       nameLabel: "Your Name",
       namePlaceholder: "e.g. Eleanor Vance",
@@ -360,13 +369,16 @@ export const en = {
       budgetLabel: "Estimated Budget",
       budgetDefault: "Select budget range...",
       messageLabel: "Project Details & Goals",
-      messagePlaceholder: "Tell us about your book or brand, target audience, timeline, and what you hope to achieve...",
+      messagePlaceholder:
+        "Tell us about your book or brand, target audience, timeline, and what you hope to achieve...",
       submitBtn: "Send Project Inquiry",
       submitting: "Sending Message...",
       successTitle: "Inquiry Received Successfully!",
-      successDesc: "Thank you for reaching out. A senior strategist from BigTeeWise Digital will review your details and respond within 24 business hours.",
+      successDesc:
+        "Thank you for reaching out. A senior strategist from BigTeeWise Digital will review your details and respond within 24 business hours.",
       errorTitle: "Submission Failed",
-      errorDesc: "Something went wrong sending your message. Please try again or reach out via WhatsApp.",
+      errorDesc:
+        "Something went wrong sending your message. Please try again or reach out via WhatsApp.",
       projectBrief: "Project Brief",
       freeConsultation: "Free consultation. No commitment required.",
       sendAnother: "Send Another Request",
@@ -385,18 +397,19 @@ export const en = {
     responseTime: "Avg. Response Time: 2 Hours",
   },
 
-  // Footer
   footer: {
     tagline: "Empowering authors and digital creators with strategic marketing, branding, and web design.",
     ctaBadge: "Start Today",
     ctaHeadingPre: "Ready to Publish, Brand,",
     ctaHeadingPost: "and",
     ctaHeadingHighlight: "Scale Your Impact?",
-    ctaSubtext: "Get a tailored strategy session with our team. No obligations, just actionable insights for your next book or brand launch.",
+    ctaSubtext:
+      "Get a tailored strategy session with our team. No obligations, just actionable insights for your next book or brand launch.",
     ctaBtn: "Get Free Quote",
     ctaCall: "Call Us Now",
     ctaHeading: "Ready to transform your book or brand into a market leader?",
-    ctaSubheading: "Book a complimentary 30-minute discovery call with our creative directors today.",
+    ctaSubheading:
+      "Book a complimentary 30-minute discovery call with our creative directors today.",
     ctaButton: "Schedule Free Consultation",
     navigate: "Navigate",
     ourTeam: "Our Team",
@@ -409,9 +422,11 @@ export const en = {
     rights: "All Rights Reserved.",
     crafted: "Crafted with precision in the United Kingdom.",
     privacy: "Privacy",
-    privacyText: "BigTeeWise Digital Privacy Policy: We safeguard all author manuscripts, creative assets, and client information with strict confidentiality.",
+    privacyText:
+      "BigTeeWise Digital Privacy Policy: We safeguard all author manuscripts, creative assets, and client information with strict confidentiality.",
     terms: "Terms",
-    termsText: "BigTeeWise Digital Terms: All creative graphics and campaign strategies are bespoke property for our clients upon project delivery.",
+    termsText:
+      "BigTeeWise Digital Terms: All creative graphics and campaign strategies are bespoke property for our clients upon project delivery.",
     rightsReserved: "All rights reserved.",
     privacyPolicy: "Privacy Policy",
     termsOfService: "Terms of Service",
@@ -419,7 +434,6 @@ export const en = {
     backToTop: "Back to top",
   },
 
-  // Interactive Quote Modal
   quoteModal: {
     step1Title: "What service are you looking for?",
     step1Subtitle: "Select the primary capability you need assistance with.",
@@ -452,11 +466,13 @@ export const en = {
     submitQuote: "Request Custom Proposal",
     submitting: "Generating Proposal...",
     successTitle: "Proposal Request Received!",
-    successMessage: "Thank you! Our creative directors will prepare a tailored proposal and reach out within 24 hours.",
+    successMessage:
+      "Thank you! Our creative directors will prepare a tailored proposal and reach out within 24 hours.",
     closeModal: "Close",
     consultation: "Consultation",
     headerTitle: "Request A Custom Proposal",
-    headerSubtitle: "Fill in your book or project details below. We'll craft a custom campaign breakdown tailored to your sales & branding goals.",
+    headerSubtitle:
+      "Fill in your book or project details below. We'll craft a custom campaign breakdown tailored to your sales & branding goals.",
     serviceLabel: "Select Core Goal / Service",
     bookMarketing: "Book Marketing Campaign",
     authorBranding: "Author Personal Branding & EPK",
@@ -474,10 +490,10 @@ export const en = {
     networkError: "Network error. Please check your connection and try again.",
   },
 
-  // Video Modal
   videoModal: {
     title: "Where Creativity Meets Conversion",
-    subtitle: "Discover how our team in the UK helps authors launch bestselling books, design award-winning covers, and scale digital brand performance.",
+    subtitle:
+      "Discover how our team in the UK helps authors launch bestselling books, design award-winning covers, and scale digital brand performance.",
     close: "Close modal",
     agencyReel: "Agency Reel",
     showreelTitle: "BigTeeWise Digital Showreel 2025",
@@ -489,7 +505,6 @@ export const en = {
     ctaButton: "Book Strategy Session",
   },
 
-  // WhatsApp Widget
   whatsapp: {
     headerTitle: "BigTeeWise Digital Chat",
     headerStatus: "Online • UK Team",
@@ -505,13 +520,13 @@ export const en = {
     tooltip: "Chat with a strategist on WhatsApp",
   },
 
-  // Portfolio Page
   portfolioPage: {
     heroBadge: "Our Work & Case Studies",
     heroTitlePre: "Crafting Brands That",
     heroTitleHighlight: "Command Attention",
     heroTitlePost: "& Generate Revenue",
-    heroDescription: "Explore our hand-picked portfolio of bestselling book covers, photorealistic 3D mockups, author identities, and multi-channel digital campaigns.",
+    heroDescription:
+      "Explore our hand-picked portfolio of bestselling book covers, photorealistic 3D mockups, author identities, and multi-channel digital campaigns.",
     filterAll: "All Projects",
     filterBookCovers: "Book Covers",
     filterAuthorBranding: "Author Branding",
@@ -528,7 +543,6 @@ export const en = {
     startProjectCta: "Start Your Project",
   },
 
-  // Service Detail Page
   serviceDetailPage: {
     backToServices: "Back to All Services",
     specializedService: "Specialized Service",
@@ -547,10 +561,12 @@ export const en = {
     statementLine1: "We don't just",
     statementLine1End: "deliver a service.",
     statementLine2: "We build momentum.",
-    statementDesc: "Everything we do around {service} is designed to create a stronger position, a clearer message, and a more meaningful connection with your audience.",
+    statementDesc:
+      "Everything we do around {service} is designed to create a stronger position, a clearer message, and a more meaningful connection with your audience.",
     blueprintLabel: "The Blueprint",
     blueprintHeading: "A smarter way to build your presence.",
-    blueprintDesc: "We combine strategy, execution, creative thinking, and continuous optimization into one focused system.",
+    blueprintDesc:
+      "We combine strategy, execution, creative thinking, and continuous optimization into one focused system.",
     whatYouGetLabel: "What you get",
     deliverablesHeading: "Everything you need. Nothing you don't.",
     deliverablesDesc: "Your package is built around the exact requirements of your goals.",
@@ -560,7 +576,8 @@ export const en = {
     expectedFocusLabel: "Expected focus",
     howWeGetThere: "How we get there",
     processHeading: "From idea to momentum.",
-    processDesc: "A clear four-stage process designed to keep your project moving forward without unnecessary complexity.",
+    processDesc:
+      "A clear four-stage process designed to keep your project moving forward without unnecessary complexity.",
     biggerPictureLabel: "The bigger picture",
     resultsHeading: "Results that speak for themselves.",
     statLaunches: "Book & Brand Launches",
@@ -573,33 +590,77 @@ export const en = {
     anotherQuestion: "Have another question?",
     readyLabel: "Ready when you are",
     ctaHeading: "Let's build something memorable.",
-    ctaDesc: "Tell us what you're building and where you want to go. We'll help turn the idea into a focused execution plan.",
+    ctaDesc:
+      "Tell us what you're building and where you want to go. We'll help turn the idea into a focused execution plan.",
     ctaButton: "Start a Conversation",
     strategyStep: "Strategy",
     executionStep: "Execution",
     launchStep: "Launch",
     growthStep: "Growth",
     processSteps: [
-      { num: "01", label: "DISCOVER", title: "Discovery & Strategy", desc: "We analyze your goals for {service} and build a focused roadmap around your audience, positioning, and objectives." },
-      { num: "02", label: "BUILD", title: "Execution & Setup", desc: "Our team develops the creative, strategic, and technical foundation required to execute the service with precision." },
-      { num: "03", label: "LAUNCH", title: "Campaign Launch", desc: "We put the strategy into action across the most relevant channels to create visibility, engagement, and momentum." },
-      { num: "04", label: "GROW", title: "Optimization & Growth", desc: "We monitor performance, identify opportunities, and continuously refine the strategy for stronger long-term results." }
+      {
+        num: "01",
+        label: "DISCOVER",
+        title: "Discovery & Strategy",
+        desc: "We analyze your goals for {service} and build a focused roadmap around your audience, positioning, and objectives.",
+      },
+      {
+        num: "02",
+        label: "BUILD",
+        title: "Execution & Setup",
+        desc: "Our team develops the creative, strategic, and technical foundation required to execute the service with precision.",
+      },
+      {
+        num: "03",
+        label: "LAUNCH",
+        title: "Campaign Launch",
+        desc: "We put the strategy into action across the most relevant channels to create visibility, engagement, and momentum.",
+      },
+      {
+        num: "04",
+        label: "GROW",
+        title: "Optimization & Growth",
+        desc: "We monitor performance, identify opportunities, and continuously refine the strategy for stronger long-term results.",
+      },
     ],
     valuePillars: [
-      { title: "Data-Driven", desc: "Every important decision is backed by research, performance signals, and measurable objectives." },
-      { title: "Built With Detail", desc: "From strategy to execution, every deliverable is reviewed for quality and brand consistency." },
-      { title: "Growth Focused", desc: "The goal is not simply to complete tasks. Every action is designed to create meaningful momentum." },
-      { title: "Transparent", desc: "Clear communication and measurable progress keep you informed throughout the entire engagement." }
+      {
+        title: "Data-Driven",
+        desc: "Every important decision is backed by research, performance signals, and measurable objectives.",
+      },
+      {
+        title: "Built With Detail",
+        desc: "From strategy to execution, every deliverable is reviewed for quality and brand consistency.",
+      },
+      {
+        title: "Growth Focused",
+        desc: "The goal is not simply to complete tasks. Every action is designed to create meaningful momentum.",
+      },
+      {
+        title: "Transparent",
+        desc: "Clear communication and measurable progress keep you informed throughout the entire engagement.",
+      },
     ],
     faqs: [
-      { q: "How quickly can we get started with {service}?", a: "Once we finalize the initial discovery call and brief, setup typically begins within 24–48 hours." },
-      { q: "What makes your approach different from other agencies?", a: "We combine niche specialization with end-to-end execution. You get dedicated strategy, premium creative assets, and performance optimization in one seamless package." },
-      { q: "Can this service be customized to my specific budget?", a: "Yes, we offer flexible tier packages and custom proposals based on your exact objectives and scope." },
-      { q: "How do we communicate throughout the project?", a: "You will have direct access to your project lead with regular milestone updates and responsive email support." }
-    ]
+      {
+        q: "How quickly can we get started with {service}?",
+        a: "Once we finalize the initial discovery call and brief, setup typically begins within 24–48 hours.",
+      },
+      {
+        q: "What makes your approach different from other agencies?",
+        a: "We combine niche specialization with end-to-end execution. You get dedicated strategy, premium creative assets, and performance optimization in one seamless package.",
+      },
+      {
+        q: "Can this service be customized to my specific budget?",
+        a: "Yes, we offer flexible tier packages and custom proposals based on your exact objectives and scope.",
+      },
+      {
+        q: "How do we communicate throughout the project?",
+        a: "You will have direct access to your project lead with regular milestone updates and responsive email support.",
+      },
+    ],
   },
 
-  // Portfolio Case Study
   portfolio: {
     caseStudy: "Case Study",
     backToPortfolio: "Portfolio",
@@ -625,13 +686,15 @@ export const en = {
     sector: "Sector",
     platform: "Platform",
     outcome: "Outcome",
-    storyHeading: "A story built from more than fifty years of life memory and everything that happened between the photographs.",
+    storyHeading:
+      "A story built from more than fifty years of life memory and everything that happened between the photographs.",
     philosophy: "Philosophy",
     guidingThought: "The guiding thought behind the design",
     historicalArc: "Historical Arc",
     timelineHeading: "Fifty years of living memory.",
     timelineSubheading: "Preserved for the next generation.",
-    timelineDesc: "A chronological narrative connecting Havana, Madrid, and Valencia into a unified literary legacy.",
+    timelineDesc:
+      "A chronological narrative connecting Havana, Madrid, and Valencia into a unified literary legacy.",
     epoch: "Epoch",
     statBooks: "Books Published",
     statHistory: "Years of History",
@@ -642,7 +705,8 @@ export const en = {
     scrollToMove: "Scroll to move through the shelf",
     theWork: "The Work",
     workHeading: "A digital world built around the story.",
-    workDesc: "Rather than presenting the website as a conventional collection of screenshots, the interface becomes an editorial canvas where every visual has its own rhythm.",
+    workDesc:
+      "Rather than presenting the website as a conventional collection of screenshots, the interface becomes an editorial canvas where every visual has its own rhythm.",
     digitalIdentity: "Digital Identity",
     desktopExperience: "Desktop Experience",
     editorialDetail: "Editorial Detail",
@@ -650,7 +714,8 @@ export const en = {
     responsiveSystem: "Responsive System",
     designAndCraft: "Design & Craft",
     craftHeading: "Crafted like a museum archive.",
-    craftDesc: "Every interface component, typography choice, and color palette decision was tailored to respect the emotional gravitas of the authors' history.",
+    craftDesc:
+      "Every interface component, typography choice, and color palette decision was tailored to respect the emotional gravitas of the authors' history.",
     pillar: "Pillar",
     theAuthors: "The Authors",
     authorsHeading: "Two voices. One shared history.",
@@ -658,7 +723,8 @@ export const en = {
     readerFeedback: "Reader Feedback",
     reviewsHeading: "Real words.",
     reviewsSubheading: "Real readers.",
-    reviewsDesc: "The story continued beyond the pages through the people who discovered it, read it and shared their experience.",
+    reviewsDesc:
+      "The story continued beyond the pages through the people who discovered it, read it and shared their experience.",
     prevReview: "Previous review",
     nextReview: "Next review",
     viewOriginal: "View Original",
@@ -666,12 +732,14 @@ export const en = {
     reviewsHint: "Click a review image to view the original — drag to browse",
     closeReview: "Close review",
     funnelHeading: "Converting interest into readership.",
-    funnelDesc: "A structured three-step experience designed to welcome readers, establish trust, and drive book purchases on Amazon España.",
+    funnelDesc:
+      "A structured three-step experience designed to welcome readers, establish trust, and drive book purchases on Amazon España.",
     stage: "Stage",
     scope: "Scope",
     scopeHeading: "Every touchpoint connected.",
     ctaHeading: "Explore the story beyond the case study.",
-    ctaDesc: "Visit the live author platform to explore the trilogy, the authors, their history and the reader journey.",
+    ctaDesc:
+      "Visit the live author platform to explore the trilogy, the authors, their history and the reader journey.",
     visitAuthorWebsite: "Visit Author Website",
     exploreBooks: "Explore Books",
     projectOne: "Project 01",
@@ -689,17 +757,20 @@ export const en = {
     storyArchitecture: "Story Architecture",
     p2NarrativeHeading: "Dual timelines. Four heirloom rings.",
     p2NarrativeSubheading: "One long-buried family vow.",
-    p2NarrativeDesc: "The marketing strategy anchored directly into the book's dual-narrative timeline to target avid fans of historical time-slip romance.",
+    p2NarrativeDesc:
+      "The marketing strategy anchored directly into the book's dual-narrative timeline to target avid fans of historical time-slip romance.",
     p2GuidingThought: "The guiding thought behind the marketing strategy",
     theSolution: "The Solution",
     p2SolutionHeading: "Five pillars of digital presence.",
     amazonAplus: "Amazon A+ Strategy",
     p2AplusHeading: "Turning Amazon scrollers into buyers.",
-    p2AplusDesc: "Custom visual modules designed to highlight character dynamics, emotional hooks, and series branding directly on the Amazon book listing.",
+    p2AplusDesc:
+      "Custom visual modules designed to highlight character dynamics, emotional hooks, and series branding directly on the Amazon book listing.",
     module: "Module",
     theExperience: "The Experience",
     p2ExperienceHeading: "Designed around the reader journey.",
-    p2ExperienceDesc: "Every touchpoint — from Amazon discovery to the author website — was crafted to immerse readers in the atmospheric world of The Sea Stone Sisters and guide them toward the story.",
+    p2ExperienceDesc:
+      "Every touchpoint — from Amazon discovery to the author website — was crafted to immerse readers in the atmospheric world of The Sea Stone Sisters and guide them toward the story.",
     readerExperiencePreview: "Reader Experience Preview",
     digitalTouchpoints: "Digital Touchpoints",
     theAuthor: "The Author",
@@ -710,25 +781,29 @@ export const en = {
     timeline: "Timeline",
     marketingEcosystem: "Marketing Ecosystem",
     p2EcosystemHeading: "Four channels driving commercial growth.",
-    p2EcosystemDesc: "A multi-layered reader acquisition pipeline engineered to maintain consistent monthly sales and high search visibility.",
+    p2EcosystemDesc:
+      "A multi-layered reader acquisition pipeline engineered to maintain consistent monthly sales and high search visibility.",
     channel: "Channel",
     p2ScopeHeading: "Every deliverable connected.",
     results: "Results",
     p2CtaHeading: "Explore the story and discover Eleanor Buchanan's work.",
-    p2CtaDesc: "Visit the Amazon listing to discover the book, or explore the author's presence on Goodreads.",
+    p2CtaDesc:
+      "Visit the Amazon listing to discover the book, or explore the author's presence on Goodreads.",
     amazonListing: "Amazon Listing",
     goodreads: "Goodreads",
     projectTwo: "Project 02",
     backToTop: "Back to top",
   },
 
-  // SEO & Metadata
   seo: {
     homeTitle: "BigTeeWise Digital | Creative Agency & Author Branding",
-    homeDesc: "Full-service book marketing, Amazon KDP optimization, author branding, and digital growth agency for authors, publishers, and ambitious brands.",
+    homeDesc:
+      "Full-service book marketing, Amazon KDP optimization, author branding, and digital growth agency for authors, publishers, and ambitious brands.",
     portfolioTitle: "Portfolio & Case Studies | BigTeeWise Digital",
-    portfolioDesc: "Browse our award-caliber book covers, 3D mockups, author brand identities, and high-converting marketing campaigns.",
+    portfolioDesc:
+      "Browse our award-caliber book covers, 3D mockups, author brand identities, and high-converting marketing campaigns.",
     servicesTitle: "Creative & Marketing Services | BigTeeWise Digital",
-    servicesDesc: "Explore our 12 bespoke digital growth and book marketing capabilities designed for maximum return on investment.",
+    servicesDesc:
+      "Explore our 12 bespoke digital growth and book marketing capabilities designed for maximum return on investment.",
   },
 };

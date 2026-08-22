@@ -34,16 +34,6 @@ if (typeof window !== 'undefined') {
 
 export default function ServiceDetailPage() {
   const { t, locale } = useLanguage();
-    // Debug: Log current locale and test translations
-  useEffect(() => {
-    console.log('=== SERVICE DETAIL PAGE DEBUG ===');
-    console.log('Current locale:', locale);
-    console.log('Test backToServices:', t('serviceDetailPage.backToServices'));
-    console.log('Test philosophyLabel:', t('serviceDetailPage.philosophyLabel'));
-    console.log('Test statementLine1:', t('serviceDetailPage.statementLine1'));
-    console.log('=====================================');
-  }, [locale, t]);
-
   const params = useParams();
   const serviceId = params?.id;
 
@@ -54,6 +44,19 @@ export default function ServiceDetailPage() {
   const mainRef = useRef(null);
 
   const service = SERVICES.find((s) => s.id === serviceId) || SERVICES[0];
+
+  // SIMPLE translation helper - guaranteed to work
+  const tr = (key, fallback) => {
+    try {
+      const result = t(key);
+      if (result === key || result === undefined || result === null) {
+        return fallback;
+      }
+      return result;
+    } catch (e) {
+      return fallback;
+    }
+  };
 
   /*
    * ----------------------------------------------------
@@ -84,24 +87,9 @@ export default function ServiceDetailPage() {
    */
 
   const deliverables = service.deliverables || [];
-  // Translation helper with proper fallback
-  const tr = (key, fallback) => {
-    try {
-      // Try to get translation
-      const result = t(key);
-      
-      // Check if translation exists and is not the key itself
-      if (result !== undefined && result !== null && result !== key && result !== '') {
-        return result;
-      }
-      
-      // If translation failed, return fallback
-      return fallback;
-    } catch (e) {
-      // If any error occurs, return fallback
-      return fallback;
-    }
-  };
+
+  const serviceTitle = service.title;
+  const serviceFullDesc = service.fullDesc || service.shortDesc;
 
   // Get translated category label
   const getCategoryLabel = () => {
@@ -115,9 +103,6 @@ export default function ServiceDetailPage() {
     }
     return tr('serviceDetailPage.specializedService', 'Specialized Service');
   };
-
-  const serviceTitle = service.title;
-  const serviceFullDesc = service.fullDesc || service.shortDesc;
 
   // Get process steps - ALWAYS return an array
   const getProcessSteps = () => {
@@ -164,6 +149,7 @@ export default function ServiceDetailPage() {
   const processSteps = getProcessSteps();
   const valuePillars = getValuePillars();
   const faqs = getFaqs();
+  const categoryLabel = getCategoryLabel();
 
   /*
    * ----------------------------------------------------
@@ -367,8 +353,6 @@ export default function ServiceDetailPage() {
     return () => ctx.revert();
   }, [serviceId]);
 
-  const categoryLabel = getCategoryLabel();
-
   return (
     <>
       <main
@@ -395,7 +379,7 @@ export default function ServiceDetailPage() {
           <div className="relative max-w-7xl mx-auto w-full px-4 sm:px-6 lg:px-8 py-24 lg:py-28">
             <div className="hero-copy mb-12 lg:mb-16">
               <Link
-                href="/#services"
+                href={`/${locale}/#services`}
                 className="group inline-flex items-center gap-2 text-[11px] sm:text-xs font-extrabold uppercase tracking-[0.16em] text-slate-500 hover:text-blue-600 transition-colors duration-300"
               >
                 <ArrowLeft className="w-3.5 h-3.5 transition-transform duration-300 group-hover:-translate-x-1" />

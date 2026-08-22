@@ -20,7 +20,6 @@ export const de = {
     tagline: "Kreativagentur & Autoren-Branding",
   },
 
-  // Language selector
   language: {
     select: "Sprache",
     en: "English",
@@ -29,7 +28,6 @@ export const de = {
     de: "Deutsch",
   },
 
-  // Hero Section
   hero: {
     badge: "Spezialisierte Agentur für Buchmarketing & Digitales Wachstum",
     titleLine1: "Stärken Sie Ihre Marke.",
@@ -46,7 +44,6 @@ export const de = {
     stat3Number: "99%",
     stat3Label: "Kundenzufriedenheit",
     trustedBy: "Das Vertrauen visionärer Autoren, Verlage und internationaler Wachstumsunternehmen",
-    // Hero features
     feature1: "Autoren-Branding Spezialisten",
     feature2: "Amazon Bestseller Kampagnen",
     feature3: "Datenbasierte Digitalwerbung",
@@ -86,7 +83,6 @@ export const de = {
     platformMailchimpLabel: "E-Mail-Kampagnen",
   },
 
-  // Marquee
   marquee: {
     items: [
       { index: "01", title: "Top-Platzierung", subtitle: "Amazon Bestseller-Strategie" },
@@ -98,7 +94,6 @@ export const de = {
     ],
   },
 
-  // About Section
   about: {
     badge: "Über BigTeeWise Digital",
     titlePre: "Wir verwandeln",
@@ -139,7 +134,6 @@ export const de = {
     workWithUs: "Jetzt zusammenarbeiten",
   },
 
-  // Services Section
   services: {
     badge: "Unsere Kompetenzen",
     heading: "Maßgeschneiderte Wachstums- & Kreativlösungen",
@@ -151,7 +145,6 @@ export const de = {
     learnMore: "Leistungsdetails ansehen",
     requestServiceQuote: "Angebot für diese Leistung anfordern",
     exploreAllServices: "Alle 12 Leistungen entdecken",
-    // Additional keys
     allServices: "Alle Leistungen",
     digitalMarketingTab: "Digitales Marketing & SEO",
     creativeDesignTab: "Kreativdesign & Branding",
@@ -164,7 +157,6 @@ export const de = {
     inquireNow: "Jetzt anfragen",
   },
 
-  // Process Section - FULLY TRANSLATED
   process: {
     badge: "Unsere Arbeitsweise",
     heading: "Ein bewährter 4-Schritte-Wachstumsplan",
@@ -196,7 +188,6 @@ export const de = {
     ctaButton: "Lassen Sie uns reden",
   },
 
-  // Why Choose Us Section
   whyChooseUs: {
     badge: "Warum BigTeeWise Digital",
     heading: "Auf Wachstum ausgerichtet. Datenbasiert geführt.",
@@ -221,7 +212,6 @@ export const de = {
     ],
     guaranteeTitle: "Unsere Qualitätsgarantie",
     guaranteeDesc: "Wir optimieren so lange, bis Ihre Kampagnen und Kreativ-Assets unsere höchsten Ansprüche an Gestaltung und Konversionsstärke erfüllen.",
-    // Additional keys
     ctaButton: "Kostenlose Beratung sichern",
     studioTag: "Creative Strategy Studio",
     watchVideo: "Showreel ansehen",
@@ -233,13 +223,11 @@ export const de = {
     statRating: "Kundenbewertung",
   },
 
-  // Testimonials Section
   testimonials: {
     badge: "Erfolgsgeschichten",
     heading: "Das Vertrauen internationaler Autoren & Führungskräfte",
     subheading: "Erfahren Sie, wie unsere Kunden mit BigTeeWise Digital ihre Sichtbarkeit und ihren Umsatz vervielfacht haben.",
     verifiedReview: "Verifizierte Kundenbewertung",
-    // Additional keys
     trustedBy: "Vertrauen von 2000+ Kunden weltweit",
     prevLabel: "Vorheriges Testimonial",
     nextLabel: "Nächstes Testimonial",
@@ -248,13 +236,11 @@ export const de = {
     basedOn: "Basierend auf 500+ Bewertungen",
   },
 
-  // Team Section
   team: {
     badge: "Unser Team",
     heading: "Die kreativen Strategen hinter Ihrem Erfolg",
     subheading: "Ein multidisziplinäres Team aus Digital-Marketern, 3D-Künstlern, Copywritern und Kampagnen-Architekten, die sich für Ihr Wachstum einsetzen.",
     viewSpecialties: "Spezialisierungen & Schwerpunkte",
-    // Additional keys
     featured: "Ausgewählt",
     featuredCount: "5 / 15 Spezialisten",
     prevLabel: "Vorheriges Teammitglied",
@@ -272,7 +258,6 @@ export const de = {
     exploreTeam: "Team entdecken",
   },
 
-  // Blog Section
   blog: {
     badge: "Einblicke & Strategien",
     heading: "Aktuelles aus Marketing & Branding",
@@ -318,14 +303,12 @@ export const de = {
     ],
   },
 
-  // FAQ Section
   faq: {
     badge: "Häufig gestellte Fragen",
     heading: "Alles, was Sie wissen müssen",
     subheading: "Klare und transparente Antworten zu unseren Abläufen, Leistungen, Preisen und Kampagnenzeiträumen.",
     stillHaveQuestions: "Haben Sie weitere Fragen? Sprechen wir direkt miteinander.",
     contactUs: "Unser Team kontaktieren",
-    // Additional keys
     commonQuestions: "Häufige Fragen",
     supportText: "Unser Team beantwortet alle Ihre Fragen zu Buchmarketing, Preisen und Zeitplänen.",
     callUs: "Rufen Sie uns an",
@@ -336,7 +319,6 @@ export const de = {
     support: "Support",
   },
 
-  // Newsletter Section
   newsletter: {
     badge: "Exklusives Branchenwissen",
     heading: "Immer einen Schritt voraus im Buchmarketing",
@@ -346,11 +328,9 @@ export const de = {
     subscribing: "Wird abonniert...",
     privacyNote: "Kein Spam. Abmeldung jederzeit mit einem Klick möglich.",
     successMsg: "Vielen Dank! Sie wurden erfolgreich für unseren Newsletter angemeldet.",
-    // Additional keys
     subscribedMessage: "Sie sind abonniert! Überprüfen Sie Ihren Posteingang für unsere neueste Autoren-Launch-Checkliste.",
   },
 
-  // Contact Section
   contact: {
     badge: "Kontakt aufnehmen",
     heading: "Lassen Sie uns gemeinsam Großes erschaffen",
@@ -374,7 +354,6 @@ export const de = {
       successDesc: "Vielen Dank für Ihre Nachricht. Ein Senior-Stratege von BigTeeWise Digital wird Ihre Angaben prüfen und sich innerhalb von 24 Geschäftsstunden bei Ihnen melden.",
       errorTitle: "Übermittlung fehlgeschlagen",
       errorDesc: "Beim Senden der Nachricht ist ein Fehler aufgetreten. Bitte versuchen Sie es erneut oder kontaktieren Sie uns per WhatsApp.",
-      // Additional keys
       projectBrief: "Projektbeschreibung",
       freeConsultation: "Kostenlose Beratung. Keine Verpflichtung.",
       sendAnother: "Weitere Anfrage senden",
@@ -386,16 +365,13 @@ export const de = {
       hours: "Geschäftszeiten",
       hoursDetail: "Montag – Freitag: 09:00 – 18:00 Uhr (GMT)",
       whatsappCta: "Direkt auf WhatsApp schreiben",
-      // Additional keys
       title: "Kontaktdetails",
       subtitle: "Kontaktieren Sie uns direkt oder füllen Sie das Formular aus. Wir antworten normalerweise innerhalb von 24 Stunden.",
     },
-    // Additional keys
     socialHeading: "Folgen Sie unserer Reise",
     responseTime: "Durchschnittliche Antwortzeit: 2 Stunden",
   },
 
-  // Footer
   footer: {
     tagline: "Wir stärken Autoren und digitale Macher mit strategischem Marketing, exzellentem Branding und erstklassigem Webdesign.",
     ctaBadge: "Starten Sie jetzt",
@@ -429,7 +405,6 @@ export const de = {
     backToTop: "Nach oben",
   },
 
-  // Interactive Quote Modal
   quoteModal: {
     step1Title: "Welche Leistung suchen Sie?",
     step1Subtitle: "Wählen Sie den Hauptbereich, bei dem Sie Unterstützung benötigen.",
@@ -464,7 +439,6 @@ export const de = {
     successTitle: "Anfrage erfolgreich eingegangen!",
     successMessage: "Vielen Dank! Unsere Kreativdirektoren berechnen Ihr maßgeschneidertes Angebot und melden sich innerhalb von 24 Stunden.",
     closeModal: "Schließen",
-    // Additional keys
     consultation: "Beratung",
     headerTitle: "Individuelles Angebot anfordern",
     headerSubtitle: "Füllen Sie die Details Ihres Buches oder Projekts unten aus. Wir erstellen eine maßgeschneiderte Kampagnenübersicht, die auf Ihre Vertriebs- und Branding-Ziele zugeschnitten ist.",
@@ -485,7 +459,6 @@ export const de = {
     networkError: "Netzwerkfehler. Bitte überprüfen Sie Ihre Verbindung und versuchen Sie es erneut.",
   },
 
-  // Video Modal
   videoModal: {
     title: "Wo Kreativität auf Konversion trifft",
     subtitle: "Entdecken Sie, wie unser Team in Großbritannien Autoren dabei hilft, Bestseller-Bücher zu veröffentlichen, preisgekrönte Cover zu designen und die digitale Markenleistung zu skalieren.",
@@ -500,7 +473,6 @@ export const de = {
     ctaButton: "Strategie-Session buchen",
   },
 
-  // WhatsApp Widget
   whatsapp: {
     headerTitle: "BigTeeWise Digital Chat",
     headerStatus: "Online • UK Team",
@@ -516,7 +488,6 @@ export const de = {
     tooltip: "Chatten Sie mit einem Strategen auf WhatsApp",
   },
 
-  // Portfolio Page
   portfolioPage: {
     heroBadge: "Unsere Arbeiten & Fallstudien",
     heroTitlePre: "Marken, die",
@@ -539,7 +510,6 @@ export const de = {
     startProjectCta: "Eigenes Projekt starten",
   },
 
-    // Service Detail Page
   serviceDetailPage: {
     backToServices: "Zurück zu Allen Leistungen",
     specializedService: "Spezialisierter Service",
@@ -610,7 +580,6 @@ export const de = {
     ]
   },
 
-  // Portfolio Case Study
   portfolio: {
     caseStudy: "Fallstudie",
     backToPortfolio: "Portfolio",
@@ -688,7 +657,6 @@ export const de = {
     projectOne: "Projekt 01",
     backToBigTeeWise: "Zurück zu BigTeeWise",
     caseStudyLabel: "Fallstudie",
-    // Project 2
     p2Tag1: "Buchmarketing",
     p2Tag2: "Amazon A+",
     p2Tag3: "Autoren-Website",
@@ -734,7 +702,6 @@ export const de = {
     backToTop: "Nach oben",
   },
 
-  // SEO & Metadata
   seo: {
     homeTitle: "BigTeeWise Digital | Kreativagentur & Autoren-Branding",
     homeDesc: "Full-Service-Buchmarketing, Amazon-KDP-Optimierung, Autoren-Branding und digitales Wachstum für Autoren, Verlage und ambitionierte Marken.",

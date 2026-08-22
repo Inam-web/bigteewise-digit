@@ -35,7 +35,7 @@ const SERVICE_IMAGES = {
 };
 
 export default function ServicesSection({ onOpenQuoteModal }) {
-  const { t } = useLanguage();
+  const { t, locale } = useLanguage();
   const [selectedCategory, setSelectedCategory] = useState('all');
   const sectionRef = useRef(null);
 
@@ -143,7 +143,6 @@ export default function ServicesSection({ onOpenQuoteModal }) {
 
   // Get translated service title
   const getServiceTitle = (service) => {
-    // If service has a translation key, use it
     if (service.translationKey) {
       return t(service.translationKey) || service.title;
     }
@@ -366,10 +365,10 @@ export default function ServicesSection({ onOpenQuoteModal }) {
                       </div>
                     )}
 
-                    {/* Footer Actions */}
+                    {/* ✅ FIXED: Footer Actions with locale prefix */}
                     <div className="pt-4 border-t border-slate-100 flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-4">
                       <Link
-                        href={`/services/${service.id}`}
+                        href={`/${locale}/services/${service.id}`}
                         className="text-sm font-bold text-blue-600 hover:text-blue-700 flex items-center justify-center sm:justify-start gap-1.5 transition-colors duration-200"
                       >
                         <span>{t('services.learnMore')}</span>

@@ -1,8 +1,15 @@
-import { en } from './translations/en';
-import { es } from './translations/es';
-import { it } from './translations/it';
-import { de } from './translations/de';
+// getTranslations.js
+import * as enModule from './translations/en';
+import * as esModule from './translations/es';
+import * as itModule from './translations/it';
+import * as deModule from './translations/de';
 import { DEFAULT_LOCALE, isValidLocale } from './config';
+
+// Extract the actual translation objects
+const en = enModule.en || enModule.default || enModule;
+const es = esModule.es || esModule.default || esModule;
+const it = itModule.it || itModule.default || itModule;
+const de = deModule.de || deModule.default || deModule;
 
 const dictionaries = {
   en,
@@ -15,14 +22,12 @@ export function getNestedValue(obj, path) {
   if (!obj || !path) return undefined;
   const keys = path.split('.');
   let current = obj;
-  
   for (const key of keys) {
     if (current === undefined || current === null || typeof current !== 'object') {
       return undefined;
     }
     current = current[key];
   }
-  
   return current;
 }
 

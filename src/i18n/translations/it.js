@@ -20,7 +20,6 @@ export const it = {
     tagline: "Agenzia Creativa e Branding per Autori",
   },
 
-  // Language selector
   language: {
     select: "Lingua",
     en: "English",
@@ -29,7 +28,6 @@ export const it = {
     de: "Deutsch",
   },
 
-  // Hero Section
   hero: {
     badge: "Agenzia Specializzata in Marketing Editoriale e Crescita Digitale",
     titleLine1: "Eleva il Tuo Brand.",
@@ -46,7 +44,6 @@ export const it = {
     stat3Number: "99%",
     stat3Label: "Tasso di Soddisfazione",
     trustedBy: "Scelto da autori visionari, case editrici e brand leader in tutto il mondo",
-    // Hero features
     feature1: "Specialisti in Branding per Autori",
     feature2: "Campagne Bestseller su Amazon",
     feature3: "Annunci Digitali Basati sui Dati",
@@ -86,7 +83,6 @@ export const it = {
     platformMailchimpLabel: "Campagne Email",
   },
 
-  // Marquee
   marquee: {
     items: [
       { index: "01", title: "Prima Classe", subtitle: "Strategia Bestseller su Amazon" },
@@ -98,7 +94,6 @@ export const it = {
     ],
   },
 
-  // About Section
   about: {
     badge: "Chi Siamo - BigTeeWise Digital",
     titlePre: "Trasformiamo",
@@ -139,7 +134,6 @@ export const it = {
     workWithUs: "Lavora Con Noi",
   },
 
-  // Services Section
   services: {
     badge: "Le Nostre Competenze",
     heading: "Soluzioni Creative e di Crescita su Misura",
@@ -151,7 +145,6 @@ export const it = {
     learnMore: "Dettagli del Servizio",
     requestServiceQuote: "Richiedi Preventivo per Questo Servizio",
     exploreAllServices: "Esplora Tutti i 12 Servizi",
-    // Additional keys
     allServices: "Tutti i Servizi",
     digitalMarketingTab: "Marketing Digitale e SEO",
     creativeDesignTab: "Design Creativo e Branding",
@@ -164,7 +157,6 @@ export const it = {
     inquireNow: "Richiedi Ora",
   },
 
-  // Process Section - FULLY TRANSLATED
   process: {
     badge: "Come Lavoriamo",
     heading: "Un Metodo di Crescita Collaudato in 4 Fasi",
@@ -196,7 +188,6 @@ export const it = {
     ctaButton: "Parliamo",
   },
 
-  // Why Choose Us Section
   whyChooseUs: {
     badge: "Perché BigTeeWise Digital",
     heading: "Progettati per Crescere. Guidati dai Dati.",
@@ -221,7 +212,6 @@ export const it = {
     ],
     guaranteeTitle: "La Nostra Garanzia di Qualità",
     guaranteeDesc: "Perfezioniamo ogni dettaglio finché le tue campagne e i tuoi materiali creativi non soddisfano i nostri più alti standard di rendimento.",
-    // Additional keys
     ctaButton: "Ottieni una Consulenza Gratuita",
     studioTag: "Studio di Strategia Creativa",
     watchVideo: "Guarda lo Showreel dell'Agenzia",
@@ -233,13 +223,11 @@ export const it = {
     statRating: "Valutazione dei Clienti",
   },
 
-  // Testimonials Section
   testimonials: {
     badge: "Storie di Successo",
     heading: "La Fiducia di Autori e Leader Internazionali",
     subheading: "Scopri cosa dicono i clienti che hanno scelto BigTeeWise Digital per accelerare la loro notorietà e le vendite.",
     verifiedReview: "Recensione Verificata",
-    // Additional keys
     trustedBy: "La fiducia di oltre 2000 clienti in tutto il mondo",
     prevLabel: "Testimonianza Precedente",
     nextLabel: "Prossima Testimonianza",
@@ -248,13 +236,11 @@ export const it = {
     basedOn: "Basato su 500+ Recensioni",
   },
 
-  // Team Section
   team: {
     badge: "Il Nostro Team",
     heading: "Gli Strateghi Creativi Dietro i Tuoi Risultati",
     subheading: "Un collettivo multidisciplinare di digital marketer, 3D artist, copywriter e architetti di campagne dedicato alla tua crescita.",
     viewSpecialties: "Specializzazioni e Aree di Focus",
-    // Additional keys
     featured: "In Evidenza",
     featuredCount: "5 / 15 Specialist",
     prevLabel: "Membro del team precedente",
@@ -272,60 +258,57 @@ export const it = {
     exploreTeam: "Esplora il team",
   },
 
-  // Blog Section
-blog: {
-  badge: "Approfondimenti e Strategie",
-  heading: "Le Ultime Novità su Marketing e Branding",
-  subheading: "Guide pratiche, analisi editoriali e lezioni dai nostri principali esperti di strategia.",
-  readArticle: "Leggi l'Articolo",
-  readTimeSuffix: "di lettura",
-  ctaText: "Vuoi implementare queste strategie? Parliamo del tuo progetto.",
-  closeArticle: "Chiudi Articolo",
-  posts: [
-    {
-      id: 1,
-      title: "7 Passaggi Comprovati per Raggiungere il #1 su Amazon nel 2025/2026",
-      snippet: "Scopri come i migliori autori combinano la selezione delle categorie KDP, il buzz del pre-order e gli annunci Meta mirati per dominare la settimana di lancio su Amazon.",
-      image: "https://images.pexels.com/photos/4145353/pexels-photo-4145353.jpeg?auto=compress&cs=tinysrgb&w=600",
-      category: "Book Marketing",
-      date: "15 giugno, 2025",
-      readTime: "6 min di lettura",
-      author: "Team BigTeeWise",
-      tags: ["Amazon KDP", "Bestseller", "Marketing"],
-    },
-    {
-      id: 2,
-      title: "Perché i Mockup 3D di Libri ad Alto Impatto Raddoppiano il Tuo Click-Through Rate",
-      snippet: "Le immagini piatte delle copertine non sono più sufficienti sui social feed affollati. Scopri come gli asset 3D fotorealistici trasformano i navigatori in acquirenti.",
-      image: "https://images.pexels.com/photos/11483884/pexels-photo-11483884.jpeg?auto=compress&cs=tinysrgb&w=600",
-      category: "Design",
-      date: "10 giugno, 2025",
-      readTime: "4 min di lettura",
-      author: "Team BigTeeWise",
-      tags: ["Mockup 3D", "Copertina", "Conversione"],
-    },
-    {
-      id: 3,
-      title: "Costruire un Brand Autore che Comanda Keynote da 5 Cifre",
-      snippet: "Il tuo libro è il tuo biglietto da visita premium. Scopri come gli autori executive sfruttano il personal branding per aprire porte corporate di alto livello.",
-      image: "https://images.pexels.com/photos/3184405/pexels-photo-3184405.jpeg?auto=compress&cs=tinysrgb&w=600",
-      category: "Author Branding",
-      date: "5 giugno, 2025",
-      readTime: "5 min di lettura",
-      author: "Team BigTeeWise",
-      tags: ["Author Branding", "Conferenze", "Autorità"],
-    },
-  ],
-},
+  blog: {
+    badge: "Approfondimenti e Strategie",
+    heading: "Le Ultime Novità su Marketing e Branding",
+    subheading: "Guide pratiche, analisi editoriali e lezioni dai nostri principali esperti di strategia.",
+    readArticle: "Leggi l'Articolo",
+    readTimeSuffix: "di lettura",
+    ctaText: "Vuoi implementare queste strategie? Parliamo del tuo progetto.",
+    closeArticle: "Chiudi Articolo",
+    posts: [
+      {
+        id: 1,
+        title: "7 Passaggi Comprovati per Raggiungere il #1 su Amazon nel 2025/2026",
+        snippet: "Scopri come i migliori autori combinano la selezione delle categorie KDP, il buzz del pre-order e gli annunci Meta mirati per dominare la settimana di lancio su Amazon.",
+        image: "https://images.pexels.com/photos/4145353/pexels-photo-4145353.jpeg?auto=compress&cs=tinysrgb&w=600",
+        category: "Book Marketing",
+        date: "15 giugno, 2025",
+        readTime: "6 min di lettura",
+        author: "Team BigTeeWise",
+        tags: ["Amazon KDP", "Bestseller", "Marketing"],
+      },
+      {
+        id: 2,
+        title: "Perché i Mockup 3D di Libri ad Alto Impatto Raddoppiano il Tuo Click-Through Rate",
+        snippet: "Le immagini piatte delle copertine non sono più sufficienti sui social feed affollati. Scopri come gli asset 3D fotorealistici trasformano i navigatori in acquirenti.",
+        image: "https://images.pexels.com/photos/11483884/pexels-photo-11483884.jpeg?auto=compress&cs=tinysrgb&w=600",
+        category: "Design",
+        date: "10 giugno, 2025",
+        readTime: "4 min di lettura",
+        author: "Team BigTeeWise",
+        tags: ["Mockup 3D", "Copertina", "Conversione"],
+      },
+      {
+        id: 3,
+        title: "Costruire un Brand Autore che Comanda Keynote da 5 Cifre",
+        snippet: "Il tuo libro è il tuo biglietto da visita premium. Scopri come gli autori executive sfruttano il personal branding per aprire porte corporate di alto livello.",
+        image: "https://images.pexels.com/photos/3184405/pexels-photo-3184405.jpeg?auto=compress&cs=tinysrgb&w=600",
+        category: "Author Branding",
+        date: "5 giugno, 2025",
+        readTime: "5 min di lettura",
+        author: "Team BigTeeWise",
+        tags: ["Author Branding", "Conferenze", "Autorità"],
+      },
+    ],
+  },
 
-  // FAQ Section
   faq: {
     badge: "Domande Frequenti",
     heading: "Tutto Quello Che Devi Sapere",
     subheading: "Risposte chiare e trasparenti sui nostri flussi di lavoro, deliverable, costi e tempistiche di campagna.",
     stillHaveQuestions: "Hai altre domande? Parliamone direttamente.",
     contactUs: "Contatta il Nostro Team",
-    // Additional keys
     commonQuestions: "Domande Comuni",
     supportText: "Il nostro team risponderà a tutte le tue domande sul book marketing, i prezzi e le tempistiche.",
     callUs: "Chiamaci",
@@ -336,7 +319,6 @@ blog: {
     support: "Supporto",
   },
 
-  // Newsletter Section
   newsletter: {
     badge: "Approfondimenti Esclusivi",
     heading: "Rimani un Passo Avanti nel Book Marketing",
@@ -346,11 +328,9 @@ blog: {
     subscribing: "Iscrizione in corso...",
     privacyNote: "Zero spam. Puoi cancellarti in qualsiasi momento con un clic.",
     successMsg: "Grazie! Ti sei iscritto con successo alla nostra newsletter.",
-    // Additional keys
     subscribedMessage: "Sei iscritto! Controlla la tua casella di posta per la nostra lista di controllo per il lancio dell'autore.",
   },
 
-  // Contact Section
   contact: {
     badge: "Mettiti in Contatto",
     heading: "Costruiamo Insieme Qualcosa di Straordinario",
@@ -374,7 +354,6 @@ blog: {
       successDesc: "Grazie per averci contattato. Uno strategist senior di BigTeeWise Digital esaminerà la tua richiesta e risponderà entro 24 ore lavorative.",
       errorTitle: "Invio non riuscito",
       errorDesc: "Si è verificato un errore durante l'invio. Riprova o contattaci direttamente su WhatsApp.",
-      // Additional keys
       projectBrief: "Sintesi del Progetto",
       freeConsultation: "Consulenza gratuita. Nessun impegno.",
       sendAnother: "Invia Un'Altra Richiesta",
@@ -386,16 +365,13 @@ blog: {
       hours: "Orari di Apertura",
       hoursDetail: "Lunedì – Venerdì: 9:00 – 18:00 (GMT)",
       whatsappCta: "Chatta Subito su WhatsApp",
-      // Additional keys
       title: "Dettagli di Contatto",
       subtitle: "Contattaci direttamente o compila il modulo. Di solito rispondiamo entro 24 ore.",
     },
-    // Additional keys
     socialHeading: "Segui il Nostro Viaggio",
     responseTime: "Tempo di Risposta Medio: 2 Ore",
   },
 
-  // Footer
   footer: {
     tagline: "Supportiamo autori e creator digitali con marketing strategico, branding e web design di alto profilo.",
     ctaBadge: "Inizia il Tuo Percorso",
@@ -429,7 +405,6 @@ blog: {
     backToTop: "Torna su",
   },
 
-  // Interactive Quote Modal
   quoteModal: {
     step1Title: "Di quale servizio hai bisogno?",
     step1Subtitle: "Seleziona la competenza principale per cui richiedi assistenza.",
@@ -464,7 +439,6 @@ blog: {
     successTitle: "Richiesta Preventivo Ricevuta!",
     successMessage: "Grazie! I nostri direttori creativi prepareranno una proposta su misura e ti contatteranno entro 24 ore.",
     closeModal: "Chiudi",
-    // Additional keys
     consultation: "Consulenza",
     headerTitle: "Richiedi una Proposta Personalizzata",
     headerSubtitle: "Compila i dettagli del tuo libro o progetto qui sotto. Creeremo un piano di campagna personalizzato in base ai tuoi obiettivi di vendita e branding.",
@@ -485,7 +459,6 @@ blog: {
     networkError: "Errore di rete. Per favore, controlla la tua connessione e riprova.",
   },
 
-  // Video Modal
   videoModal: {
     title: "Dove la Creatività Incontra la Conversione",
     subtitle: "Scopri come il nostro team nel Regno Unito aiuta gli autori a lanciare libri bestseller, progettare copertine premiate e scalare le performance del brand digitale.",
@@ -500,7 +473,6 @@ blog: {
     ctaButton: "Prenota Sessione Strategica",
   },
 
-  // WhatsApp Widget
   whatsapp: {
     headerTitle: "Chat di BigTeeWise Digital",
     headerStatus: "Online • Team UK",
@@ -516,7 +488,6 @@ blog: {
     tooltip: "Chatta con uno strategist su WhatsApp",
   },
 
-  // Portfolio Page
   portfolioPage: {
     heroBadge: "I Nostri Lavori e Case Study",
     heroTitlePre: "Creiamo Brand Che",
@@ -539,7 +510,6 @@ blog: {
     startProjectCta: "Inizia il Tuo Progetto",
   },
 
-    // Service Detail Page
   serviceDetailPage: {
     backToServices: "Torna a Tutti i Servizi",
     specializedService: "Servizio Specializzato",
@@ -610,7 +580,6 @@ blog: {
     ]
   },
 
-  // Portfolio Case Study
   portfolio: {
     caseStudy: "Case Study",
     backToPortfolio: "Portfolio",
@@ -688,7 +657,6 @@ blog: {
     projectOne: "Progetto 01",
     backToBigTeeWise: "Torna a BigTeeWise",
     caseStudyLabel: "Case Study",
-    // Project 2
     p2Tag1: "Book Marketing",
     p2Tag2: "Amazon A+",
     p2Tag3: "Sito Web Autore",
@@ -734,7 +702,6 @@ blog: {
     backToTop: "Torna su",
   },
 
-  // SEO & Metadata
   seo: {
     homeTitle: "BigTeeWise Digital | Agenzia Creativa e Branding per Autori",
     homeDesc: "Book marketing a servizio completo, ottimizzazione Amazon KDP, author branding e crescita digitale per autori, case editrici e creator.",

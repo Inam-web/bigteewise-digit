@@ -446,7 +446,7 @@ export default function Header({
                                   SERVICES.map((service, index) => (
                                     <Link
                                       key={service.id}
-                                      href={`/services/${service.id}`}
+                                      href={`/${locale}/services/${service.id}`}
                                       className="group/item relative flex items-center justify-between gap-3 p-3 rounded-xl hover:bg-blue-50 transition-all duration-200"
                                     >
                                       <div className="min-w-0">
