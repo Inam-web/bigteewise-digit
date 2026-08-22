@@ -59,7 +59,7 @@ export default function Header({
     { name: t('nav.services'), href: `/${locale}/#services` },
     { name: t('nav.process'), href: `/${locale}/#process` },
     { name: t('nav.portfolio'), href: `/${locale}/portfolio` },
-    { name: t('nav.testimonials'), href: `/${locale}/#testimonials` },
+    { name: t('nav.team'), href: `/${locale}/#team` },
     { name: t('nav.contact'), href: `/${locale}/#contact` },
   ];
 

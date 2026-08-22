@@ -6,6 +6,7 @@ export const it = {
     about: "Chi Siamo",
     services: "Servizi",
     process: "Metodo",
+    team: "Team", 
     portfolio: "Portfolio",
     testimonials: "Testimonianze",
     contact: "Contatti",

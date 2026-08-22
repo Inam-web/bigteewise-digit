@@ -246,7 +246,7 @@ export default function AboutSection({ onOpenVideoModal, onOpenQuoteModal }) {
                 {/* Secondary portrait */}
                 <div className="about-photo about-photo-secondary absolute right-0 top-[21%] sm:top-[23%] w-[48%] h-[51%] rounded-[2rem] overflow-hidden shadow-2xl border-4 border-white z-20">
                   <Image
-                    src="https://images.pexels.com/photos/5648408/pexels-photo-5648408.jpeg?auto=compress&cs=tinysrgb&fit=crop&h=800&w=700"
+                    src="https://images.pexels.com/photos/7256352/pexels-photo-7256352.jpeg?auto=compress&cs=tinysrgb&fit=crop&h=800&w=700"
                     alt="BigTeeWise creative director"
                     fill
                     sizes="(max-width: 1280px) 45vw, 25vw"

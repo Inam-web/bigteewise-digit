@@ -7,6 +7,7 @@ export const es = {
     services: "Servicios",
     process: "Proceso",
     portfolio: "Portafolio",
+    team: "Equipo", 
     testimonials: "Testimonios",
     contact: "Contacto",
     getAQuote: "Obtener Presupuesto",
