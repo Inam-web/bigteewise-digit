@@ -12,6 +12,7 @@ import { SERVICES } from '../app/Data/content';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { useLanguage } from '@/i18n/LanguageContext';
+import { usePathname } from 'next/navigation';
 
 if (typeof window !== 'undefined') {
   gsap.registerPlugin(ScrollTrigger);
@@ -21,8 +22,8 @@ if (typeof window !== 'undefined') {
 const SERVICE_IMAGES = {
   'book-marketing': '/images/services/book-marketing.jpg',
   'author-branding': '/images/services/author-branding.jpg',
-  'book-cover-design': '/images/services/book-cover-design.jpg',
-  'book-mockup-design': '/images/services/book-mockup-design.jpeg',
+  'book-cover-design': '/images/services/book-cover-design-v2.jpg',
+  'book-mockup-design': '/images/services/book-mockup-design.jpg',
   'digital-marketing': '/images/services/digital-marketing.jpg',
   'social-media-marketing': '/images/services/social-media-marketing.jpg',
   'social-media-graphics': '/images/services/social-media-graphics.jpg',
@@ -36,6 +37,7 @@ const SERVICE_IMAGES = {
 
 export default function ServicesSection({ onOpenQuoteModal }) {
   const { t, locale } = useLanguage();
+  const pathname = usePathname();
   const [selectedCategory, setSelectedCategory] = useState('all');
   const sectionRef = useRef(null);
 
@@ -70,10 +72,9 @@ export default function ServicesSection({ onOpenQuoteModal }) {
     return t('services.specialization') || 'Specialization';
   };
 
-  // GSAP Animations with unhurried durations, clearProps, and ScrollTrigger cleanup
+  // GSAP Animations
   useEffect(() => {
     const ctx = gsap.context(() => {
-      // 1. Refined Header & Filter entrance
       gsap.fromTo(
         '.services-header-item',
         { y: 35, opacity: 0 },
@@ -92,7 +93,6 @@ export default function ServicesSection({ onOpenQuoteModal }) {
         }
       );
 
-      // 2. Individual Service Rows animation on scroll
       const rows = gsap.utils.toArray('.service-row-item');
       rows.forEach((row) => {
         const imageCol = row.querySelector('.service-image-col');
@@ -156,6 +156,22 @@ export default function ServicesSection({ onOpenQuoteModal }) {
     }
     return service.fullDesc || service.shortDesc;
   };
+
+  // ✅ Helper to get the current locale from pathname (fallback)
+  const getCurrentLocale = () => {
+    // If locale is available from useLanguage, use it
+    if (locale) return locale;
+    // Fallback: extract from pathname
+    if (pathname) {
+      const segments = pathname.split('/').filter(Boolean);
+      if (segments.length > 0 && ['en', 'es', 'it', 'de'].includes(segments[0])) {
+        return segments[0];
+      }
+    }
+    return 'en';
+  };
+
+  const currentLocale = getCurrentLocale();
 
   return (
     <section ref={sectionRef} id="services" className="py-16 sm:py-24 bg-slate-50 relative overflow-hidden">
@@ -252,6 +268,9 @@ export default function ServicesSection({ onOpenQuoteModal }) {
             const serviceTitle = getServiceTitle(service);
             const serviceDesc = getServiceDesc(service);
             const categoryLabel = getCategoryLabel(service.category);
+
+            // ✅ Build the correct href with locale
+            const serviceHref = `/${currentLocale}/services/${service.id}`;
 
             return (
               <div 
@@ -365,14 +384,14 @@ export default function ServicesSection({ onOpenQuoteModal }) {
                       </div>
                     )}
 
-                    {/* ✅ FIXED: Footer Actions with locale prefix */}
+                    {/* ✅ FIXED: Footer Actions with CORRECT locale prefix */}
                     <div className="pt-4 border-t border-slate-100 flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-4">
                       <Link
-                        href={`/${locale}/services/${service.id}`}
-                        className="text-sm font-bold text-blue-600 hover:text-blue-700 flex items-center justify-center sm:justify-start gap-1.5 transition-colors duration-200"
+                        href={serviceHref}
+                        className="text-sm font-bold text-blue-600 hover:text-blue-700 flex items-center justify-center sm:justify-start gap-1.5 transition-colors duration-200 group"
                       >
                         <span>{t('services.learnMore')}</span>
-                        <ArrowRight className="w-4 h-4" />
+                        <ArrowRight className="w-4 h-4 transition-transform duration-300 group-hover:translate-x-1" />
                       </Link>
 
                       <button

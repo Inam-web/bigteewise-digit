@@ -1,10 +1,11 @@
 'use client';
 
-import React, { createContext, useContext, useState, useEffect, useTransition, useCallback, useMemo } from 'react';
+import React, { createContext, useContext, useState, useEffect, useTransition, useCallback, useMemo, useRef } from 'react';
 import { usePathname, useRouter } from 'next/navigation';
 import { SUPPORTED_LOCALES, DEFAULT_LOCALE, LOCALE_INFO, isValidLocale, getLocaleFromPath, formatLocalizedPath } from './config';
 import { getDictionary, getNestedValue } from './getTranslations';
 
+// ✅ Cache dictionaries to prevent reloading
 const dictionaryCache = {};
 
 function getCachedDictionary(locale) {
@@ -33,7 +34,11 @@ export function LanguageProvider({ children, initialLocale = DEFAULT_LOCALE }) {
   const pathname = usePathname();
   const router = useRouter();
   const [isPending, startTransition] = useTransition();
+  
+  // ✅ Use ref to track if this is the first render
+  const isFirstRender = useRef(true);
 
+  // ✅ Detect locale from pathname
   const currentPathLocale = getLocaleFromPath(pathname);
   const activeLocale = isValidLocale(currentPathLocale)
     ? currentPathLocale
@@ -41,22 +46,30 @@ export function LanguageProvider({ children, initialLocale = DEFAULT_LOCALE }) {
 
   const [locale, setLocaleState] = useState(activeLocale);
 
+  // ✅ Only update locale when pathname changes AND it's different
   useEffect(() => {
     const detected = getLocaleFromPath(pathname);
-    if (detected !== locale) {
+    
+    // ✅ Skip if same locale to prevent unnecessary updates
+    if (detected === locale) return;
+    
+    if (isValidLocale(detected)) {
       setLocaleState(detected);
     }
 
+    // ✅ Update HTML lang attribute
     const currentInfo = LOCALE_INFO[detected] || LOCALE_INFO[DEFAULT_LOCALE];
     if (typeof document !== 'undefined' && currentInfo?.htmlLang) {
       document.documentElement.lang = currentInfo.htmlLang;
       const rtlLocales = ['ar', 'he', 'ur'];
       document.documentElement.dir = rtlLocales.includes(detected) ? 'rtl' : 'ltr';
     }
-  }, [pathname, locale]);
+  }, [pathname]); // ✅ Removed locale from dependencies to prevent loops
 
+  // ✅ Load dictionary with useMemo
   const dict = useMemo(() => getCachedDictionary(locale), [locale]);
 
+  // ✅ Memoized translation function
   const t = useCallback(
     (key, params, fallback) => {
       let interpolations = params;
@@ -90,6 +103,7 @@ export function LanguageProvider({ children, initialLocale = DEFAULT_LOCALE }) {
     [dict, locale]
   );
 
+  // ✅ Memoized URL generator
   const getLocalizedHref = useCallback(
     (path, targetLocale = locale) => {
       return formatLocalizedPath(path, targetLocale);
@@ -97,20 +111,27 @@ export function LanguageProvider({ children, initialLocale = DEFAULT_LOCALE }) {
     [locale]
   );
 
+  // ✅ OPTIMIZED: Switch language with minimal re-renders
   const switchLanguage = useCallback(
     (newLocale) => {
+      // ✅ Early exit if invalid or same locale
       if (!isValidLocale(newLocale) || newLocale === locale) return;
 
-      document.cookie = `NEXT_LOCALE=${newLocale}; path=/; max-age=31536000; SameSite=Lax`;
+      // ✅ Persist preference
       try {
+        document.cookie = `NEXT_LOCALE=${newLocale}; path=/; max-age=31536000; SameSite=Lax`;
         localStorage.setItem('NEXT_LOCALE', newLocale);
-      } catch (e) {}
+      } catch (e) {
+        // Handle incognito mode
+      }
 
+      // ✅ Immediately update state to prevent flash of wrong content
       setLocaleState(newLocale);
 
       const currentFull = pathname || '/';
       const targetUrl = formatLocalizedPath(currentFull, newLocale);
 
+      // ✅ Use startTransition for smoother navigation
       startTransition(() => {
         router.push(targetUrl);
       });
@@ -118,6 +139,7 @@ export function LanguageProvider({ children, initialLocale = DEFAULT_LOCALE }) {
     [locale, pathname, router]
   );
 
+  // ✅ Memoized context value
   const contextValue = useMemo(() => ({
     locale,
     locales: SUPPORTED_LOCALES,

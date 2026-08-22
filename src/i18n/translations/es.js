@@ -282,6 +282,8 @@ export const es = {
   readTimeSuffix: "de lectura",
   ctaText: "¿Quieres implementar estas estrategias? Hablemos de tu proyecto.",
   closeArticle: "Cerrar Artículo",
+  author: "Autor",
+  tags: "Etiquetas",
   posts: [
     {
       id: 1,

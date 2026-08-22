@@ -24,6 +24,7 @@ import { SERVICES } from '../../Data/content';
 import { InteractiveQuoteModal } from '@/components/InteractiveQuoteModal';
 import { Toast } from '@/components/Toast';
 import { useLanguage } from '@/i18n/LanguageContext';
+import Header from '@/components/Header';
 
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
@@ -45,7 +46,7 @@ export default function ServiceDetailPage() {
 
   const service = SERVICES.find((s) => s.id === serviceId) || SERVICES[0];
 
-  // SIMPLE translation helper - guaranteed to work
+  // Translation helper
   const tr = (key, fallback) => {
     try {
       const result = t(key);
@@ -355,9 +356,12 @@ export default function ServiceDetailPage() {
 
   return (
     <>
+      {/* ✅ HEADER - Rendered at the top */}
+      <Header onOpenQuoteModal={handleOpenQuote} />
+
       <main
         ref={mainRef}
-        className="min-h-screen bg-slate-50 text-slate-900 font-sans antialiased selection:bg-blue-600 selection:text-white overflow-hidden"
+        className="min-h-screen bg-slate-50 text-slate-900 font-sans antialiased selection:bg-blue-600 selection:text-white overflow-hidden pt-20"
       >
         {/* HERO SECTION */}
         <section className="relative min-h-[720px] lg:min-h-[780px] flex items-center bg-gradient-to-br from-slate-50 via-white to-blue-50/60 overflow-hidden">
@@ -428,7 +432,7 @@ export default function ServiceDetailPage() {
                   </button>
 
                   <a
-                    href="#blueprint"
+                    href={`#blueprint`}
                     className="inline-flex items-center gap-2 rounded-full border border-slate-200 bg-white px-6 sm:px-7 py-3.5 text-sm font-bold text-slate-700 shadow-sm hover:border-blue-200 hover:text-blue-600 hover:-translate-y-0.5 transition-all duration-300"
                   >
                     {tr('serviceDetailPage.exploreApproach', 'Explore the approach')}

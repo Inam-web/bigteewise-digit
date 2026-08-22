@@ -2,7 +2,6 @@
 
 import React, { useState, useEffect, useRef } from 'react';
 import { Calendar, Clock, ArrowRight, X, User, Tag, BookOpen, ChevronRight } from 'lucide-react';
-import { blogPosts } from '@/app/Data/content';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { useLanguage } from '@/i18n/LanguageContext';
@@ -12,11 +11,72 @@ if (typeof window !== 'undefined') {
 }
 
 export default function BlogSection() {
-  const { t } = useLanguage();
+  const { t, locale } = useLanguage();
   const [selectedPost, setSelectedPost] = useState(null);
   const sectionRef = useRef(null);
   const headerRef = useRef(null);
   const cardsRef = useRef([]);
+
+  // ✅ Get translated blog posts from language files
+  const blogPostsData = t('blog.posts');
+  
+  // ✅ Fallback posts if translations don't exist
+  const defaultPosts = [
+    {
+      id: 1,
+      title: "7 Proven Steps to Hit Amazon #1 Bestseller in 2025/2026",
+      snippet: "Discover how top authors combine KDP category selection, pre-order buzz, and targeted Meta ads to dominate Amazon launch week.",
+      image: "https://images.pexels.com/photos/4050301/pexels-photo-4050301.jpeg?auto=compress&cs=tinysrgb&w=600",
+      category: "Book Marketing",
+      date: "June 15, 2025",
+      readTime: "6 min read",
+      author: "BigTeeWise Team",
+      tags: ["Amazon KDP", "Bestseller", "Marketing"],
+    },
+    {
+      id: 2,
+      title: "Why High-Impact 3D Book Mockups Double Your Ad Click-Through Rate",
+      snippet: "Flat book cover images are no longer enough on crowded social feeds. Learn how photorealistic 3D assets turn casual scrollers into buyers.",
+      image: "https://images.pexels.com/photos/13501804/pexels-photo-13501804.jpeg?auto=compress&cs=tinysrgb&w=600",
+      category: "Design",
+      date: "June 10, 2025",
+      readTime: "4 min read",
+      author: "BigTeeWise Team",
+      tags: ["3D Mockups", "Book Cover", "Conversion"],
+    },
+    {
+      id: 3,
+      title: "Building an Author Brand That Commands 5-Figure Keynotes & Bookings",
+      snippet: "Your book is your premium business card. Here is how executive authors leverage personal branding to open high-paying corporate doors.",
+      image: "https://images.pexels.com/photos/1181675/pexels-photo-1181675.jpeg?auto=compress&cs=tinysrgb&w=600",
+      category: "Author Branding",
+      date: "June 5, 2025",
+      readTime: "5 min read",
+      author: "BigTeeWise Team",
+      tags: ["Author Branding", "Speaking", "Authority"],
+    },
+  ];
+
+  // ✅ Use translated posts if available, otherwise fallback to defaults
+  const blogPosts = Array.isArray(blogPostsData) && blogPostsData.length > 0 
+    ? blogPostsData 
+    : defaultPosts;
+
+  // ✅ Get first 3 posts only for 3-column layout
+  const displayPosts = blogPosts?.slice(0, 3) || [];
+
+  // Translation helper
+  const tr = (key, fallback) => {
+    try {
+      const result = t(key);
+      if (result === key || result === undefined || result === null) {
+        return fallback;
+      }
+      return result;
+    } catch (e) {
+      return fallback;
+    }
+  };
 
   useEffect(() => {
     const ctx = gsap.context(() => {
@@ -70,9 +130,6 @@ export default function BlogSection() {
 
   const handleCloseModal = () => setSelectedPost(null);
 
-  // Get first 3 posts only for 3-column layout
-  const displayPosts = blogPosts?.slice(0, 3) || [];
-
   return (
     <section ref={sectionRef} className="py-20 lg:py-28 bg-slate-50 text-slate-900 overflow-hidden relative">
       <div className="absolute inset-0 opacity-[0.03] pointer-events-none" style={{
@@ -86,23 +143,23 @@ export default function BlogSection() {
         <div ref={headerRef} className="text-center max-w-3xl mx-auto mb-16 space-y-4">
           <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-blue-100/80 border border-blue-200 text-blue-700 text-xs sm:text-sm font-bold tracking-wide uppercase">
             <span className="font-extrabold text-blue-600">//</span>
-            <span>{t('blog.badge')}</span>
+            <span>{tr('blog.badge', 'News & Insights')}</span>
           </div>
 
           <h2 className="text-3xl sm:text-4xl lg:text-5xl font-extrabold text-slate-900 tracking-tight leading-tight">
-            {t('blog.heading')}
+            {tr('blog.heading', 'Expert Insights on Marketing & Design')}
           </h2>
 
           <p className="text-slate-600 text-sm sm:text-base leading-relaxed max-w-2xl mx-auto">
-            {t('blog.subheading')}
+            {tr('blog.subheading', 'Actionable strategies on book marketing, Amazon optimization, author branding, and creative design trends that drive real results.')}
           </p>
         </div>
 
-        {/* 3-Column Grid - All cards equal */}
+        {/* 3-Column Grid */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8">
           {displayPosts.map((post, index) => (
             <div
-              key={post.id}
+              key={post.id || index}
               ref={(el) => (cardsRef.current[index] = el)}
               onClick={() => setSelectedPost(post)}
               className="group bg-white rounded-3xl border border-slate-200/80 overflow-hidden shadow-sm hover:shadow-xl hover:border-blue-300 hover:-translate-y-2 transition-all duration-500 cursor-pointer flex flex-col h-full"
@@ -161,7 +218,7 @@ export default function BlogSection() {
                     <span className="text-xs font-bold text-slate-700 line-clamp-1">{post.author}</span>
                   </div>
                   <span className="text-xs font-bold text-blue-600 flex items-center gap-0.5 group-hover:gap-1.5 transition-all duration-300">
-                    {t('blog.readArticle')} <ChevronRight className="w-3.5 h-3.5" />
+                    {tr('blog.readArticle', 'Read')} <ChevronRight className="w-3.5 h-3.5" />
                   </span>
                 </div>
               </div>
@@ -218,7 +275,7 @@ export default function BlogSection() {
                   </div>
                   <div>
                     <p className="text-sm font-bold text-slate-900">{selectedPost.author}</p>
-                    <p className="text-[10px] font-semibold text-slate-400 uppercase tracking-wider">Author</p>
+                    <p className="text-[10px] font-semibold text-slate-400 uppercase tracking-wider">{tr('blog.author', 'Author')}</p>
                   </div>
                 </div>
                 <div className="h-6 w-px bg-slate-200 hidden sm:block" />
@@ -242,7 +299,7 @@ export default function BlogSection() {
 
               {selectedPost.tags && (
                 <div className="flex flex-wrap gap-2 pt-1">
-                  <span className="text-xs font-bold text-slate-400 uppercase tracking-wider mr-1">Tags:</span>
+                  <span className="text-xs font-bold text-slate-400 uppercase tracking-wider mr-1">{tr('blog.tags', 'Tags')}:</span>
                   {selectedPost.tags.map((tag, i) => (
                     <span key={i} className="inline-flex items-center gap-1 px-3 py-1 rounded-full bg-slate-100 text-slate-700 text-xs font-bold border border-slate-200">
                       <Tag className="w-3 h-3" />
@@ -254,14 +311,14 @@ export default function BlogSection() {
 
               <div className="pt-5 border-t border-slate-100 flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-4">
                 <p className="text-xs text-slate-500 font-medium">
-                  {t('blog.ctaText')}
+                  {tr('blog.ctaText', 'Want to implement these strategies? Let\'s discuss your project.')}
                 </p>
                 <button
                   type="button"
                   onClick={handleCloseModal}
                   className="inline-flex items-center justify-center gap-2 bg-slate-900 hover:bg-slate-800 active:bg-slate-950 text-white font-bold text-sm px-8 py-3 rounded-full transition-all duration-300 shadow-lg hover:shadow-xl active:scale-95 shrink-0"
                 >
-                  {t('blog.closeArticle')}
+                  {tr('blog.closeArticle', 'Close Article')}
                 </button>
               </div>
             </div>
