@@ -18,12 +18,12 @@ if (typeof window !== 'undefined') {
   gsap.registerPlugin(ScrollTrigger);
 }
 
-// Dedicated image URLs mapped individually for every service ID
+// ✅ FIXED: Use absolute paths from public folder
 const SERVICE_IMAGES = {
   'book-marketing': '/images/services/book-marketing.jpg',
-  'author-branding': '/images/services/author-branding.jpg',
-  'book-cover-design': '/images/services/book-cover-design-v2.jpg',
-  'book-mockup-design': '/images/services/book-mockup-design.jpg',
+  'author-branding': '/images/services/author-branding-v2.jpg',
+  'book-cover-design': '/images/services/book-cover-design-v3.jpg',
+  'book-mockup-design': '/images/services/book-mockup-design-v2.jpeg',
   'digital-marketing': '/images/services/digital-marketing.jpg',
   'social-media-marketing': '/images/services/social-media-marketing.jpg',
   'social-media-graphics': '/images/services/social-media-graphics.jpg',
@@ -39,6 +39,7 @@ export default function ServicesSection({ onOpenQuoteModal }) {
   const { t, locale } = useLanguage();
   const pathname = usePathname();
   const [selectedCategory, setSelectedCategory] = useState('all');
+  const [imageErrors, setImageErrors] = useState({});
   const sectionRef = useRef(null);
 
   const iconMap = {
@@ -70,6 +71,25 @@ export default function ServicesSection({ onOpenQuoteModal }) {
     if (category === 'marketing') return t('services.digitalMarketingTab') || 'Digital Marketing & SEO';
     if (category === 'creative') return t('services.creativeDesignTab') || 'Creative Design & Branding';
     return t('services.specialization') || 'Specialization';
+  };
+
+  // ✅ Get the correct image path with fallback
+  const getServiceImage = (service) => {
+    // Check if service has custom image
+    if (service.image) return service.image;
+    if (service.coverImage) return service.coverImage;
+    
+    // Check mapped images
+    if (SERVICE_IMAGES[service.id]) return SERVICE_IMAGES[service.id];
+    
+    // ✅ Use service title to generate a filename (fallback)
+    const titleSlug = service.title?.toLowerCase().replace(/[^a-z0-9]+/g, '-') || 'default';
+    return `/images/services/${titleSlug}.jpg`;
+  };
+
+  // Handle image errors
+  const handleImageError = (serviceId) => {
+    setImageErrors(prev => ({ ...prev, [serviceId]: true }));
   };
 
   // GSAP Animations
@@ -159,9 +179,7 @@ export default function ServicesSection({ onOpenQuoteModal }) {
 
   // ✅ Helper to get the current locale from pathname (fallback)
   const getCurrentLocale = () => {
-    // If locale is available from useLanguage, use it
     if (locale) return locale;
-    // Fallback: extract from pathname
     if (pathname) {
       const segments = pathname.split('/').filter(Boolean);
       if (segments.length > 0 && ['en', 'es', 'it', 'de'].includes(segments[0])) {
@@ -258,12 +276,12 @@ export default function ServicesSection({ onOpenQuoteModal }) {
           {filteredServices.map((service, index) => {
             const isEven = index % 2 === 0;
             const stepNumber = String(index + 1).padStart(2, '0');
-
-            const serviceImage = 
-              service.image || 
-              service.coverImage || 
-              SERVICE_IMAGES[service.id] || 
-              SERVICE_IMAGES['default'];
+            
+            // ✅ Get image path with fallback
+            const imagePath = getServiceImage(service);
+            
+            // ✅ Check if image has errored
+            const hasError = imageErrors[service.id];
 
             const serviceTitle = getServiceTitle(service);
             const serviceDesc = getServiceDesc(service);
@@ -281,15 +299,30 @@ export default function ServicesSection({ onOpenQuoteModal }) {
               >
                 {/* Compact Image Column */}
                 <div className="service-image-col w-full lg:w-[40%] shrink-0 relative z-10">
-                  <div className="relative aspect-[4/3] sm:aspect-[1.1/1] rounded-none lg:rounded-[2.2rem] overflow-hidden shadow-none lg:shadow-lg border-none lg:border lg:border-slate-200/80 bg-transparent lg:bg-slate-100">
-                    <Image 
-                      src={serviceImage} 
-                      alt={serviceTitle} 
-                      fill
-                      sizes="(max-width: 768px) 100vw, (max-width: 1200px) 40vw, 500px"
-                      quality={80}
-                      className="object-cover transition-transform duration-700 ease-out hover:scale-105"
-                    />
+                  <div className="relative aspect-[4/3] sm:aspect-[1.1/1] rounded-none lg:rounded-[2.2rem] overflow-hidden shadow-none lg:shadow-lg border-none lg:border lg:border-slate-200/80 bg-slate-100">
+                    {!hasError ? (
+                      <Image 
+                        src={imagePath}
+                        alt={serviceTitle}
+                        fill
+                        sizes="(max-width: 768px) 100vw, (max-width: 1200px) 40vw, 500px"
+                        quality={80}
+                        priority={index < 2}
+                        className="object-cover transition-transform duration-700 ease-out hover:scale-105"
+                        onError={() => handleImageError(service.id)}
+                      />
+                    ) : (
+                      // ✅ Fallback placeholder when image fails to load
+                      <div className="w-full h-full flex items-center justify-center bg-gradient-to-br from-blue-50 to-indigo-50">
+                        <div className="text-center p-6">
+                          <div className="w-16 h-16 mx-auto rounded-full bg-blue-100 text-blue-600 flex items-center justify-center">
+                            {iconMap[service.iconName] || <Sparkles className="w-8 h-8" />}
+                          </div>
+                          <p className="mt-3 text-sm font-semibold text-slate-600">{serviceTitle}</p>
+                          <p className="text-xs text-slate-400">Image coming soon</p>
+                        </div>
+                      </div>
+                    )}
 
                     {/* Top Stat Badge */}
                     <div className="absolute top-3 right-3 bg-white/95 backdrop-blur-md rounded-xl p-2.5 shadow-md border border-slate-100 flex items-center gap-2 z-20">
@@ -384,7 +417,7 @@ export default function ServicesSection({ onOpenQuoteModal }) {
                       </div>
                     )}
 
-                    {/* ✅ FIXED: Footer Actions with CORRECT locale prefix */}
+                    {/* Footer Actions */}
                     <div className="pt-4 border-t border-slate-100 flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-4">
                       <Link
                         href={serviceHref}
