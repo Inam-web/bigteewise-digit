@@ -20,6 +20,9 @@ const nextConfig = {
       },
     ],
   },
+  experimental: {
+    optimizePackageImports: ['gsap', 'lenis', '@gsap/react'],
+  },
 };
 
 export default nextConfig;

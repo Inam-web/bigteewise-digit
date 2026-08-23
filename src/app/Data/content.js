@@ -4,12 +4,12 @@ export const BUSINESS_INFO = {
   phone: '+234 807 352 7146',
   email: 'petergodswill52@gmail.com',
   socialHandle: '@bigteewisedigital',
-  socialLinks: {
-    facebook: 'https://facebook.com',
-    twitter: 'https://x.com',
-    instagram: 'https://instagram.com',
-    linkedin: 'https://linkedin.com',
+    socialLinks: {
+    facebook: '#', // You can update this later
+    instagram: 'https://www.instagram.com/petertaiwogodswill',
+    tiktok: 'https://www.tiktok.com/@bigteewisedigital',
   },
+
 };
 export const SERVICES = [
   {

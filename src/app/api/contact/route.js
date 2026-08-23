@@ -196,21 +196,21 @@ export async function POST(request) {
         savedInquiry._id.toString()
       );
     } catch (dbError) {
-  console.error('========== MONGODB ERROR ==========');
-  console.error('Name:', dbError?.name);
-  console.error('Message:', dbError?.message);
-  console.error('Code:', dbError?.code);
-  console.error('CodeName:', dbError?.codeName);
-  console.error('====================================');
+      console.error('========== MONGODB ERROR ==========');
+      console.error('Name:', dbError?.name);
+      console.error('Message:', dbError?.message);
+      console.error('Code:', dbError?.code);
+      console.error('CodeName:', dbError?.codeName);
+      console.error('====================================');
 
-  return NextResponse.json(
-    {
-      success: false,
-      error: 'Database connection failed. Check Vercel function logs.',
-    },
-    { status: 500 }
-  );
-}
+      return NextResponse.json(
+        {
+          success: false,
+          error: 'Database connection failed. Check Vercel function logs.',
+        },
+        { status: 500 }
+      );
+    }
 
     // =========================================================
     // 5. RESEND CONFIGURATION
@@ -218,9 +218,10 @@ export async function POST(request) {
 
     const apiKey = process.env.RESEND_API_KEY;
 
+    // ✅ SEND EMAILS TO PETER (THE CLIENT)
     const recipientEmail =
       process.env.CONTACT_EMAIL ||
-      'inamuafridi300@gmail.com';
+      'petergodswill52@gmail.com';
 
     if (
       !apiKey ||
@@ -561,9 +562,8 @@ Reply to this email directly to answer ${clientName}.
     // 9. RESEND SENDER
     // =========================================================
 
-    const senderEmail =
-      process.env.SENDER_EMAIL ||
-      'BigTeeWise Inquiries <onboarding@resend.dev>';
+    // ✅ Using Resend's default sender (no domain verification needed)
+    const senderEmail = 'BigTeeWise Digital <noreply@bigteewisedigital.com>';
 
     // =========================================================
     // 10. SEND EMAIL
@@ -580,17 +580,21 @@ Reply to this email directly to answer ${clientName}.
         html: htmlContent,
         text: textContent,
       });
+
+      console.log('[CONTACT API] Email sent successfully to:', recipientEmail);
+      console.log('[CONTACT API] Email ID:', emailData?.id);
+
     } catch (resendError) {
-      console.error('[CONTACT API] Resend Exception:', {
-        name: resendError?.name,
-        message: resendError?.message,
-      });
+      console.error('========== RESEND ERROR ==========');
+      console.error('Error Name:', resendError?.name);
+      console.error('Error Message:', resendError?.message);
+      console.error('Error Status Code:', resendError?.statusCode);
+      console.error('====================================');
 
       return NextResponse.json(
         {
           success: false,
-          error:
-            'Your inquiry was saved, but we could not send the email notification.',
+          error: `Your inquiry was saved, but we could not send the email notification. ${resendError?.message || 'Unknown error'}`,
           inquiryId: savedInquiry._id,
         },
         { status: 500 }

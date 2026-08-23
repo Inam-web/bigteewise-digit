@@ -18,6 +18,7 @@ import {
   Layers3,
   Rocket,
   CircleDot,
+  MessageCircle, // ✅ ONLY ADDED THIS
 } from 'lucide-react';
 
 import { SERVICES } from '../../Data/content';
@@ -422,6 +423,7 @@ export default function ServiceDetailPage() {
                 </div>
 
                 <div className="hero-copy mt-9 flex flex-wrap items-center gap-3">
+                  {/* ✅ Your Original "Start a Project" Button */}
                   <button
                     type="button"
                     onClick={handleOpenQuote}
@@ -430,6 +432,17 @@ export default function ServiceDetailPage() {
                     {tr('serviceDetailPage.startProject', 'Start a Project')}
                     <ArrowRight className="w-4 h-4 transition-transform duration-300 group-hover:translate-x-1" />
                   </button>
+
+                  {/* ✅ ONLY ADDED: WhatsApp Button */}
+                  <a
+                    href={`https://wa.me/2348073527146?text=Hi!%20I'm%20interested%20in%20"${encodeURIComponent(serviceTitle)}"%20service.%20Can%20you%20tell%20me%20more?`}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="inline-flex items-center gap-2 rounded-full bg-[#25D366] hover:bg-[#1DA851] px-6 sm:px-7 py-3.5 text-sm font-extrabold text-white shadow-lg shadow-[#25D366]/20 hover:shadow-[#25D366]/40 hover:-translate-y-0.5 active:scale-95 transition-all duration-300"
+                  >
+                    <MessageCircle className="w-4 h-4" />
+                    <span>WhatsApp</span>
+                  </a>
 
                   <a
                     href={`#blueprint`}
@@ -440,7 +453,9 @@ export default function ServiceDetailPage() {
                 </div>
               </div>
 
+              {/* Hero Visual - UNCHANGED */}
               <div className="hero-visual lg:col-span-5 relative min-h-[400px] sm:min-h-[480px]">
+                {/* ... your existing hero visual code ... */}
                 <div className="hero-orbit absolute inset-[7%] rounded-full border border-blue-200/60 border-dashed" />
                 <div className="hero-orbit absolute inset-[17%] rounded-full border border-slate-200/80 border-dashed" />
                 <div className="hero-glow absolute top-[14%] right-[8%] w-28 h-28 rounded-full bg-blue-500/20 blur-3xl" />
@@ -519,8 +534,10 @@ export default function ServiceDetailPage() {
           </div>
         </section>
 
-        {/* STATEMENT SECTION */}
+        {/* REST OF YOUR SECTIONS - COMPLETELY UNCHANGED */}
+        {/* Statement Section */}
         <section className="statement-section relative bg-slate-950 text-white py-28 sm:py-36 lg:py-44 overflow-hidden">
+          {/* ... your existing statement section code ... */}
           <div className="absolute top-0 right-0 w-[500px] h-[500px] bg-blue-600/10 blur-[120px] rounded-full pointer-events-none" />
 
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -546,7 +563,7 @@ export default function ServiceDetailPage() {
           </div>
         </section>
 
-        {/* BLUEPRINT SECTION */}
+        {/* Blueprint Section */}
         <section id="blueprint" className="blueprint-section bg-white py-24 sm:py-28 lg:py-36">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div className="blueprint-intro max-w-3xl mb-14 lg:mb-20">
@@ -601,7 +618,7 @@ export default function ServiceDetailPage() {
           </div>
         </section>
 
-        {/* DELIVERABLES SECTION */}
+        {/* Deliverables Section */}
         <section className="deliverables-section bg-slate-50 py-24 sm:py-28 lg:py-36 border-y border-slate-200/80">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-20 items-center">
@@ -718,7 +735,7 @@ export default function ServiceDetailPage() {
           </div>
         </section>
 
-        {/* PROCESS SECTION */}
+        {/* Process Section */}
         <section className="process-section bg-white py-24 sm:py-28 lg:py-36">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div className="process-heading text-center max-w-3xl mx-auto">
@@ -783,7 +800,7 @@ export default function ServiceDetailPage() {
           </div>
         </section>
 
-        {/* STATS SECTION */}
+        {/* Stats Section */}
         <section className="stats-section bg-slate-950 text-white py-24 sm:py-28 lg:py-32 relative overflow-hidden">
           <div className="absolute inset-0 pointer-events-none">
             <div className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-blue-600/10 rounded-full blur-[120px]" />
@@ -832,7 +849,7 @@ export default function ServiceDetailPage() {
           </div>
         </section>
 
-        {/* FAQ SECTION */}
+        {/* FAQ Section */}
         <section className="faq-section bg-slate-50 py-24 sm:py-28 lg:py-36">
           <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
             <div className="grid grid-cols-1 lg:grid-cols-5 gap-12 lg:gap-20">
@@ -911,7 +928,7 @@ export default function ServiceDetailPage() {
           </div>
         </section>
 
-        {/* FINAL CTA */}
+        {/* FINAL CTA - WITH WHATSAPP ADDED */}
         <section className="final-cta relative bg-white py-28 sm:py-36 lg:py-44 overflow-hidden border-t border-slate-200">
           <div className="absolute inset-0 pointer-events-none">
             <div className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 w-[550px] h-[550px] bg-blue-500/10 rounded-full blur-[120px]" />
@@ -930,14 +947,28 @@ export default function ServiceDetailPage() {
               {tr('serviceDetailPage.ctaDesc', "Tell us what you're building and where you want to go. We'll help turn the idea into a focused execution plan.")}
             </p>
 
-            <button
-              type="button"
-              onClick={handleOpenQuote}
-              className="group mt-9 inline-flex items-center gap-3 bg-blue-600 hover:bg-blue-700 text-white font-extrabold text-sm px-7 py-4 rounded-full shadow-xl shadow-blue-600/20 hover:-translate-y-1 transition-all duration-300"
-            >
-              {tr('serviceDetailPage.ctaButton', 'Start a Conversation')}
-              <ArrowRight className="w-4 h-4 transition-transform duration-300 group-hover:translate-x-1" />
-            </button>
+            <div className="mt-9 flex flex-wrap items-center justify-center gap-3">
+              {/* ✅ Your Original "Start a Conversation" Button */}
+              <button
+                type="button"
+                onClick={handleOpenQuote}
+                className="group inline-flex items-center gap-3 bg-blue-600 hover:bg-blue-700 text-white font-extrabold text-sm px-7 py-4 rounded-full shadow-xl shadow-blue-600/20 hover:-translate-y-1 transition-all duration-300"
+              >
+                {tr('serviceDetailPage.ctaButton', 'Start a Conversation')}
+                <ArrowRight className="w-4 h-4 transition-transform duration-300 group-hover:translate-x-1" />
+              </button>
+
+              {/* ✅ ONLY ADDED: WhatsApp Button - Final CTA Section */}
+              <a
+                href={`https://wa.me/2348073527146?text=Hi!%20I'm%20interested%20in%20"${encodeURIComponent(serviceTitle)}"%20service.%20Can%20you%20tell%20me%20more?`}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex items-center gap-3 bg-[#25D366] hover:bg-[#1DA851] text-white font-extrabold text-sm px-7 py-4 rounded-full shadow-xl shadow-[#25D366]/20 hover:-translate-y-1 transition-all duration-300"
+              >
+                <MessageCircle className="w-4 h-4" />
+                <span>Chat on WhatsApp</span>
+              </a>
+            </div>
           </div>
         </section>
       </main>

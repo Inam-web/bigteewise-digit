@@ -34,7 +34,9 @@ import {
 } from 'lucide-react';
 import { useLanguage } from '@/i18n/LanguageContext';
 
-gsap.registerPlugin(ScrollTrigger);
+if (typeof window !== 'undefined') {
+  gsap.registerPlugin(ScrollTrigger);
+}
 
 /* ============================================================
    PROJECT DATA
@@ -921,33 +923,35 @@ export default function PortfolioCaseStudy() {
      LENIS SMOOTH SCROLL
   ========================================================== */
 
-  useEffect(() => {
-    if (prefersReducedMotion()) return;
-    if (window.innerWidth < 768) return;
+  // Replace the Lenis useEffect with this:
+useEffect(() => {
+  if (typeof window === 'undefined') return;
+  if (prefersReducedMotion()) return;
+  if (window.innerWidth < 768) return;
 
-    const lenis = new Lenis({
-      duration: 1.15,
-      easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
-      orientation: 'vertical',
-      gestureOrientation: 'vertical',
-      smoothWheel: true,
-      touchMultiplier: 1.5,
-    });
+  const lenis = new Lenis({
+    duration: 1.15,
+    easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
+    orientation: 'vertical',
+    gestureOrientation: 'vertical',
+    smoothWheel: true,
+    touchMultiplier: 1.5,
+  });
 
-    lenisRef.current = lenis;
+  lenisRef.current = lenis;
 
-    lenis.on('scroll', ScrollTrigger.update);
+  lenis.on('scroll', ScrollTrigger.update);
 
-    const tick = (time) => lenis.raf(time * 1000);
-    gsap.ticker.add(tick);
-    gsap.ticker.lagSmoothing(0);
+  const tick = (time) => lenis.raf(time * 1000);
+  gsap.ticker.add(tick);
+  gsap.ticker.lagSmoothing(0);
 
-    return () => {
-      gsap.ticker.remove(tick);
-      lenis.destroy();
-      lenisRef.current = null;
-    };
-  }, []);
+  return () => {
+    gsap.ticker.remove(tick);
+    lenis.destroy();
+    lenisRef.current = null;
+  };
+}, []);
 
   /* ==========================================================
      NAV VISIBILITY

@@ -3,11 +3,13 @@
 import React, { useState, useEffect, useRef } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
-import { 
-  BookOpenCheck, UserCheck, Palette, Box, TrendingUp, Share2, 
-  Sparkles, FileText, Search, Compass, Target, Lightbulb, 
-  ArrowRight, Star, Users 
+import {
+  BookOpenCheck, UserCheck, Palette, Box, TrendingUp, Share2,
+  Sparkles, FileText, Search, Compass, Target, Lightbulb,
+  ArrowRight, Star, Users,
+  MessageCircle // ✅ ADD THIS
 } from 'lucide-react';
+
 import { SERVICES } from '../app/Data/content';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
@@ -78,10 +80,10 @@ export default function ServicesSection({ onOpenQuoteModal }) {
     // Check if service has custom image
     if (service.image) return service.image;
     if (service.coverImage) return service.coverImage;
-    
+
     // Check mapped images
     if (SERVICE_IMAGES[service.id]) return SERVICE_IMAGES[service.id];
-    
+
     // ✅ Use service title to generate a filename (fallback)
     const titleSlug = service.title?.toLowerCase().replace(/[^a-z0-9]+/g, '-') || 'default';
     return `/images/services/${titleSlug}.jpg`;
@@ -194,7 +196,7 @@ export default function ServicesSection({ onOpenQuoteModal }) {
   return (
     <section ref={sectionRef} id="services" className="py-16 sm:py-24 bg-slate-50 relative overflow-hidden">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
-        
+
         {/* Section Header */}
         <div className="flex flex-col lg:flex-row lg:items-end justify-between mb-12 gap-6">
           <div className="space-y-3 max-w-2xl">
@@ -227,22 +229,20 @@ export default function ServicesSection({ onOpenQuoteModal }) {
         <div className="services-header-item flex flex-wrap items-center gap-2 mb-16 pb-4 border-b border-slate-200">
           <button
             onClick={() => setSelectedCategory('all')}
-            className={`px-5 py-2.5 rounded-full text-xs sm:text-sm font-bold transition-all duration-300 ${
-              selectedCategory === 'all'
-                ? 'bg-blue-600 text-white shadow-md'
-                : 'bg-white text-slate-600 hover:bg-slate-200 hover:text-slate-900'
-            }`}
+            className={`px-5 py-2.5 rounded-full text-xs sm:text-sm font-bold transition-all duration-300 ${selectedCategory === 'all'
+              ? 'bg-blue-600 text-white shadow-md'
+              : 'bg-white text-slate-600 hover:bg-slate-200 hover:text-slate-900'
+              }`}
           >
             {t('services.allServices')} ({servicesList.length})
           </button>
 
           <button
             onClick={() => setSelectedCategory('specialization')}
-            className={`px-5 py-2.5 rounded-full text-xs sm:text-sm font-bold transition-all duration-300 flex items-center gap-1.5 ${
-              selectedCategory === 'specialization'
-                ? 'bg-gradient-to-r from-amber-500 to-amber-600 text-white shadow-md'
-                : 'bg-amber-50 text-amber-700 border border-amber-200 hover:bg-amber-100'
-            }`}
+            className={`px-5 py-2.5 rounded-full text-xs sm:text-sm font-bold transition-all duration-300 flex items-center gap-1.5 ${selectedCategory === 'specialization'
+              ? 'bg-gradient-to-r from-amber-500 to-amber-600 text-white shadow-md'
+              : 'bg-amber-50 text-amber-700 border border-amber-200 hover:bg-amber-100'
+              }`}
           >
             <Star className="w-4 h-4 fill-amber-400 text-amber-500" />
             <span>{t('services.specializationsTab')}</span>
@@ -250,22 +250,20 @@ export default function ServicesSection({ onOpenQuoteModal }) {
 
           <button
             onClick={() => setSelectedCategory('marketing')}
-            className={`px-5 py-2.5 rounded-full text-xs sm:text-sm font-bold transition-all duration-300 ${
-              selectedCategory === 'marketing'
-                ? 'bg-blue-600 text-white shadow-md'
-                : 'bg-white text-slate-600 hover:bg-slate-200 hover:text-slate-900'
-            }`}
+            className={`px-5 py-2.5 rounded-full text-xs sm:text-sm font-bold transition-all duration-300 ${selectedCategory === 'marketing'
+              ? 'bg-blue-600 text-white shadow-md'
+              : 'bg-white text-slate-600 hover:bg-slate-200 hover:text-slate-900'
+              }`}
           >
             {t('services.digitalMarketingTab')}
           </button>
 
           <button
             onClick={() => setSelectedCategory('creative')}
-            className={`px-5 py-2.5 rounded-full text-xs sm:text-sm font-bold transition-all duration-300 ${
-              selectedCategory === 'creative'
-                ? 'bg-blue-600 text-white shadow-md'
-                : 'bg-white text-slate-600 hover:bg-slate-200 hover:text-slate-900'
-            }`}
+            className={`px-5 py-2.5 rounded-full text-xs sm:text-sm font-bold transition-all duration-300 ${selectedCategory === 'creative'
+              ? 'bg-blue-600 text-white shadow-md'
+              : 'bg-white text-slate-600 hover:bg-slate-200 hover:text-slate-900'
+              }`}
           >
             {t('services.creativeDesignTab')}
           </button>
@@ -276,10 +274,10 @@ export default function ServicesSection({ onOpenQuoteModal }) {
           {filteredServices.map((service, index) => {
             const isEven = index % 2 === 0;
             const stepNumber = String(index + 1).padStart(2, '0');
-            
+
             // ✅ Get image path with fallback
             const imagePath = getServiceImage(service);
-            
+
             // ✅ Check if image has errored
             const hasError = imageErrors[service.id];
 
@@ -291,17 +289,16 @@ export default function ServicesSection({ onOpenQuoteModal }) {
             const serviceHref = `/${currentLocale}/services/${service.id}`;
 
             return (
-              <div 
-                key={service.id || index} 
-                className={`service-row-item flex flex-col lg:flex-row items-center justify-between gap-0 relative bg-white rounded-3xl shadow-xl border border-slate-200/80 overflow-hidden lg:bg-transparent lg:shadow-none lg:border-none lg:overflow-visible ${
-                  isEven ? 'lg:flex-row' : 'lg:flex-row-reverse'
-                }`}
+              <div
+                key={service.id || index}
+                className={`service-row-item flex flex-col lg:flex-row items-center justify-between gap-0 relative bg-white rounded-3xl shadow-xl border border-slate-200/80 overflow-hidden lg:bg-transparent lg:shadow-none lg:border-none lg:overflow-visible ${isEven ? 'lg:flex-row' : 'lg:flex-row-reverse'
+                  }`}
               >
                 {/* Compact Image Column */}
                 <div className="service-image-col w-full lg:w-[40%] shrink-0 relative z-10">
                   <div className="relative aspect-[4/3] sm:aspect-[1.1/1] rounded-none lg:rounded-[2.2rem] overflow-hidden shadow-none lg:shadow-lg border-none lg:border lg:border-slate-200/80 bg-slate-100">
                     {!hasError ? (
-                      <Image 
+                      <Image
                         src={imagePath}
                         alt={serviceTitle}
                         fill
@@ -357,13 +354,12 @@ export default function ServicesSection({ onOpenQuoteModal }) {
                 </div>
 
                 {/* Dominant Overlapping Content Card */}
-                <div 
-                  className={`service-card-col w-full lg:w-[68%] relative z-20 mt-0 ${
-                    isEven ? 'lg:-ml-12' : 'lg:-mr-12'
-                  }`}
+                <div
+                  className={`service-card-col w-full lg:w-[68%] relative z-20 mt-0 ${isEven ? 'lg:-ml-12' : 'lg:-mr-12'
+                    }`}
                 >
                   <div className="bg-transparent lg:bg-white rounded-none lg:rounded-3xl p-6 sm:p-10 lg:p-12 shadow-none lg:shadow-xl border-none lg:border lg:border-slate-200/80 space-y-6">
-                    
+
                     {/* Header Badges */}
                     <div className="flex flex-wrap items-center justify-between gap-2">
                       <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-blue-50 border border-blue-100 text-blue-700 text-xs font-extrabold uppercase tracking-wider">
@@ -418,7 +414,7 @@ export default function ServicesSection({ onOpenQuoteModal }) {
                     )}
 
                     {/* Footer Actions */}
-                    <div className="pt-4 border-t border-slate-100 flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-4">
+                    <div className="pt-4 border-t border-slate-100 flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-3">
                       <Link
                         href={serviceHref}
                         className="text-sm font-bold text-blue-600 hover:text-blue-700 flex items-center justify-center sm:justify-start gap-1.5 transition-colors duration-200 group"
@@ -427,14 +423,29 @@ export default function ServicesSection({ onOpenQuoteModal }) {
                         <ArrowRight className="w-4 h-4 transition-transform duration-300 group-hover:translate-x-1" />
                       </Link>
 
-                      <button
-                        onClick={() => onOpenQuoteModal && onOpenQuoteModal(service.title)}
-                        className="inline-flex items-center justify-center gap-2 bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 active:scale-95 text-white font-bold text-sm px-6 py-3.5 rounded-full shadow-lg shadow-blue-600/20 transition-all duration-300 touch-manipulation"
-                      >
-                        <span>{t('services.inquireNow')}</span>
-                        <ArrowRight className="w-4 h-4" />
-                      </button>
+                      <div className="flex items-center gap-2">
+                        {/* Inquire Now Button */}
+                        <button
+                          onClick={() => onOpenQuoteModal && onOpenQuoteModal(service.title)}
+                          className="inline-flex items-center justify-center gap-2 bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 active:scale-95 text-white font-bold text-sm px-5 py-3 rounded-full shadow-lg shadow-blue-600/20 transition-all duration-300 touch-manipulation"
+                        >
+                          <span>{t('services.inquireNow')}</span>
+                          <ArrowRight className="w-4 h-4" />
+                        </button>
+
+                        {/* WhatsApp Button - CLOSER TO INQUIRE NOW */}
+                        <a
+                          href={`https://wa.me/2348073527146?text=Hi!%20I'm%20interested%20in%20"${encodeURIComponent(service.title)}"%20service.%20Can%20you%20tell%20me%20more?`}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="inline-flex items-center justify-center gap-1.5 bg-[#25D366] hover:bg-[#1DA851] text-white font-bold text-sm px-4 py-3 rounded-full shadow-lg shadow-[#25D366]/20 transition-all duration-300 hover:-translate-y-0.5 active:scale-95"
+                        >
+                          <MessageCircle className="w-4 h-4" />
+                          <span>WhatsApp</span>
+                        </a>
+                      </div>
                     </div>
+
 
                   </div>
                 </div>

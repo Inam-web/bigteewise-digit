@@ -6,7 +6,7 @@ import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { useGSAP } from '@gsap/react';
 import { 
   Sparkles, Phone, Mail, MapPin, ArrowRight, 
-  ArrowUpRight, ChevronUp, Clock 
+  ArrowUpRight, ChevronUp, Clock, Code, Heart, Briefcase, User 
 } from 'lucide-react';
 import { FacebookIcon, TwitterXIcon, InstagramIcon, LinkedinIcon } from './SocialIcons';
 import { useLanguage } from '@/i18n/LanguageContext';
@@ -297,47 +297,68 @@ export const Footer = ({ onOpenQuoteModal }) => {
         </div>
       </div>
 
-      {/* Copyright Bar */}
+      {/* Copyright Bar - UPDATED with visible developer credit */}
       <div ref={copyrightRef} className="relative z-10 bg-[#070C1A] border-t border-slate-800/80">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
-          <div className="flex flex-col sm:flex-row items-center justify-between gap-4">
+          <div className="flex flex-col md:flex-row items-center justify-between gap-4">
+            
+            {/* Left Side - Copyright */}
             <div className="flex flex-col sm:flex-row items-center gap-2 sm:gap-4 text-xs text-slate-500 text-center sm:text-left">
-              <p>© 2025 BigTeeWise Digital. {t('footer.rightsReserved')}</p>
+              <p>© 2026 BigTeeWise Digital. {t('footer.rightsReserved')}</p>
               <span className="hidden sm:block w-1 h-1 rounded-full bg-slate-700" />
               <p>{t('footer.crafted')}</p>
             </div>
 
-            <div className="flex items-center gap-6">
-              <a
-                href="#privacy"
-                onClick={(e) => {
-                  e.preventDefault();
-                  alert(t('footer.privacyText'));
-                }}
-                className="text-xs text-slate-500 hover:text-blue-400 transition-colors duration-200"
-              >
-                {t('footer.privacyPolicy')}
-              </a>
-              <a
-                href="#terms"
-                onClick={(e) => {
-                  e.preventDefault();
-                  alert(t('footer.termsText'));
-                }}
-                className="text-xs text-slate-500 hover:text-blue-400 transition-colors duration-200"
-              >
-                {t('footer.termsOfService')}
-              </a>
+            {/* Right Side - Visible Developer Credit */}
+            <div className="flex flex-wrap items-center justify-center gap-3 md:gap-5">
               
+              {/* Privacy & Terms */}
+              <div className="flex items-center gap-3">
+                <a
+                  href="#privacy"
+                  onClick={(e) => {
+                    e.preventDefault();
+                    alert(t('footer.privacyText'));
+                  }}
+                  className="text-xs text-slate-500 hover:text-blue-400 transition-colors duration-200"
+                >
+                  {t('footer.privacyPolicy')}
+                </a>
+                <span className="w-px h-3 bg-slate-700" />
+                <a
+                  href="#terms"
+                  onClick={(e) => {
+                    e.preventDefault();
+                    alert(t('footer.termsText'));
+                  }}
+                  className="text-xs text-slate-500 hover:text-blue-400 transition-colors duration-200"
+                >
+                  {t('footer.termsOfService')}
+                </a>
+              </div>
+
+              <span className="hidden md:block w-px h-5 bg-slate-700" />
+
+              {/* Developer Credit - More Visible */}
+              <div className="flex items-center gap-2.5 px-3 py-1.5 rounded-lg bg-blue-500/5 border border-blue-500/10 hover:border-blue-500/30 transition-all duration-300">
+                <User className="w-3.5 h-3.5 text-blue-400" />
+                <span className="text-[11px] font-medium text-slate-400">Built by</span>
+                <span className="text-[12px] font-bold bg-gradient-to-r from-blue-400 to-indigo-400 bg-clip-text text-transparent">
+                  Inam Ullah Afridi
+                </span>
+                <Code className="w-3.5 h-3.5 text-blue-500/60" />
+              </div>
+
               {/* Back to Top */}
               <button
                 onClick={scrollToTop}
-                className="ml-2 w-8 h-8 rounded-full bg-slate-800 hover:bg-blue-600 border border-slate-700 hover:border-blue-500 text-slate-400 hover:text-white flex items-center justify-center transition-all duration-300 hover:-translate-y-0.5"
+                className="w-8 h-8 rounded-full bg-slate-800 hover:bg-blue-600 border border-slate-700 hover:border-blue-500 text-slate-400 hover:text-white flex items-center justify-center transition-all duration-300 hover:-translate-y-0.5"
                 aria-label="Back to top"
               >
                 <ChevronUp className="w-4 h-4" />
               </button>
             </div>
+
           </div>
         </div>
       </div>
