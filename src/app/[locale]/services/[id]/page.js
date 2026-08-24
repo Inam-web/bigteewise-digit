@@ -3,6 +3,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import Link from 'next/link';
 import { useParams } from 'next/navigation';
+import Image from 'next/image';
 import {
   ArrowRight,
   ArrowLeft,
@@ -34,6 +35,23 @@ if (typeof window !== 'undefined') {
   gsap.registerPlugin(ScrollTrigger);
 }
 
+// ✅ IMAGE MAPPING - MATCHES YOUR PUBLIC FOLDER
+const SERVICE_IMAGES = {
+  'book-marketing': '/images/services/book-marketing.jpg',
+  'author-branding': '/images/services/author-branding-v2.jpg',
+  'book-cover-design': '/images/services/book-cover-design-v3.jpg',
+  'book-mockup-design': '/images/services/book-mockup-design-v2.jpeg',
+  'digital-marketing': '/images/services/digital-marketing.jpg',
+  'social-media-marketing': '/images/services/social-media-marketing.jpg',
+  'social-media-graphics': '/images/services/social-media-graphics.jpg',
+  'content-marketing': '/images/services/content-marketing.jpg',
+  'seo': '/images/services/seo.jpg',
+  'brand-strategy': '/images/services/brand-strategy.jpg',
+  'digital-advertising': '/images/services/digital-advertising.jpg',
+  'marketing-strategy': '/images/services/marketing-strategy.jpg',
+  'default': '/images/services/default.jpg'
+};
+
 export default function ServiceDetailPage() {
   const { t, locale } = useLanguage();
   const params = useParams();
@@ -42,10 +60,21 @@ export default function ServiceDetailPage() {
   const [openFaq, setOpenFaq] = useState(null);
   const [isQuoteModalOpen, setIsQuoteModalOpen] = useState(false);
   const [toastMessage, setToastMessage] = useState(null);
+  const [imageError, setImageError] = useState(false);
 
   const mainRef = useRef(null);
 
   const service = SERVICES.find((s) => s.id === serviceId) || SERVICES[0];
+
+  // ✅ Get the service image
+  const getServiceImage = () => {
+    if (service.image) return service.image;
+    if (service.coverImage) return service.coverImage;
+    if (SERVICE_IMAGES[service.id]) return SERVICE_IMAGES[service.id];
+    return SERVICE_IMAGES['default'];
+  };
+
+  const serviceImage = getServiceImage();
 
   // Translation helper
   const tr = (key, fallback) => {
@@ -159,7 +188,6 @@ export default function ServiceDetailPage() {
         return;
       }
 
-      // Hero animations
       gsap.fromTo(
         '.hero-copy',
         { y: 45, opacity: 0 },
@@ -188,7 +216,6 @@ export default function ServiceDetailPage() {
         ease: 'sine.inOut',
       });
 
-      // Statement section
       gsap.fromTo(
         '.statement-line',
         { y: 70, opacity: 0 },
@@ -202,7 +229,6 @@ export default function ServiceDetailPage() {
         }
       );
 
-      // Blueprint section
       gsap.fromTo(
         '.blueprint-intro',
         { y: 40, opacity: 0 },
@@ -228,7 +254,6 @@ export default function ServiceDetailPage() {
         }
       );
 
-      // Deliverables section
       gsap.fromTo(
         '.deliverable-item',
         { x: -25, opacity: 0 },
@@ -254,7 +279,6 @@ export default function ServiceDetailPage() {
         }
       );
 
-      // Process section
       gsap.fromTo(
         '.process-heading',
         { y: 35, opacity: 0 },
@@ -292,7 +316,6 @@ export default function ServiceDetailPage() {
         }
       );
 
-      // Stats section
       gsap.fromTo(
         '.service-stat',
         { y: 35, opacity: 0 },
@@ -306,7 +329,6 @@ export default function ServiceDetailPage() {
         }
       );
 
-      // FAQ section
       gsap.fromTo(
         '.faq-item',
         { y: 25, opacity: 0 },
@@ -320,7 +342,6 @@ export default function ServiceDetailPage() {
         }
       );
 
-      // CTA section
       gsap.fromTo(
         '.final-cta-content',
         { y: 45, opacity: 0 },
@@ -413,7 +434,6 @@ export default function ServiceDetailPage() {
                     <ArrowRight className="w-4 h-4 transition-transform duration-300 group-hover:translate-x-1" />
                   </button>
 
-                  {/* WhatsApp Button */}
                   <a
                     href={`https://wa.me/2348073527146?text=Hi!%20I'm%20interested%20in%20"${encodeURIComponent(serviceTitle)}"%20service.%20Can%20you%20tell%20me%20more?`}
                     target="_blank"
@@ -433,57 +453,66 @@ export default function ServiceDetailPage() {
                 </div>
               </div>
 
+              {/* ✅ HERO VISUAL - WITH IMAGE (BLUE CONTAINER REMOVED) */}
               <div className="hero-visual lg:col-span-5 relative min-h-[400px] sm:min-h-[480px]">
                 <div className="hero-orbit absolute inset-[7%] rounded-full border border-blue-200/60 border-dashed" />
                 <div className="hero-orbit absolute inset-[17%] rounded-full border border-slate-200/80 border-dashed" />
                 <div className="hero-glow absolute top-[14%] right-[8%] w-28 h-28 rounded-full bg-blue-500/20 blur-3xl" />
 
-                <div className="absolute inset-[12%] sm:inset-[14%] rounded-[2rem] bg-slate-950 shadow-2xl shadow-slate-900/20 overflow-hidden border border-white/10">
-                  <div className="absolute inset-0 bg-gradient-to-br from-blue-600/20 via-transparent to-transparent" />
-
-                  <div className="absolute top-5 left-5 right-5 flex items-center justify-between">
-                    <span className="text-[9px] font-black tracking-[0.2em] text-blue-300 uppercase">
+                {/* ✅ THE IMAGE - NO BLUE CONTAINER */}
+                <div className="absolute inset-[12%] sm:inset-[14%] rounded-[2rem] overflow-hidden shadow-2xl shadow-slate-900/20 border border-white/10 bg-slate-900">
+                  {!imageError ? (
+                    <Image
+                      src={serviceImage}
+                      alt={serviceTitle}
+                      fill
+                      sizes="(max-width: 768px) 100vw, (max-width: 1200px) 40vw, 500px"
+                      className="object-cover"
+                      priority
+                      onError={() => setImageError(true)}
+                    />
+                  ) : (
+                    <div className="w-full h-full flex items-center justify-center bg-gradient-to-br from-blue-900/50 to-slate-900">
+                      <div className="text-center text-white/60 p-6">
+                        <Sparkles className="w-12 h-12 mx-auto mb-3 text-blue-400/50" />
+                        <p className="text-sm font-semibold">{serviceTitle}</p>
+                        <p className="text-xs text-white/40">Image coming soon</p>
+                      </div>
+                    </div>
+                  )}
+                  
+                  {/* Dark overlay for text readability */}
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/10 to-transparent" />
+                  
+                  {/* Top badges */}
+                  <div className="absolute top-5 left-5 right-5 flex items-center justify-between z-10">
+                    <span className="text-[9px] font-black tracking-[0.2em] text-white/80 uppercase bg-black/30 px-3 py-1 rounded-full backdrop-blur-sm">
                       {tr('serviceDetailPage.serviceLabel', 'Service')} / {service.category || '01'}
                     </span>
-                    <span className="flex items-center gap-1.5 text-[9px] font-bold text-slate-400 uppercase tracking-wider">
-                      <span className="w-1.5 h-1.5 rounded-full bg-blue-400 animate-pulse" />
+                    <span className="flex items-center gap-1.5 text-[9px] font-bold text-white/70 uppercase tracking-wider bg-black/30 px-3 py-1 rounded-full backdrop-blur-sm">
+                      <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />
                       {tr('serviceDetailPage.activeLabel', 'Active')}
                     </span>
                   </div>
 
-                  <div className="absolute inset-0 flex items-center justify-center p-8 sm:p-12">
-                    <div className="relative w-full aspect-square max-w-[250px] rounded-[1.5rem] border border-white/10 bg-white/[0.04] backdrop-blur-sm flex items-center justify-center">
-                      <div className="absolute inset-5 rounded-full border border-blue-400/20" />
-                      <div className="absolute inset-10 rounded-full border border-blue-400/10" />
-                      <div className="relative w-28 h-28 sm:w-32 sm:h-32 rounded-full bg-blue-600 shadow-[0_0_70px_rgba(37,99,235,0.35)] flex items-center justify-center">
-                        <div className="absolute inset-2 rounded-full border border-white/20" />
-                        <Sparkles className="w-10 h-10 text-white" />
-                      </div>
-                      <div className="absolute top-[8%] left-[12%] w-8 h-8 rounded-full bg-white flex items-center justify-center shadow-lg">
-                        <Target className="w-4 h-4 text-blue-600" />
-                      </div>
-                      <div className="absolute bottom-[12%] right-[8%] w-8 h-8 rounded-full bg-blue-50 flex items-center justify-center shadow-lg">
-                        <TrendingUp className="w-4 h-4 text-blue-600" />
-                      </div>
-                    </div>
-                  </div>
-
-                  <div className="absolute bottom-5 left-5 right-5">
+                  {/* Bottom info */}
+                  <div className="absolute bottom-5 left-5 right-5 z-10">
                     <div className="flex items-end justify-between">
                       <div>
-                        <p className="text-[9px] uppercase tracking-[0.18em] text-slate-500 font-bold">
+                        <p className="text-[9px] uppercase tracking-[0.18em] text-white/60 font-bold">
                           {tr('serviceDetailPage.focusLabel', 'Focus')}
                         </p>
-                        <p className="text-sm font-bold text-white mt-1">
+                        <p className="text-sm font-bold text-white mt-1 drop-shadow-lg">
                           {serviceTitle}
                         </p>
                       </div>
-                      <span className="text-3xl font-black text-blue-500/30">01</span>
+                      <span className="text-3xl font-black text-white/10">01</span>
                     </div>
                   </div>
                 </div>
 
-                <div className="absolute top-[7%] -left-2 sm:left-0 bg-white border border-slate-200 shadow-xl rounded-2xl px-4 py-3">
+                {/* Floating labels - KEEP */}
+                <div className="absolute top-[7%] -left-2 sm:left-0 bg-white border border-slate-200 shadow-xl rounded-2xl px-4 py-3 z-20">
                   <p className="text-[9px] font-black text-slate-400 uppercase tracking-wider">
                     {tr('serviceDetailPage.strategyLabel', 'Strategy')}
                   </p>
@@ -492,7 +521,7 @@ export default function ServiceDetailPage() {
                   </p>
                 </div>
 
-                <div className="absolute bottom-[8%] -right-1 sm:right-0 bg-blue-600 rounded-2xl px-4 py-3 shadow-xl shadow-blue-600/20">
+                <div className="absolute bottom-[8%] -right-1 sm:right-0 bg-blue-600 rounded-2xl px-4 py-3 shadow-xl shadow-blue-600/20 z-20">
                   <p className="text-[9px] font-black text-blue-100 uppercase tracking-wider">
                     {tr('serviceDetailPage.outcomeLabel', 'Outcome')}
                   </p>
@@ -512,7 +541,7 @@ export default function ServiceDetailPage() {
           </div>
         </section>
 
-        {/* STATEMENT SECTION */}
+        {/* REST OF YOUR SECTIONS - KEEP UNCHANGED */}
         <section className="statement-section relative bg-slate-950 text-white py-28 sm:py-36 lg:py-44 overflow-hidden">
           <div className="absolute top-0 right-0 w-[500px] h-[500px] bg-blue-600/10 blur-[120px] rounded-full pointer-events-none" />
 
@@ -539,7 +568,6 @@ export default function ServiceDetailPage() {
           </div>
         </section>
 
-        {/* BLUEPRINT SECTION */}
         <section id="blueprint" className="blueprint-section bg-white py-24 sm:py-28 lg:py-36">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div className="blueprint-intro max-w-3xl mb-14 lg:mb-20">
@@ -594,7 +622,6 @@ export default function ServiceDetailPage() {
           </div>
         </section>
 
-        {/* DELIVERABLES SECTION */}
         <section className="deliverables-section bg-slate-50 py-24 sm:py-28 lg:py-36 border-y border-slate-200/80">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-20 items-center">
@@ -711,7 +738,6 @@ export default function ServiceDetailPage() {
           </div>
         </section>
 
-        {/* PROCESS SECTION */}
         <section className="process-section bg-white py-24 sm:py-28 lg:py-36">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div className="process-heading text-center max-w-3xl mx-auto">
@@ -776,7 +802,6 @@ export default function ServiceDetailPage() {
           </div>
         </section>
 
-        {/* STATS SECTION */}
         <section className="stats-section bg-slate-950 text-white py-24 sm:py-28 lg:py-32 relative overflow-hidden">
           <div className="absolute inset-0 pointer-events-none">
             <div className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-blue-600/10 rounded-full blur-[120px]" />
@@ -825,7 +850,6 @@ export default function ServiceDetailPage() {
           </div>
         </section>
 
-        {/* FAQ SECTION */}
         <section className="faq-section bg-slate-50 py-24 sm:py-28 lg:py-36">
           <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
             <div className="grid grid-cols-1 lg:grid-cols-5 gap-12 lg:gap-20">
@@ -904,7 +928,6 @@ export default function ServiceDetailPage() {
           </div>
         </section>
 
-        {/* FINAL CTA */}
         <section className="final-cta relative bg-white py-28 sm:py-36 lg:py-44 overflow-hidden border-t border-slate-200">
           <div className="absolute inset-0 pointer-events-none">
             <div className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 w-[550px] h-[550px] bg-blue-500/10 rounded-full blur-[120px]" />
@@ -933,7 +956,6 @@ export default function ServiceDetailPage() {
                 <ArrowRight className="w-4 h-4 transition-transform duration-300 group-hover:translate-x-1" />
               </button>
 
-              {/* WhatsApp Button - Final CTA */}
               <a
                 href={`https://wa.me/2348073527146?text=Hi!%20I'm%20interested%20in%20"${encodeURIComponent(serviceTitle)}"%20service.%20Can%20you%20tell%20me%20more?`}
                 target="_blank"
