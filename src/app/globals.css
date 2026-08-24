@@ -19,9 +19,17 @@
   }
 }
 
+/* ✅ Desktop: use clip */
 html, body {
   max-width: 100vw;
   overflow-x: clip;
+}
+
+/* ✅ Mobile & Tablet: use hidden */
+@media (max-width: 1023px) {
+  html, body {
+    overflow-x: hidden;
+  }
 }
 
 body {
