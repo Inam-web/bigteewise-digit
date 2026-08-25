@@ -6,9 +6,9 @@ import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { useGSAP } from '@gsap/react';
 import { 
   Sparkles, Phone, Mail, MapPin, ArrowRight, 
-  ArrowUpRight, ChevronUp, Clock, Code, Heart, Briefcase, User 
+  ArrowUpRight, ChevronUp, Clock, Code, User
 } from 'lucide-react';
-import { FacebookIcon, TwitterXIcon, InstagramIcon, LinkedinIcon } from './SocialIcons';
+import { FacebookIcon, InstagramIcon, TikTokIcon } from './SocialIcons';
 import { useLanguage } from '@/i18n/LanguageContext';
 
 const BUSINESS_INFO = {
@@ -19,9 +19,8 @@ const BUSINESS_INFO = {
   socialHandle: "@bigteewisedigital",
   socialLinks: {
     facebook: "https://facebook.com",
-    twitter: "https://twitter.com",
-    instagram: "https://instagram.com",
-    linkedin: "https://linkedin.com",
+    instagram: "https://www.instagram.com/petertaiwogodswill/",
+    tiktok: "https://www.tiktok.com/@bigteewisedigital",
   },
 };
 
@@ -173,13 +172,12 @@ export const Footer = ({ onOpenQuoteModal }) => {
                 {t('footer.tagline')}
               </p>
 
-              {/* Socials */}
+              {/* ✅ Socials - Only Facebook, Instagram, TikTok */}
               <div className="flex items-center gap-3">
                 {[
                   { icon: FacebookIcon, href: BUSINESS_INFO.socialLinks.facebook, label: 'Facebook', color: 'hover:bg-[#1877F2] hover:border-[#1877F2]' },
-                  { icon: TwitterXIcon, href: BUSINESS_INFO.socialLinks.twitter, label: 'Twitter', color: 'hover:bg-slate-600 hover:border-slate-600' },
+                  { icon: TikTokIcon, href: BUSINESS_INFO.socialLinks.tiktok, label: 'TikTok', color: 'hover:bg-black hover:border-slate-600' },
                   { icon: InstagramIcon, href: BUSINESS_INFO.socialLinks.instagram, label: 'Instagram', color: 'hover:bg-gradient-to-tr hover:from-purple-600 hover:via-pink-600 hover:to-yellow-500 hover:border-transparent' },
-                  { icon: LinkedinIcon, href: BUSINESS_INFO.socialLinks.linkedin, label: 'LinkedIn', color: 'hover:bg-[#0A66C2] hover:border-[#0A66C2]' },
                 ].map((social) => (
                   <a
                     key={social.label}
@@ -297,7 +295,7 @@ export const Footer = ({ onOpenQuoteModal }) => {
         </div>
       </div>
 
-      {/* Copyright Bar - UPDATED with visible developer credit */}
+      {/* Copyright Bar */}
       <div ref={copyrightRef} className="relative z-10 bg-[#070C1A] border-t border-slate-800/80">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
           <div className="flex flex-col md:flex-row items-center justify-between gap-4">
@@ -309,7 +307,7 @@ export const Footer = ({ onOpenQuoteModal }) => {
               <p>{t('footer.crafted')}</p>
             </div>
 
-            {/* Right Side - Visible Developer Credit */}
+            {/* Right Side */}
             <div className="flex flex-wrap items-center justify-center gap-3 md:gap-5">
               
               {/* Privacy & Terms */}
@@ -339,7 +337,7 @@ export const Footer = ({ onOpenQuoteModal }) => {
 
               <span className="hidden md:block w-px h-5 bg-slate-700" />
 
-              {/* Developer Credit - More Visible */}
+              {/* Developer Credit */}
               <div className="flex items-center gap-2.5 px-3 py-1.5 rounded-lg bg-blue-500/5 border border-blue-500/10 hover:border-blue-500/30 transition-all duration-300">
                 <User className="w-3.5 h-3.5 text-blue-400" />
                 <span className="text-[11px] font-medium text-slate-400">Built by</span>

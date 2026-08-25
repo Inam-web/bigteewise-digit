@@ -1,7 +1,7 @@
 'use client';
 
-import React, { useState, useEffect, useRef } from 'react';
-import { Calendar, Clock, ArrowRight, X, User, Tag, BookOpen, ChevronRight } from 'lucide-react';
+import React, { useState, useEffect, useRef, useCallback } from 'react';
+import { Calendar, Clock, ArrowRight, X, User, Tag, BookOpen, ChevronRight, Sparkles, Eye, TrendingUp, BookMarked } from 'lucide-react';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { useLanguage } from '@/i18n/LanguageContext';
@@ -13,9 +13,15 @@ if (typeof window !== 'undefined') {
 export default function BlogSection() {
   const { t, locale } = useLanguage();
   const [selectedPost, setSelectedPost] = useState(null);
+  const [isMounted, setIsMounted] = useState(false);
   const sectionRef = useRef(null);
   const headerRef = useRef(null);
   const cardsRef = useRef([]);
+
+  // ✅ Mount state for hydration
+  useEffect(() => {
+    setIsMounted(true);
+  }, []);
 
   // ✅ Get translated blog posts from language files
   const blogPostsData = t('blog.posts');
@@ -79,26 +85,68 @@ export default function BlogSection() {
   };
 
   useEffect(() => {
+    if (!isMounted) return;
+
     const ctx = gsap.context(() => {
+      const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+      const isMobile = window.innerWidth < 768;
+
+      if (reduceMotion) {
+        gsap.set(['.blog-header-item', '.blog-card'], {
+          opacity: 1,
+          y: 0,
+          scale: 1,
+          clearProps: 'transform,opacity',
+        });
+        return;
+      }
+
+      // ✅ Header animation
       gsap.fromTo(
-        headerRef.current.children,
+        '.blog-header-item',
         { y: 40, opacity: 0 },
-        { y: 0, opacity: 1, duration: 1.2, stagger: 0.2, ease: 'power3.out',
-          scrollTrigger: { trigger: headerRef.current, start: 'top 85%', toggleActions: 'play none none reverse' } }
+        {
+          y: 0,
+          opacity: 1,
+          duration: 1.2,
+          stagger: 0.15,
+          ease: 'power3.out',
+          overwrite: 'auto',
+          scrollTrigger: {
+            trigger: headerRef.current,
+            start: 'top 85%',
+            toggleActions: 'play none none reverse',
+          },
+        }
       );
 
+      // ✅ Card animations
       gsap.fromTo(
-        cardsRef.current,
+        '.blog-card',
         { y: 60, opacity: 0, scale: 0.96 },
-        { y: 0, opacity: 1, scale: 1, duration: 1.4, stagger: 0.15, ease: 'power2.out',
-          scrollTrigger: { trigger: sectionRef.current, start: 'top 75%', toggleActions: 'play none none reverse' } }
+        {
+          y: 0,
+          opacity: 1,
+          scale: 1,
+          duration: 1.2,
+          stagger: isMobile ? 0.1 : 0.15,
+          ease: 'power2.out',
+          overwrite: 'auto',
+          scrollTrigger: {
+            trigger: sectionRef.current,
+            start: 'top 75%',
+            toggleActions: 'play none none reverse',
+          },
+        }
       );
     }, sectionRef);
 
-    return () => ctx.revert();
-  }, []);
+    return () => {
+      ctx.revert();
+    };
+  }, [isMounted]);
 
-  // Hide navbar and lock body scroll when modal is open
+  // ✅ Modal scroll lock
   useEffect(() => {
     if (selectedPost) {
       const header = document.querySelector('header');
@@ -108,18 +156,18 @@ export default function BlogSection() {
     } else {
       const header = document.querySelector('header');
       if (header) header.style.display = '';
-      document.body.style.overflow = 'unset';
+      document.body.style.overflow = '';
       document.body.classList.remove('modal-open');
     }
     return () => {
       const header = document.querySelector('header');
       if (header) header.style.display = '';
-      document.body.style.overflow = 'unset';
+      document.body.style.overflow = '';
       document.body.classList.remove('modal-open');
     };
   }, [selectedPost]);
 
-  // Escape key handler
+  // ✅ Escape key handler
   useEffect(() => {
     const handleKeyDown = (e) => {
       if (e.key === 'Escape' && selectedPost) setSelectedPost(null);
@@ -130,105 +178,158 @@ export default function BlogSection() {
 
   const handleCloseModal = () => setSelectedPost(null);
 
+  // ✅ Prevent hydration mismatch
+  if (!isMounted) {
+    return null;
+  }
+
   return (
-    <section ref={sectionRef} className="py-20 lg:py-28 bg-slate-50 text-slate-900 overflow-hidden relative">
-      <div className="absolute inset-0 opacity-[0.03] pointer-events-none" style={{
-        backgroundImage: `radial-gradient(circle at 1px 1px, rgb(15 23 42) 1px, transparent 0)`,
-        backgroundSize: '32px 32px'
-      }} />
+    <section ref={sectionRef} className="py-20 lg:py-28 bg-gradient-to-b from-slate-50 to-white text-slate-900 overflow-hidden relative">
+      {/* Background Decorations */}
+      <div className="absolute inset-0 pointer-events-none">
+        <div className="absolute top-0 right-0 w-96 h-96 bg-blue-100/30 rounded-full blur-3xl" />
+        <div className="absolute bottom-0 left-0 w-80 h-80 bg-indigo-100/20 rounded-full blur-3xl" />
+        <div className="absolute inset-0 opacity-[0.02] bg-[radial-gradient(#0f172a_1px,transparent_1px)] [background-size:32px_32px]" />
+      </div>
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
         
-        {/* Header */}
+        {/* ===== HEADER ===== */}
         <div ref={headerRef} className="text-center max-w-3xl mx-auto mb-16 space-y-4">
-          <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-blue-100/80 border border-blue-200 text-blue-700 text-xs sm:text-sm font-bold tracking-wide uppercase">
+          <div className="blog-header-item inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-blue-50 border border-blue-200/60 text-blue-700 text-xs sm:text-sm font-bold tracking-wide uppercase shadow-sm">
             <span className="font-extrabold text-blue-600">//</span>
             <span>{tr('blog.badge', 'News & Insights')}</span>
+            <Sparkles className="w-3 h-3 text-blue-500 ml-1" />
           </div>
 
-          <h2 className="text-3xl sm:text-4xl lg:text-5xl font-extrabold text-slate-900 tracking-tight leading-tight">
+          <h2 className="blog-header-item text-3xl sm:text-4xl lg:text-5xl font-extrabold text-slate-900 tracking-tight leading-tight">
             {tr('blog.heading', 'Expert Insights on Marketing & Design')}
+            <span className="block text-blue-600 text-2xl sm:text-3xl lg:text-4xl mt-1">
+              {tr('blog.headingHighlight', 'For Authors & Creators')}
+            </span>
           </h2>
 
-          <p className="text-slate-600 text-sm sm:text-base leading-relaxed max-w-2xl mx-auto">
+          <p className="blog-header-item text-slate-600 text-sm sm:text-base leading-relaxed max-w-2xl mx-auto">
             {tr('blog.subheading', 'Actionable strategies on book marketing, Amazon optimization, author branding, and creative design trends that drive real results.')}
           </p>
+
+          {/* ✅ Decorative line */}
+          <div className="blog-header-item flex items-center justify-center gap-2 mt-2">
+            <span className="w-12 h-px bg-gradient-to-r from-transparent to-blue-300" />
+            <BookMarked className="w-4 h-4 text-blue-400" />
+            <span className="w-12 h-px bg-gradient-to-l from-transparent to-blue-300" />
+          </div>
         </div>
 
-        {/* 3-Column Grid */}
+        {/* ===== 3-COLUMN GRID ===== */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8">
           {displayPosts.map((post, index) => (
             <div
               key={post.id || index}
               ref={(el) => (cardsRef.current[index] = el)}
               onClick={() => setSelectedPost(post)}
-              className="group bg-white rounded-3xl border border-slate-200/80 overflow-hidden shadow-sm hover:shadow-xl hover:border-blue-300 hover:-translate-y-2 transition-all duration-500 cursor-pointer flex flex-col h-full"
+              className="blog-card group bg-white rounded-3xl border border-slate-200/80 overflow-hidden shadow-sm hover:shadow-2xl hover:border-blue-400/50 hover:-translate-y-3 transition-all duration-500 cursor-pointer flex flex-col h-full relative"
             >
+              {/* ✅ Gradient overlay on hover */}
+              <div className="absolute inset-0 bg-gradient-to-br from-blue-600/5 via-transparent to-indigo-600/5 opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none rounded-3xl" />
+
+              {/* Image Container */}
               <div className="relative h-56 w-full overflow-hidden bg-slate-100">
                 <img
                   src={post.image}
                   alt={post.title}
-                  className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700 ease-out"
+                  className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700 ease-out"
+                  loading="lazy"
                 />
-                <div className="absolute top-4 left-4 bg-blue-600 text-white text-[10px] font-bold px-3 py-1 rounded-full shadow-md uppercase tracking-wider">
+                {/* ✅ Overlay gradient */}
+                <div className="absolute inset-0 bg-gradient-to-t from-black/20 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
+                
+                {/* ✅ Category Badge - Enhanced */}
+                <div className="absolute top-4 left-4 bg-gradient-to-r from-blue-600 to-blue-500 text-white text-[10px] font-bold px-3.5 py-1.5 rounded-full shadow-lg shadow-blue-600/30 uppercase tracking-wider flex items-center gap-1.5">
+                  <BookOpen className="w-3 h-3" />
                   {post.category}
+                </div>
+
+                {/* ✅ Read time badge - floating */}
+                <div className="absolute top-4 right-4 bg-white/95 backdrop-blur-sm text-slate-700 text-[10px] font-bold px-3 py-1.5 rounded-full shadow-md flex items-center gap-1.5 border border-white/50">
+                  <Clock className="w-3 h-3 text-blue-600" />
+                  {post.readTime}
                 </div>
               </div>
 
-              <div className="p-6 flex flex-col flex-grow space-y-3">
-                <div className="flex items-center gap-3 text-xs text-slate-500 font-medium">
-                  <span className="flex items-center gap-1.5">
-                    <Calendar className="w-3.5 h-3.5 text-blue-600" />
-                    {post.date}
-                  </span>
-                  <span className="flex items-center gap-1.5">
-                    <Clock className="w-3.5 h-3.5 text-blue-600" />
-                    {post.readTime}
-                  </span>
+              {/* Content */}
+              <div className="p-6 flex flex-col flex-grow space-y-3 relative z-10">
+                {/* Date */}
+                <div className="flex items-center gap-2 text-xs text-slate-500 font-medium">
+                  <Calendar className="w-3.5 h-3.5 text-blue-600" />
+                  <span>{post.date}</span>
                 </div>
 
+                {/* Title */}
                 <h3 className="text-lg font-bold text-slate-900 group-hover:text-blue-600 transition-colors duration-300 leading-snug line-clamp-2 min-h-[56px]">
                   {post.title}
                 </h3>
 
+                {/* Snippet */}
                 <p className="text-slate-600 text-sm leading-relaxed line-clamp-3 flex-grow">
                   {post.snippet}
                 </p>
 
+                {/* Tags */}
                 {post.tags && (
                   <div className="flex flex-wrap gap-1.5 pt-1">
                     {post.tags.slice(0, 2).map((tag, i) => (
-                      <span key={i} className="px-2 py-0.5 rounded-md bg-slate-100 text-slate-500 text-[9px] font-bold uppercase tracking-wider border border-slate-200/50">
+                      <span key={i} className="px-2.5 py-0.5 rounded-md bg-slate-100 text-slate-600 text-[9px] font-bold uppercase tracking-wider border border-slate-200/50 group-hover:border-blue-200 group-hover:bg-blue-50 transition-colors duration-300">
                         {tag}
                       </span>
                     ))}
                     {post.tags.length > 2 && (
-                      <span className="px-2 py-0.5 rounded-md bg-slate-100 text-slate-400 text-[9px] font-bold uppercase tracking-wider">
+                      <span className="px-2.5 py-0.5 rounded-md bg-slate-100 text-slate-400 text-[9px] font-bold uppercase tracking-wider">
                         +{post.tags.length - 2}
                       </span>
                     )}
                   </div>
                 )}
 
-                <div className="pt-3 border-t border-slate-100 flex items-center justify-between">
-                  <div className="flex items-center gap-2">
-                    <div className="w-7 h-7 rounded-full bg-blue-100 flex items-center justify-center">
+                {/* Footer */}
+                <div className="pt-4 border-t border-slate-100 flex items-center justify-between">
+                  <div className="flex items-center gap-2.5">
+                    <div className="w-8 h-8 rounded-full bg-gradient-to-br from-blue-100 to-blue-50 flex items-center justify-center border border-blue-200/50">
                       <User className="w-3.5 h-3.5 text-blue-600" />
                     </div>
                     <span className="text-xs font-bold text-slate-700 line-clamp-1">{post.author}</span>
                   </div>
-                  <span className="text-xs font-bold text-blue-600 flex items-center gap-0.5 group-hover:gap-1.5 transition-all duration-300">
-                    {tr('blog.readArticle', 'Read')} <ChevronRight className="w-3.5 h-3.5" />
+                  <span className="text-xs font-bold text-blue-600 flex items-center gap-0.5 group-hover:gap-2 transition-all duration-300 group-hover:text-blue-700">
+                    {tr('blog.readArticle', 'Read')} 
+                    <ChevronRight className="w-3.5 h-3.5 group-hover:translate-x-0.5 transition-transform" />
                   </span>
                 </div>
+
+                {/* ✅ Bottom accent line on hover */}
+                <div className="absolute bottom-0 left-0 right-0 h-0.5 bg-gradient-to-r from-blue-500 via-indigo-500 to-blue-500 scale-x-0 group-hover:scale-x-100 transition-transform duration-700 origin-left rounded-b-3xl" />
               </div>
             </div>
           ))}
         </div>
 
+        {/* ===== BOTTOM CTA ===== */}
+        <div className="blog-header-item mt-14 text-center">
+          <div className="inline-flex items-center gap-3 bg-white/80 backdrop-blur-sm border border-slate-200 rounded-full px-5 sm:px-7 py-2.5 sm:py-3 shadow-sm hover:shadow-md transition-all duration-300">
+            <span className="text-xs sm:text-sm text-slate-600 font-medium">
+              {tr('blog.ctaBottomText', 'Want to be featured in our next article?')}
+            </span>
+            <button 
+              className="inline-flex items-center gap-1.5 text-blue-600 hover:text-blue-700 font-bold text-xs sm:text-sm transition-colors duration-200 group"
+              aria-label="Read more insights"
+            >
+              <span>{tr('blog.ctaBottomBtn', 'Subscribe for Updates')}</span>
+              <ArrowRight className="w-3.5 h-3.5 group-hover:translate-x-1 transition-transform" />
+            </button>
+          </div>
+        </div>
       </div>
 
-      {/* Modal */}
+      {/* ===== MODAL ===== */}
       {selectedPost && (
         <div 
           className="fixed inset-0 z-[1000] flex items-center justify-center p-4 bg-slate-950/70 backdrop-blur-md modal-overlay"
@@ -240,34 +341,40 @@ export default function BlogSection() {
             onClick={(e) => e.stopPropagation()}
             data-modal-safe="true"
           >
+            {/* Modal Header Image */}
             <div className="relative h-56 sm:h-64 w-full overflow-hidden rounded-t-3xl bg-slate-100 shrink-0">
               <img 
                 src={selectedPost.image} 
                 alt={selectedPost.title} 
                 className="w-full h-full object-cover" 
               />
-              <div className="absolute inset-0 bg-gradient-to-t from-slate-900/60 via-transparent to-transparent" />
+              <div className="absolute inset-0 bg-gradient-to-t from-slate-900/70 via-transparent to-transparent" />
               
+              {/* Close Button */}
               <button
                 type="button"
                 onClick={handleCloseModal}
-                className="absolute top-4 right-4 p-2.5 rounded-full bg-white/95 hover:bg-white text-slate-700 shadow-lg transition-all duration-200 hover:scale-105 active:scale-95 z-20"
+                className="absolute top-4 right-4 p-2.5 rounded-full bg-white/95 hover:bg-white text-slate-700 shadow-xl transition-all duration-200 hover:scale-105 active:scale-95 z-20 border border-white/30"
+                aria-label="Close article"
               >
                 <X className="w-5 h-5" />
               </button>
 
+              {/* Bottom overlay content */}
               <div className="absolute bottom-5 left-5 sm:left-7 right-5 sm:right-7">
-                <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-blue-600 text-white text-[10px] font-bold uppercase tracking-wider mb-2 shadow-lg">
+                <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-gradient-to-r from-blue-600 to-blue-500 text-white text-[10px] font-bold uppercase tracking-wider mb-2.5 shadow-lg shadow-blue-600/30">
                   <BookOpen className="w-3 h-3" />
                   {selectedPost.category}
                 </div>
-                <h3 className="text-xl sm:text-2xl font-extrabold text-white leading-tight drop-shadow-sm line-clamp-2">
+                <h3 className="text-xl sm:text-2xl font-extrabold text-white leading-tight drop-shadow-lg line-clamp-2">
                   {selectedPost.title}
                 </h3>
               </div>
             </div>
 
+            {/* Modal Body */}
             <div className="p-6 sm:p-8 space-y-5">
+              {/* Meta Info */}
               <div className="flex flex-wrap items-center gap-3 pb-5 border-b border-slate-100">
                 <div className="flex items-center gap-2.5">
                   <div className="w-8 h-8 rounded-full bg-blue-50 border border-blue-100 flex items-center justify-center">
@@ -288,15 +395,21 @@ export default function BlogSection() {
                     <Clock className="w-3.5 h-3.5 text-blue-600" />
                     {selectedPost.readTime}
                   </span>
+                  <span className="flex items-center gap-1.5">
+                    <Eye className="w-3.5 h-3.5 text-blue-600" />
+                    {tr('blog.reads', '1.2K reads')}
+                  </span>
                 </div>
               </div>
 
+              {/* Content */}
               <div className="prose prose-slate prose-sm sm:prose-base max-w-none">
                 <p className="text-slate-600 leading-relaxed text-sm sm:text-base">
                   {selectedPost.content || selectedPost.snippet}
                 </p>
               </div>
 
+              {/* Tags */}
               {selectedPost.tags && (
                 <div className="flex flex-wrap gap-2 pt-1">
                   <span className="text-xs font-bold text-slate-400 uppercase tracking-wider mr-1">{tr('blog.tags', 'Tags')}:</span>
@@ -309,10 +422,14 @@ export default function BlogSection() {
                 </div>
               )}
 
+              {/* Footer */}
               <div className="pt-5 border-t border-slate-100 flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-4">
-                <p className="text-xs text-slate-500 font-medium">
-                  {tr('blog.ctaText', 'Want to implement these strategies? Let\'s discuss your project.')}
-                </p>
+                <div className="flex items-center gap-2">
+                  <TrendingUp className="w-4 h-4 text-blue-600" />
+                  <p className="text-xs text-slate-500 font-medium">
+                    {tr('blog.ctaText', 'Want to implement these strategies? Let\'s discuss your project.')}
+                  </p>
+                </div>
                 <button
                   type="button"
                   onClick={handleCloseModal}

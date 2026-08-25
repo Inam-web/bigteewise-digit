@@ -1,9 +1,9 @@
 'use client';
 
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useEffect, useRef } from 'react';
 import Image from 'next/image';
 import * as ContentModule from '../app/Data/content';
-import { Star, Quote, ChevronLeft, ChevronRight, Sparkles, Users } from 'lucide-react';
+import { Star, Quote, Sparkles, Users } from 'lucide-react';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 
@@ -38,24 +38,67 @@ const DEFAULT_TESTIMONIALS = [
     title: 'Incredible Design & Branding',
     quote: 'The 3D book mockups and cover artwork they designed were stunning. It gave my title instant credibility and boosted reader pre-orders immensely.',
     avatar: 'https://images.pexels.com/photos/1239291/pexels-photo-1239291.jpeg?auto=compress&cs=tinysrgb&w=300'
+  },
+  {
+    id: 4,
+    name: 'Xylophar G. Vex',
+    companyOrBook: 'Chronicles of the Void',
+    rating: 5,
+    title: 'A Game-Changer for Indie Authors',
+    quote: 'Their team understood the unique challenges of fantasy marketing. The bespoke campaign they built around my series launch exceeded every sales target I had set.',
+    avatar: 'https://images.pexels.com/photos/1681010/pexels-photo-1681010.jpeg?auto=compress&cs=tinysrgb&w=300'
+  },
+  {
+    id: 5,
+    name: 'Seraphina Moonwhisper',
+    companyOrBook: 'Aether Industries',
+    rating: 5,
+    title: 'Unmatched Creative Vision',
+    quote: 'From the initial concept to final execution, BigTeeWise delivered a brand identity that perfectly captured the ethereal quality of my work. Absolutely magical results.',
+    avatar: 'https://images.pexels.com/photos/4153141/pexels-photo-4153141.jpeg?auto=compress&cs=tinysrgb&w=300'
+  },
+  {
+    id: 6,
+    name: 'Dorian Blackwell',
+    companyOrBook: 'The Obsidian Codex',
+    rating: 5,
+    title: 'Precision Marketing at Its Finest',
+    quote: 'The data-driven approach they took to my book launch was remarkable. Every ad dollar was optimized, and the ROI spoke for itself. A true strategic partner.',
+    avatar: 'https://images.pexels.com/photos/2379004/pexels-photo-2379004.jpeg?auto=compress&cs=tinysrgb&w=300'
+  },
+  {
+    id: 7,
+    name: 'Lyra Starweaver',
+    companyOrBook: 'Nebula Publishing',
+    rating: 5,
+    title: 'Transformed Our Digital Presence',
+    quote: 'BigTeeWise rebuilt our entire digital ecosystem from the ground up. The new website, funnels, and ad strategy tripled our subscriber base in just ninety days.',
+    avatar: 'https://images.pexels.com/photos/3764119/pexels-photo-3764119.jpeg?auto=compress&cs=tinysrgb&w=300'
+  },
+  {
+    id: 8,
+    name: 'Thorne Ashford',
+    companyOrBook: 'Echoes of Eldoria',
+    rating: 5,
+    title: 'Beyond What I Imagined Possible',
+    quote: 'I came to them with a rough manuscript and a dream. They delivered a full-scale publishing strategy, cover design, and launch plan that landed me a spot on multiple bestseller charts.',
+    avatar: 'https://images.pexels.com/photos/1043474/pexels-photo-1043474.jpeg?auto=compress&cs=tinysrgb&w=300'
+  },
+  {
+    id: 9,
+    name: 'Cassius Vale',
+    companyOrBook: 'The Last Spellbinder',
+    rating: 5,
+    title: 'Elite-Level Author Services',
+    quote: 'Their understanding of the literary market is unparalleled. The launch campaign they orchestrated for my trilogy created a sustained sales velocity I did not think was possible for an indie author.',
+    avatar: 'https://images.pexels.com/photos/614810/pexels-photo-614810.jpeg?auto=compress&cs=tinysrgb&w=300'
   }
 ];
 
 export default function TestimonialsSection() {
-  const [currentIdx, setCurrentIdx] = useState(0);
   const sectionRef = useRef(null);
-  const cardRefs = useRef([]);
 
   const testimonialsList = ContentModule.TESTIMONIALS || DEFAULT_TESTIMONIALS;
-  const listLength = testimonialsList.length;
-
-  const nextTestimonial = () => {
-    setCurrentIdx((prev) => (prev + 1) % listLength);
-  };
-
-  const prevTestimonial = () => {
-    setCurrentIdx((prev) => (prev - 1 + listLength) % listLength);
-  };
 
   useEffect(() => {
     const ctx = gsap.context(() => {
@@ -78,26 +121,6 @@ export default function TestimonialsSection() {
         }
       );
 
-      // Card Animation with stagger
-      gsap.fromTo(
-        '.testimonial-card',
-        { y: 50, opacity: 0, scale: 0.95 },
-        {
-          y: 0,
-          opacity: 1,
-          scale: 1,
-          duration: 1.1,
-          stagger: 0.15,
-          ease: 'power3.out',
-          scrollTrigger: {
-            trigger: '.testimonial-grid',
-            start: 'top 80%',
-            toggleActions: 'play none none none',
-          },
-          clearProps: 'transform,opacity,scale',
-        }
-      );
-
       // Floating orbs
       gsap.to('.testimonial-orb-1', {
         y: -25,
@@ -117,111 +140,10 @@ export default function TestimonialsSection() {
         ease: 'sine.inOut',
         delay: 0.5,
       });
-
-      // Card hover animations with GSAP
-      const cards = document.querySelectorAll('.testimonial-card');
-      cards.forEach((card) => {
-        const quoteIcon = card.querySelector('.testimonial-quote-icon');
-        const content = card.querySelector('.testimonial-content');
-        const stars = card.querySelector('.testimonial-stars');
-        const avatar = card.querySelector('.testimonial-avatar');
-
-        card.addEventListener('mouseenter', () => {
-          // Card lift
-          gsap.to(card, {
-            y: -8,
-            duration: 0.4,
-            ease: 'power2.out',
-          });
-
-          // Quote icon
-          if (quoteIcon) {
-            gsap.to(quoteIcon, {
-              scale: 1.1,
-              rotation: 5,
-              duration: 0.4,
-              ease: 'power2.out',
-            });
-          }
-
-          // Content
-          if (content) {
-            gsap.to(content, {
-              y: -2,
-              duration: 0.3,
-              ease: 'power2.out',
-            });
-          }
-
-          // Stars
-          if (stars) {
-            gsap.to(stars, {
-              scale: 1.05,
-              duration: 0.3,
-              ease: 'power2.out',
-            });
-          }
-
-          // Avatar
-          if (avatar) {
-            gsap.to(avatar, {
-              scale: 1.05,
-              rotate: -3,
-              duration: 0.4,
-              ease: 'power2.out',
-            });
-          }
-        });
-
-        card.addEventListener('mouseleave', () => {
-          gsap.to(card, {
-            y: 0,
-            duration: 0.4,
-            ease: 'power2.out',
-          });
-
-          if (quoteIcon) {
-            gsap.to(quoteIcon, {
-              scale: 1,
-              rotation: 0,
-              duration: 0.4,
-              ease: 'power2.out',
-            });
-          }
-
-          if (content) {
-            gsap.to(content, {
-              y: 0,
-              duration: 0.3,
-              ease: 'power2.out',
-            });
-          }
-
-          if (stars) {
-            gsap.to(stars, {
-              scale: 1,
-              duration: 0.3,
-              ease: 'power2.out',
-            });
-          }
-
-          if (avatar) {
-            gsap.to(avatar, {
-              scale: 1,
-              rotate: 0,
-              duration: 0.4,
-              ease: 'power2.out',
-            });
-          }
-        });
-      });
     }, sectionRef);
 
     return () => ctx.revert();
   }, []);
-
-  const item1 = testimonialsList[currentIdx];
-  const item2 = testimonialsList[(currentIdx + 1) % listLength];
 
   return (
     <section 
@@ -263,156 +185,64 @@ export default function TestimonialsSection() {
           </div>
         </div>
 
-        {/* Testimonials Grid */}
-        <div className="testimonial-grid grid grid-cols-1 md:grid-cols-2 gap-6 sm:gap-8 mb-10">
-          
-          {/* Card 1 */}
-          {item1 && (
-            <div className="testimonial-card group bg-gradient-to-br from-slate-800/90 to-slate-800/70 rounded-3xl p-6 sm:p-8 lg:p-10 border border-slate-700/60 hover:border-blue-500/40 transition-all duration-500 shadow-xl hover:shadow-2xl hover:shadow-blue-600/10 cursor-pointer relative">
-              
-              {/* Quote Icon - Decorative */}
-              <div className="testimonial-quote-icon absolute top-6 right-6 sm:top-8 sm:right-8 opacity-20 group-hover:opacity-40 transition-opacity duration-500">
-                <Quote className="w-12 h-12 sm:w-14 sm:h-14 text-blue-400" strokeWidth={1.5} />
-              </div>
-
-              {/* Gradient accent line */}
-              <div className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-blue-500 via-indigo-500 to-blue-500 rounded-t-3xl opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
-
-              <div className="testimonial-content relative">
-                {/* Rating Stars */}
-                <div className="testimonial-stars flex items-center gap-1.5 mb-4">
-                  {[...Array(item1.rating || 5)].map((_, i) => (
-                    <Star key={i} className="w-4 h-4 fill-amber-400 text-amber-400" strokeWidth={0} />
-                  ))}
-                  <span className="text-xs font-bold text-slate-400 ml-2">5.0</span>
-                </div>
-
-                {/* Title */}
-                <h3 className="text-lg sm:text-xl font-bold text-white mb-3 leading-tight">
-                  &ldquo;{item1.title}&rdquo;
-                </h3>
-
-                {/* Quote Text */}
-                <p className="text-slate-300 text-sm sm:text-base leading-relaxed mb-6 font-normal">
-                  {item1.quote}
-                </p>
-              </div>
-
-              {/* Client Info */}
-              <div className="flex items-center gap-4 pt-5 border-t border-slate-700/40 group-hover:border-blue-500/20 transition-colors duration-300">
-                <div className="testimonial-avatar relative w-14 h-14 sm:w-16 sm:h-16 rounded-full overflow-hidden shrink-0 ring-2 ring-blue-500/30 group-hover:ring-blue-400/50 transition-all duration-300 shadow-lg shadow-blue-500/10">
-                  <Image
-                    src={item1.avatar}
-                    alt={item1.name}
-                    fill
-                    sizes="64px"
-                    className="object-cover"
-                  />
-                </div>
-                <div>
-                  <h4 className="font-bold text-white text-base sm:text-lg leading-snug group-hover:text-blue-400 transition-colors duration-300">
-                    {item1.name}
-                  </h4>
-                  {item1.role && <p className="text-xs font-semibold text-blue-400">{item1.role}</p>}
-                  {item1.companyOrBook && <p className="text-[11px] text-slate-400 mt-0.5">{item1.companyOrBook}</p>}
-                </div>
-              </div>
-            </div>
-          )}
-
-          {/* Card 2 (Desktop only) */}
-          {item2 && (
-            <div className="testimonial-card hidden md:flex group bg-gradient-to-br from-slate-800/90 to-slate-800/70 rounded-3xl p-6 sm:p-8 lg:p-10 border border-slate-700/60 hover:border-blue-500/40 transition-all duration-500 shadow-xl hover:shadow-2xl hover:shadow-blue-600/10 cursor-pointer relative">
-              
-              {/* Quote Icon - Decorative */}
-              <div className="testimonial-quote-icon absolute top-6 right-6 sm:top-8 sm:right-8 opacity-20 group-hover:opacity-40 transition-opacity duration-500">
-                <Quote className="w-12 h-12 sm:w-14 sm:h-14 text-blue-400" strokeWidth={1.5} />
-              </div>
-
-              {/* Gradient accent line */}
-              <div className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-blue-500 via-indigo-500 to-blue-500 rounded-t-3xl opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
-
-              <div className="testimonial-content relative">
-                {/* Rating Stars */}
-                <div className="testimonial-stars flex items-center gap-1.5 mb-4">
-                  {[...Array(item2.rating || 5)].map((_, i) => (
-                    <Star key={i} className="w-4 h-4 fill-amber-400 text-amber-400" strokeWidth={0} />
-                  ))}
-                  <span className="text-xs font-bold text-slate-400 ml-2">5.0</span>
-                </div>
-
-                {/* Title */}
-                <h3 className="text-lg sm:text-xl font-bold text-white mb-3 leading-tight">
-                  &ldquo;{item2.title}&rdquo;
-                </h3>
-
-                {/* Quote Text */}
-                <p className="text-slate-300 text-sm sm:text-base leading-relaxed mb-6 font-normal">
-                  {item2.quote}
-                </p>
-              </div>
-
-              {/* Client Info */}
-              <div className="flex items-center gap-4 pt-5 border-t border-slate-700/40 group-hover:border-blue-500/20 transition-colors duration-300">
-                <div className="testimonial-avatar relative w-14 h-14 sm:w-16 sm:h-16 rounded-full overflow-hidden shrink-0 ring-2 ring-blue-500/30 group-hover:ring-blue-400/50 transition-all duration-300 shadow-lg shadow-blue-500/10">
-                  <Image
-                    src={item2.avatar}
-                    alt={item2.name}
-                    fill
-                    sizes="64px"
-                    className="object-cover"
-                  />
-                </div>
-                <div>
-                  <h4 className="font-bold text-white text-base sm:text-lg leading-snug group-hover:text-blue-400 transition-colors duration-300">
-                    {item2.name}
-                  </h4>
-                  {item2.role && <p className="text-xs font-semibold text-blue-400">{item2.role}</p>}
-                  {item2.companyOrBook && <p className="text-[11px] text-slate-400 mt-0.5">{item2.companyOrBook}</p>}
-                </div>
-              </div>
-            </div>
-          )}
-
-        </div>
-
-        {/* Carousel Navigation - Premium Controls */}
-        <div className="flex items-center justify-center gap-5">
-          <button
-            onClick={prevTestimonial}
-            className="w-12 h-12 rounded-full bg-slate-800/80 hover:bg-blue-600 active:scale-95 text-white flex items-center justify-center transition-all duration-300 border border-slate-700/50 hover:border-blue-500 shadow-lg hover:shadow-blue-600/20 touch-manipulation group"
-            aria-label="Previous Testimonial"
-          >
-            <ChevronLeft className="w-5 h-5 group-hover:scale-110 transition-transform" />
-          </button>
-
-          {/* Dots Indicator - Premium */}
-          <div className="flex items-center gap-2.5">
-            {testimonialsList.map((_, idx) => (
-              <button
-                key={idx}
-                onClick={() => setCurrentIdx(idx)}
-                className={`relative h-2.5 rounded-full transition-all duration-500 ${
-                  idx === currentIdx 
-                    ? 'w-10 bg-gradient-to-r from-blue-500 to-indigo-500 shadow-lg shadow-blue-500/30' 
-                    : 'w-2.5 bg-slate-700 hover:bg-slate-500'
-                }`}
-                aria-label={`Go to slide ${idx + 1}`}
+        {/* Testimonials Marquee Carousel */}
+        <div className="carousel-container relative overflow-hidden mb-10">
+          <div className="carousel-track flex gap-6 sm:gap-8">
+            {[...testimonialsList, ...testimonialsList].map((item, idx) => (
+              <div
+                key={`${item.id}-${idx}`}
+                className="testimonial-card group flex-shrink-0 w-[300px] sm:w-[380px] lg:w-[520px] bg-gradient-to-br from-slate-800/90 to-slate-800/70 rounded-3xl p-6 sm:p-8 lg:p-10 border border-slate-700/60 hover:border-blue-500/40 transition-all duration-500 shadow-xl hover:shadow-2xl hover:shadow-blue-600/10 cursor-pointer relative"
               >
-                {idx === currentIdx && (
-                  <span className="absolute inset-0 rounded-full bg-blue-400/30 animate-ping-slow" />
-                )}
-              </button>
+                {/* Quote Icon - Decorative */}
+                <div className="testimonial-quote-icon absolute top-6 right-6 sm:top-8 sm:right-8 opacity-20 group-hover:opacity-40 transition-opacity duration-500">
+                  <Quote className="w-12 h-12 sm:w-14 sm:h-14 text-blue-400" strokeWidth={1.5} />
+                </div>
+
+                {/* Gradient accent line */}
+                <div className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-blue-500 via-indigo-500 to-blue-500 rounded-t-3xl opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
+
+                <div className="testimonial-content relative">
+                  {/* Rating Stars */}
+                  <div className="testimonial-stars flex items-center gap-1.5 mb-4">
+                    {[...Array(item.rating || 5)].map((_, i) => (
+                      <Star key={i} className="w-4 h-4 fill-amber-400 text-amber-400" strokeWidth={0} />
+                    ))}
+                    <span className="text-xs font-bold text-slate-400 ml-2">5.0</span>
+                  </div>
+
+                  {/* Title */}
+                  <h3 className="text-lg sm:text-xl font-bold text-white mb-3 leading-tight">
+                    &ldquo;{item.title}&rdquo;
+                  </h3>
+
+                  {/* Quote Text */}
+                  <p className="text-slate-300 text-sm sm:text-base leading-relaxed mb-6 font-normal">
+                    {item.quote}
+                  </p>
+                </div>
+
+                {/* Client Info */}
+                <div className="flex items-center gap-4 pt-5 border-t border-slate-700/40 group-hover:border-blue-500/20 transition-colors duration-300">
+                  <div className="testimonial-avatar relative w-14 h-14 sm:w-16 sm:h-16 rounded-full overflow-hidden shrink-0 ring-2 ring-blue-500/30 group-hover:ring-blue-400/50 transition-all duration-300 shadow-lg shadow-blue-500/10">
+                    <Image
+                      src={item.avatar}
+                      alt={item.name}
+                      fill
+                      sizes="64px"
+                      className="object-cover"
+                    />
+                  </div>
+                  <div>
+                    <h4 className="font-bold text-white text-base sm:text-lg leading-snug group-hover:text-blue-400 transition-colors duration-300">
+                      {item.name}
+                    </h4>
+                    {item.role && <p className="text-xs font-semibold text-blue-400">{item.role}</p>}
+                    {item.companyOrBook && <p className="text-[11px] text-slate-400 mt-0.5">{item.companyOrBook}</p>}
+                  </div>
+                </div>
+              </div>
             ))}
           </div>
-
-          <button
-            onClick={nextTestimonial}
-            className="w-12 h-12 rounded-full bg-slate-800/80 hover:bg-blue-600 active:scale-95 text-white flex items-center justify-center transition-all duration-300 border border-slate-700/50 hover:border-blue-500 shadow-lg hover:shadow-blue-600/20 touch-manipulation group"
-            aria-label="Next Testimonial"
-          >
-            <ChevronRight className="w-5 h-5 group-hover:scale-110 transition-transform" />
-          </button>
         </div>
 
         {/* Trust Indicator */}
@@ -432,18 +262,25 @@ export default function TestimonialsSection() {
 
       {/* Custom animations */}
       <style jsx>{`
-        @keyframes ping-slow {
+        @keyframes marquee {
           0% {
-            transform: scale(1);
-            opacity: 0.4;
+            transform: translateX(0);
           }
           100% {
-            transform: scale(2);
-            opacity: 0;
+            transform: translateX(-50%);
           }
         }
-        .animate-ping-slow {
-          animation: ping-slow 2s cubic-bezier(0, 0, 0.2, 1) infinite;
+        .carousel-track {
+          animation: marquee 22s linear infinite;
+          will-change: transform;
+        }
+        .carousel-container:hover .carousel-track {
+          animation-play-state: paused;
+        }
+        @media (prefers-reduced-motion: reduce) {
+          .carousel-track {
+            animation: none;
+          }
         }
       `}</style>
     </section>

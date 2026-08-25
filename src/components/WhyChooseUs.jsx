@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useEffect, useRef } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import Image from 'next/image';
 import { Play, DollarSign, Users, Award, ShieldCheck, ArrowRight, Sparkles, Target, TrendingUp, Star, CheckCircle2 } from 'lucide-react';
 import gsap from 'gsap';
@@ -14,6 +14,12 @@ if (typeof window !== 'undefined') {
 export default function WhyChooseUs({ onOpenQuoteModal, onOpenVideoModal }) {
   const { t } = useLanguage();
   const sectionRef = useRef(null);
+  const [isMounted, setIsMounted] = useState(false);
+
+  // ✅ Mount state for hydration
+  useEffect(() => {
+    setIsMounted(true);
+  }, []);
 
   // Translation helper
   const tr = (key, fallback) => {
@@ -67,11 +73,32 @@ export default function WhyChooseUs({ onOpenQuoteModal, onOpenVideoModal }) {
   ];
 
   useEffect(() => {
+    if (!sectionRef.current || !isMounted) return;
+
     const ctx = gsap.context(() => {
       const isMobile = window.matchMedia('(max-width: 767px)').matches;
       const isTablet = window.matchMedia('(min-width: 768px) and (max-width: 1023px)').matches;
+      const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
-      // Header Animation
+      if (reduceMotion) {
+        gsap.set([
+          '.why-header-item',
+          '.why-media-card',
+          '.why-feature-card',
+          '.why-stat-number',
+          '.why-orb-1',
+          '.why-orb-2',
+        ], {
+          opacity: 1,
+          y: 0,
+          x: 0,
+          scale: 1,
+          clearProps: 'transform,opacity',
+        });
+        return;
+      }
+
+      // ✅ Header Animation
       gsap.fromTo(
         '.why-header-item',
         { y: 30, opacity: 0 },
@@ -81,16 +108,16 @@ export default function WhyChooseUs({ onOpenQuoteModal, onOpenVideoModal }) {
           duration: 1,
           stagger: 0.15,
           ease: 'power3.out',
+          overwrite: 'auto',
           scrollTrigger: {
             trigger: sectionRef.current,
             start: 'top 80%',
             toggleActions: 'play none none none',
           },
-          clearProps: 'transform,opacity',
         }
       );
 
-      // Media Image Card Animation with scale
+      // ✅ Media Card Animation
       gsap.fromTo(
         '.why-media-card',
         { x: -40, opacity: 0, scale: 0.95 },
@@ -100,16 +127,16 @@ export default function WhyChooseUs({ onOpenQuoteModal, onOpenVideoModal }) {
           scale: 1,
           duration: 1.2,
           ease: 'power3.out',
+          overwrite: 'auto',
           scrollTrigger: {
             trigger: '.why-media-card',
             start: 'top 80%',
             toggleActions: 'play none none none',
           },
-          clearProps: 'transform,opacity,scale',
         }
       );
 
-      // Feature Grid Cards Animation with stagger
+      // ✅ Feature Cards Animation
       gsap.fromTo(
         '.why-feature-card',
         { y: 40, opacity: 0, scale: 0.96 },
@@ -120,37 +147,40 @@ export default function WhyChooseUs({ onOpenQuoteModal, onOpenVideoModal }) {
           duration: isMobile ? 0.7 : 1,
           stagger: isMobile ? 0.08 : 0.12,
           ease: 'power3.out',
+          overwrite: 'auto',
           scrollTrigger: {
             trigger: '.why-grid-container',
             start: 'top 80%',
             toggleActions: 'play none none none',
           },
-          clearProps: 'transform,opacity,scale',
         }
       );
 
-      // Floating orbs animation
-      gsap.to('.why-orb-1', {
-        y: -20,
-        x: 15,
-        duration: 4,
-        repeat: -1,
-        yoyo: true,
-        ease: 'sine.inOut',
-        delay: 0,
-      });
+      // ✅ Floating Orbs (only on desktop)
+      if (!isMobile) {
+        gsap.to('.why-orb-1', {
+          y: -20,
+          x: 15,
+          duration: 4,
+          repeat: -1,
+          yoyo: true,
+          ease: 'sine.inOut',
+          overwrite: 'auto',
+        });
 
-      gsap.to('.why-orb-2', {
-        y: 25,
-        x: -10,
-        duration: 3.5,
-        repeat: -1,
-        yoyo: true,
-        ease: 'sine.inOut',
-        delay: 0.5,
-      });
+        gsap.to('.why-orb-2', {
+          y: 25,
+          x: -10,
+          duration: 3.5,
+          repeat: -1,
+          yoyo: true,
+          ease: 'sine.inOut',
+          delay: 0.5,
+          overwrite: 'auto',
+        });
+      }
 
-      // Play button pulse ring
+      // ✅ Play button pulse ring
       gsap.to('.why-pulse-ring', {
         scale: 1.4,
         opacity: 0,
@@ -158,67 +188,76 @@ export default function WhyChooseUs({ onOpenQuoteModal, onOpenVideoModal }) {
         repeat: -1,
         ease: 'power2.out',
         delay: 0.5,
+        overwrite: 'auto',
       });
 
-      // Feature cards hover animations via GSAP
-      const cards = document.querySelectorAll('.why-feature-card');
-      cards.forEach((card) => {
-        const icon = card.querySelector('.why-feature-icon');
-        const title = card.querySelector('.why-feature-title');
-        const desc = card.querySelector('.why-feature-desc');
+      // ✅ Feature card hover animations (desktop only)
+      if (!isMobile) {
+        const cards = document.querySelectorAll('.why-feature-card');
+        cards.forEach((card) => {
+          const icon = card.querySelector('.why-feature-icon');
+          const title = card.querySelector('.why-feature-title');
+          const desc = card.querySelector('.why-feature-desc');
 
-        card.addEventListener('mouseenter', () => {
-          if (icon) {
-            gsap.to(icon, {
-              scale: 1.1,
-              rotation: 5,
-              duration: 0.4,
-              ease: 'power2.out',
-            });
-          }
-          if (title) {
-            gsap.to(title, {
-              color: '#60a5fa',
-              duration: 0.3,
-              ease: 'power2.out',
-            });
-          }
-          if (desc) {
-            gsap.to(desc, {
-              color: '#e2e8f0',
-              duration: 0.3,
-              ease: 'power2.out',
-            });
-          }
+          card.addEventListener('mouseenter', () => {
+            if (icon) {
+              gsap.to(icon, {
+                scale: 1.1,
+                rotation: 5,
+                duration: 0.4,
+                ease: 'power2.out',
+                overwrite: 'auto',
+              });
+            }
+            if (title) {
+              gsap.to(title, {
+                color: '#60a5fa',
+                duration: 0.3,
+                ease: 'power2.out',
+                overwrite: 'auto',
+              });
+            }
+            if (desc) {
+              gsap.to(desc, {
+                color: '#e2e8f0',
+                duration: 0.3,
+                ease: 'power2.out',
+                overwrite: 'auto',
+              });
+            }
+          });
+
+          card.addEventListener('mouseleave', () => {
+            if (icon) {
+              gsap.to(icon, {
+                scale: 1,
+                rotation: 0,
+                duration: 0.4,
+                ease: 'power2.out',
+                overwrite: 'auto',
+              });
+            }
+            if (title) {
+              gsap.to(title, {
+                color: '#ffffff',
+                duration: 0.3,
+                ease: 'power2.out',
+                overwrite: 'auto',
+              });
+            }
+            if (desc) {
+              gsap.to(desc, {
+                color: '#94a3b8',
+                duration: 0.3,
+                ease: 'power2.out',
+                overwrite: 'auto',
+              });
+            }
+          });
         });
+      }
 
-        card.addEventListener('mouseleave', () => {
-          if (icon) {
-            gsap.to(icon, {
-              scale: 1,
-              rotation: 0,
-              duration: 0.4,
-              ease: 'power2.out',
-            });
-          }
-          if (title) {
-            gsap.to(title, {
-              color: '#ffffff',
-              duration: 0.3,
-              ease: 'power2.out',
-            });
-          }
-          if (desc) {
-            gsap.to(desc, {
-              color: '#94a3b8',
-              duration: 0.3,
-              ease: 'power2.out',
-            });
-          }
-        });
-      });
-
-      // Stat numbers animation
+      // ✅ Stats Animation
       gsap.fromTo(
         '.why-stat-number',
         { opacity: 0, scale: 0.5 },
@@ -228,19 +267,31 @@ export default function WhyChooseUs({ onOpenQuoteModal, onOpenVideoModal }) {
           duration: 0.8,
           stagger: 0.15,
           ease: 'back.out(1.7)',
+          overwrite: 'auto',
           scrollTrigger: {
             trigger: '.why-stats-container',
             start: 'top 85%',
             toggleActions: 'play none none none',
           },
-          clearProps: 'transform,opacity',
         }
       );
-
     }, sectionRef);
 
-    return () => ctx.revert();
-  }, []);
+    return () => {
+      ctx.revert();
+      // ✅ Clean up ScrollTriggers
+      ScrollTrigger.getAll().forEach(st => {
+        if (st.trigger === sectionRef.current || sectionRef.current?.contains(st.trigger)) {
+          st.kill();
+        }
+      });
+    };
+  }, [isMounted]);
+
+  // ✅ Prevent hydration mismatch
+  if (!isMounted) {
+    return null;
+  }
 
   return (
     <section 
@@ -253,8 +304,6 @@ export default function WhyChooseUs({ onOpenQuoteModal, onOpenVideoModal }) {
         <div className="why-orb-1 absolute -top-32 -right-32 w-96 h-96 bg-blue-600/20 rounded-full blur-3xl" />
         <div className="why-orb-2 absolute -bottom-32 -left-32 w-80 h-80 bg-indigo-600/15 rounded-full blur-3xl" />
         <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-blue-500/5 rounded-full blur-3xl" />
-        
-        {/* Subtle grid pattern */}
         <div className="absolute inset-0 opacity-[0.03] bg-[radial-gradient(#ffffff_1px,transparent_1px)] [background-size:24px_24px]" />
       </div>
 
@@ -264,7 +313,7 @@ export default function WhyChooseUs({ onOpenQuoteModal, onOpenVideoModal }) {
         <div className="flex flex-col lg:flex-row lg:items-end justify-between mb-12 sm:mb-16 gap-6">
           <div className="space-y-3 max-w-2xl">
             <div className="why-header-item inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-blue-500/10 border border-blue-500/30 text-blue-400 text-xs sm:text-sm font-bold tracking-wide uppercase">
-              <span className="text-blue-400 font-extrabold">//</span>
+              <span className="text-blue-400 font-extrabold" aria-hidden="true">//</span>
               <span>{tr('whyChooseUs.badge', 'Why Choose Us')}</span>
             </div>
 
@@ -281,9 +330,10 @@ export default function WhyChooseUs({ onOpenQuoteModal, onOpenVideoModal }) {
           <button
             onClick={onOpenQuoteModal}
             className="why-header-item bg-blue-600 hover:bg-blue-500 active:scale-95 text-white font-bold text-sm px-7 sm:px-8 py-3.5 rounded-full shadow-lg shadow-blue-600/30 hover:shadow-blue-600/50 hover:-translate-y-0.5 transition-all duration-300 flex items-center justify-center gap-2 self-start lg:self-auto group"
+            aria-label={tr('whyChooseUs.ctaButton', 'Get A Free Consultation')}
           >
             <span>{tr('whyChooseUs.ctaButton', 'Get A Free Consultation')}</span>
-            <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
+            <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" aria-hidden="true" />
           </button>
         </div>
 
@@ -295,9 +345,10 @@ export default function WhyChooseUs({ onOpenQuoteModal, onOpenVideoModal }) {
             <div className="relative h-[380px] sm:h-[450px] lg:h-[520px] w-full rounded-3xl overflow-hidden border border-slate-700/80 shadow-2xl shadow-blue-600/10 group">
               <Image
                 src="https://images.pexels.com/photos/32082430/pexels-photo-32082430.jpeg?auto=compress&cs=tinysrgb&fit=crop&h=800&w=1000"
-                alt={tr('whyChooseUs.altText', 'BigTeeWise Team Consultation')}
+                alt={tr('whyChooseUs.altText', 'BigTeeWise Digital team working on creative strategy and book marketing campaigns')}
                 fill
                 quality={85}
+                priority
                 sizes="(max-width: 1024px) 100vw, 50vw"
                 className="object-cover group-hover:scale-105 transition-transform duration-700"
               />
@@ -305,7 +356,7 @@ export default function WhyChooseUs({ onOpenQuoteModal, onOpenVideoModal }) {
 
               {/* Top Badge */}
               <div className="absolute top-4 left-4 bg-white/95 backdrop-blur-md rounded-xl px-3 py-2 border border-white/20 shadow-lg flex items-center gap-2 z-20">
-                <Sparkles className="w-3.5 h-3.5 text-blue-600" />
+                <Sparkles className="w-3.5 h-3.5 text-blue-600" aria-hidden="true" />
                 <span className="text-[10px] sm:text-xs font-bold text-slate-900">{tr('whyChooseUs.studioTag', 'Creative Strategy Studio')}</span>
               </div>
 
@@ -314,15 +365,16 @@ export default function WhyChooseUs({ onOpenQuoteModal, onOpenVideoModal }) {
                 onClick={onOpenVideoModal}
                 className="absolute inset-0 m-auto w-16 h-16 sm:w-20 sm:h-20 rounded-full bg-blue-600 text-white flex items-center justify-center shadow-2xl shadow-blue-600/40 hover:scale-110 hover:bg-blue-500 transition-all duration-300 group/btn z-20"
                 title={tr('whyChooseUs.watchVideo', 'Watch Agency Showreel')}
+                aria-label={tr('whyChooseUs.watchVideo', 'Watch Agency Showreel')}
               >
-                <Play className="w-7 h-7 sm:w-8 sm:h-8 fill-white ml-0.5 group-hover/btn:scale-110 transition-transform" />
+                <Play className="w-7 h-7 sm:w-8 sm:h-8 fill-white ml-0.5 group-hover/btn:scale-110 transition-transform" aria-hidden="true" />
                 <span className="why-pulse-ring absolute inset-0 rounded-full border-2 border-blue-400/50 pointer-events-none" />
               </button>
 
               {/* Bottom Info Card */}
               <div className="absolute bottom-4 left-4 right-4 p-4 sm:p-5 rounded-2xl bg-slate-900/95 backdrop-blur-md border border-slate-700 z-20 shadow-xl">
                 <div className="flex items-center gap-2 mb-1.5">
-                  <CheckCircle2 className="w-3.5 h-3.5 text-blue-400" />
+                  <CheckCircle2 className="w-3.5 h-3.5 text-blue-400" aria-hidden="true" />
                   <p className="text-[10px] text-blue-400 font-bold uppercase tracking-wider">{tr('whyChooseUs.locationBadge', 'Based in UK, United Kingdom')}</p>
                 </div>
                 <p className="text-xs sm:text-sm font-semibold text-slate-200 leading-relaxed">

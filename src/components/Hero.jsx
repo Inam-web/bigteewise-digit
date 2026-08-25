@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useEffect, useRef } from 'react';
+import React, { useEffect, useRef, useCallback, useState } from 'react';
 import Image from 'next/image';
 import {
   ArrowRight,
@@ -22,6 +22,9 @@ import { useLanguage } from '@/i18n/LanguageContext';
 export default function Hero({ onOpenQuoteModal, onOpenVideoModal }) {
   const { t } = useLanguage();
   const containerRef = useRef(null);
+  const [isMounted, setIsMounted] = useState(false);
+
+  // Refs for GSAP animations
   const badgeRef = useRef(null);
   const headingRef = useRef(null);
   const descRef = useRef(null);
@@ -56,290 +59,323 @@ export default function Hero({ onOpenQuoteModal, onOpenVideoModal }) {
     { name: t('hero.platformMailchimp'), label: t('hero.platformMailchimpLabel'), color: 'yellow', icon: Star },
   ];
 
+  // ✅ Use useCallback to prevent unnecessary re-renders
+  const addFeatureRef = useCallback((el) => {
+    if (el && !featuresRef.current.includes(el)) {
+      featuresRef.current.push(el);
+    }
+  }, []);
+
+  const addCtaRef = useCallback((el) => {
+    if (el && !ctasRef.current.includes(el)) {
+      ctasRef.current.push(el);
+    }
+  }, []);
+
+  const addResultRef = useCallback((el) => {
+    if (el && !resultItemsRef.current.includes(el)) {
+      resultItemsRef.current.push(el);
+    }
+  }, []);
+
+  const addPlatformRef = useCallback((el) => {
+    if (el && !platformCardsRef.current.includes(el)) {
+      platformCardsRef.current.push(el);
+    }
+  }, []);
+
+  // ✅ Set mounted state for hydration
   useEffect(() => {
-    if (!containerRef.current) return;
+    setIsMounted(true);
+  }, []);
+
+  // ✅ GSAP Animations - Optimized
+  useEffect(() => {
+    if (!containerRef.current || !isMounted) return;
 
     const ctx = gsap.context(() => {
-      const tl = gsap.timeline({
-        defaults: {
-          ease: 'power3.out'
-        }
-      });
+      // ✅ Check for reduced motion preference
+      const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+      const isMobile = window.innerWidth < 768;
+      
+      // ✅ Animation durations based on device
+      const dur = isMobile ? 0.5 : 0.8;
+      const staggerDur = isMobile ? 0.06 : 0.1;
 
-      /* Initial states */
-      gsap.set(
-        [
-          badgeRef.current,
-          headingRef.current,
-          descRef.current,
-          socialRef.current,
-          imageBoxRef.current,
-          floatTopRef.current,
-          floatBottomRef.current,
-          resultsRef.current,
-          statusRef.current,
-          platformHeadingRef.current,
-          platformsRef.current
-        ],
-        {
-          opacity: 0
-        }
-      );
+      // Only apply if not reduced motion
+      if (!reduceMotion) {
+        const tl = gsap.timeline({
+          defaults: {
+            ease: 'power3.out',
+            force3D: true, // ✅ GPU acceleration
+          }
+        });
 
-      gsap.set(featuresRef.current, {
-        opacity: 0
-      });
-
-      gsap.set(ctasRef.current, {
-        opacity: 0
-      });
-
-      gsap.set(resultItemsRef.current, {
-        opacity: 0
-      });
-
-      gsap.set(platformCardsRef.current, {
-        opacity: 0,
-        y: 30
-      });
-
-      gsap.set(badgeRef.current, {
-        y: -20
-      });
-
-      gsap.set(headingRef.current, {
-        y: 30
-      });
-
-      gsap.set(descRef.current, {
-        y: 20
-      });
-
-      gsap.set(featuresRef.current, {
-        y: 15
-      });
-
-      gsap.set(ctasRef.current, {
-        y: 20
-      });
-
-      gsap.set(socialRef.current, {
-        y: 15
-      });
-
-      gsap.set(imageBoxRef.current, {
-        scale: 0.92
-      });
-
-      gsap.set(floatTopRef.current, {
-        x: -30
-      });
-
-      gsap.set(floatBottomRef.current, {
-        x: 30
-      });
-
-      gsap.set(resultsRef.current, {
-        y: 30
-      });
-
-      gsap.set(statusRef.current, {
-        y: 20
-      });
-
-      gsap.set(platformHeadingRef.current, {
-        y: 20
-      });
-
-      gsap.set(platformsRef.current, {
-        y: 20
-      });
-
-      /* Main hero animation */
-      tl.to(badgeRef.current, {
-        opacity: 1,
-        y: 0,
-        duration: 0.5
-      })
-        .to(
-          headingRef.current,
+        // Initial states
+        gsap.set(
+          [
+            badgeRef.current,
+            headingRef.current,
+            descRef.current,
+            socialRef.current,
+            imageBoxRef.current,
+            floatTopRef.current,
+            floatBottomRef.current,
+            resultsRef.current,
+            statusRef.current,
+            platformHeadingRef.current,
+            platformsRef.current
+          ],
           {
-            opacity: 1,
-            y: 0,
-            duration: 0.8
-          },
-          '-=0.25'
-        )
-        .to(
-          descRef.current,
-          {
-            opacity: 1,
-            y: 0,
-            duration: 0.6
-          },
-          '-=0.5'
-        )
-        .to(
-          featuresRef.current,
-          {
-            opacity: 1,
-            y: 0,
-            stagger: 0.1,
-            duration: 0.5
-          },
-          '-=0.4'
-        )
-        .to(
-          ctasRef.current,
-          {
-            opacity: 1,
-            y: 0,
-            stagger: 0.15,
-            duration: 0.5
-          },
-          '-=0.3'
-        )
-        .to(
-          socialRef.current,
-          {
-            opacity: 1,
-            y: 0,
-            duration: 0.5
-          },
-          '-=0.3'
-        )
-        .to(
-          imageBoxRef.current,
-          {
-            opacity: 1,
-            scale: 1,
-            duration: 0.8
-          },
-          '-=1'
-        )
-        .to(
-          floatTopRef.current,
-          {
-            opacity: 1,
-            x: 0,
-            duration: 0.6
-          },
-          '-=0.4'
-        )
-        .to(
-          floatBottomRef.current,
-          {
-            opacity: 1,
-            x: 0,
-            duration: 0.6
-          },
-          '-=0.5'
-        )
-        .to(
-          resultsRef.current,
-          {
-            opacity: 1,
-            y: 0,
-            duration: 0.7
-          },
-          '-=0.3'
-        )
-        .to(
-          resultItemsRef.current,
-          {
-            opacity: 1,
-            y: 0,
-            stagger: 0.12,
-            duration: 0.55
-          },
-          '-=0.35'
-        )
-        .to(
-          statusRef.current,
-          {
-            opacity: 1,
-            y: 0,
-            duration: 0.6
-          },
-          '-=0.3'
-        )
-        .to(
-          platformHeadingRef.current,
-          {
-            opacity: 1,
-            y: 0,
-            duration: 0.6
-          },
-          '-=0.2'
-        )
-        .to(
-          platformsRef.current,
-          {
-            opacity: 1,
-            y: 0,
-            duration: 0.5
-          },
-          '-=0.3'
-        )
-        .to(
-          platformCardsRef.current,
-          {
-            opacity: 1,
-            y: 0,
-            stagger: 0.08,
-            duration: 0.55,
-            ease: 'power3.out'
-          },
-          '-=0.25'
+            opacity: 0,
+            willChange: 'transform, opacity',
+          }
         );
 
-      /* Floating cards */
-      gsap.to(floatTopRef.current, {
-        y: -8,
-        duration: 3,
-        repeat: -1,
-        yoyo: true,
-        ease: 'power1.inOut'
-      });
+        gsap.set(featuresRef.current, {
+          opacity: 0,
+          willChange: 'transform, opacity',
+        });
 
-      gsap.to(floatBottomRef.current, {
-        y: 8,
-        duration: 3.5,
-        repeat: -1,
-        yoyo: true,
-        ease: 'power1.inOut',
-        delay: 0.5
-      });
+        gsap.set(ctasRef.current, {
+          opacity: 0,
+          willChange: 'transform, opacity',
+        });
+
+        gsap.set(resultItemsRef.current, {
+          opacity: 0,
+          willChange: 'transform, opacity',
+        });
+
+        gsap.set(platformCardsRef.current, {
+          opacity: 0,
+          y: 30,
+          willChange: 'transform, opacity',
+        });
+
+        gsap.set(badgeRef.current, { y: -20 });
+        gsap.set(headingRef.current, { y: 30 });
+        gsap.set(descRef.current, { y: 20 });
+        gsap.set(featuresRef.current, { y: 15 });
+        gsap.set(ctasRef.current, { y: 20 });
+        gsap.set(socialRef.current, { y: 15 });
+        gsap.set(imageBoxRef.current, { scale: 0.92 });
+        gsap.set(floatTopRef.current, { x: -30 });
+        gsap.set(floatBottomRef.current, { x: 30 });
+        gsap.set(resultsRef.current, { y: 30 });
+        gsap.set(statusRef.current, { y: 20 });
+        gsap.set(platformHeadingRef.current, { y: 20 });
+        gsap.set(platformsRef.current, { y: 20 });
+
+        // ✅ Main animation sequence
+        tl.to(badgeRef.current, {
+          opacity: 1,
+          y: 0,
+          duration: dur * 0.6,
+          overwrite: 'auto',
+        })
+          .to(
+            headingRef.current,
+            {
+              opacity: 1,
+              y: 0,
+              duration: dur,
+              overwrite: 'auto',
+            },
+            '-=0.25'
+          )
+          .to(
+            descRef.current,
+            {
+              opacity: 1,
+              y: 0,
+              duration: dur * 0.7,
+              overwrite: 'auto',
+            },
+            '-=0.5'
+          )
+          .to(
+            featuresRef.current,
+            {
+              opacity: 1,
+              y: 0,
+              stagger: staggerDur,
+              duration: dur * 0.6,
+              overwrite: 'auto',
+            },
+            '-=0.4'
+          )
+          .to(
+            ctasRef.current,
+            {
+              opacity: 1,
+              y: 0,
+              stagger: staggerDur * 1.5,
+              duration: dur * 0.6,
+              overwrite: 'auto',
+            },
+            '-=0.3'
+          )
+          .to(
+            socialRef.current,
+            {
+              opacity: 1,
+              y: 0,
+              duration: dur * 0.6,
+              overwrite: 'auto',
+            },
+            '-=0.3'
+          )
+          .to(
+            imageBoxRef.current,
+            {
+              opacity: 1,
+              scale: 1,
+              duration: dur,
+              overwrite: 'auto',
+            },
+            '-=1'
+          )
+          .to(
+            floatTopRef.current,
+            {
+              opacity: 1,
+              x: 0,
+              duration: dur * 0.7,
+              overwrite: 'auto',
+            },
+            '-=0.4'
+          )
+          .to(
+            floatBottomRef.current,
+            {
+              opacity: 1,
+              x: 0,
+              duration: dur * 0.7,
+              overwrite: 'auto',
+            },
+            '-=0.5'
+          )
+          .to(
+            resultsRef.current,
+            {
+              opacity: 1,
+              y: 0,
+              duration: dur * 0.8,
+              overwrite: 'auto',
+            },
+            '-=0.3'
+          )
+          .to(
+            resultItemsRef.current,
+            {
+              opacity: 1,
+              y: 0,
+              stagger: staggerDur * 1.2,
+              duration: dur * 0.6,
+              overwrite: 'auto',
+            },
+            '-=0.35'
+          )
+          .to(
+            statusRef.current,
+            {
+              opacity: 1,
+              y: 0,
+              duration: dur * 0.7,
+              overwrite: 'auto',
+            },
+            '-=0.3'
+          )
+          .to(
+            platformHeadingRef.current,
+            {
+              opacity: 1,
+              y: 0,
+              duration: dur * 0.7,
+              overwrite: 'auto',
+            },
+            '-=0.2'
+          )
+          .to(
+            platformsRef.current,
+            {
+              opacity: 1,
+              y: 0,
+              duration: dur * 0.6,
+              overwrite: 'auto',
+            },
+            '-=0.3'
+          )
+          .to(
+            platformCardsRef.current,
+            {
+              opacity: 1,
+              y: 0,
+              stagger: staggerDur * 0.8,
+              duration: dur * 0.6,
+              ease: 'power3.out',
+              overwrite: 'auto',
+            },
+            '-=0.25'
+          );
+
+        // ✅ Floating animations (only on desktop)
+        if (!isMobile) {
+          gsap.to(floatTopRef.current, {
+            y: -8,
+            duration: 3,
+            repeat: -1,
+            yoyo: true,
+            ease: 'power1.inOut',
+            overwrite: 'auto',
+          });
+
+          gsap.to(floatBottomRef.current, {
+            y: 8,
+            duration: 3.5,
+            repeat: -1,
+            yoyo: true,
+            ease: 'power1.inOut',
+            delay: 0.5,
+            overwrite: 'auto',
+          });
+        }
+      } else {
+        // ✅ If reduced motion, just show everything without animation
+        gsap.set(
+          [
+            badgeRef.current,
+            headingRef.current,
+            descRef.current,
+            socialRef.current,
+            imageBoxRef.current,
+            floatTopRef.current,
+            floatBottomRef.current,
+            resultsRef.current,
+            statusRef.current,
+            platformHeadingRef.current,
+            platformsRef.current,
+            ...featuresRef.current,
+            ...ctasRef.current,
+            ...resultItemsRef.current,
+            ...platformCardsRef.current,
+          ],
+          {
+            opacity: 1,
+            y: 0,
+            x: 0,
+            scale: 1,
+            clearProps: 'transform,opacity',
+          }
+        );
+      }
     }, containerRef);
 
     return () => {
       ctx.revert();
     };
-  }, [t]);
-
-  const addFeatureRef = (el) => {
-    if (el && !featuresRef.current.includes(el)) {
-      featuresRef.current.push(el);
-    }
-  };
-
-  const addCtaRef = (el) => {
-    if (el && !ctasRef.current.includes(el)) {
-      ctasRef.current.push(el);
-    }
-  };
-
-  const addResultRef = (el) => {
-    if (el && !resultItemsRef.current.includes(el)) {
-      resultItemsRef.current.push(el);
-    }
-  };
-
-  const addPlatformRef = (el) => {
-    if (el && !platformCardsRef.current.includes(el)) {
-      platformCardsRef.current.push(el);
-    }
-  };
+  }, [isMounted]);
 
   // Get color class for platform
   const getColorClass = (color) => {
@@ -378,12 +414,18 @@ export default function Hero({ onOpenQuoteModal, onOpenVideoModal }) {
     return colors[color] || colors.blue;
   };
 
+  // ✅ If not mounted, return null to prevent hydration mismatch
+  if (!isMounted) {
+    return null;
+  }
+
   return (
     <section
       ref={containerRef}
       id="home"
       className="relative pt-28 sm:pt-36 lg:pt-44 pb-16 sm:pb-24 lg:pb-28 bg-gradient-to-b from-slate-950 via-slate-900 to-slate-900 text-white overflow-hidden"
     >
+      {/* Background decoration */}
       <div className="absolute top-1/4 left-1/4 w-72 sm:w-96 h-72 sm:h-96 bg-blue-600/20 rounded-full blur-3xl pointer-events-none" />
       <div className="absolute bottom-10 right-10 w-64 sm:w-80 h-64 sm:h-80 bg-indigo-600/20 rounded-full blur-3xl pointer-events-none" />
       <div className="absolute inset-0 opacity-[0.03] bg-[radial-gradient(#ffffff_1px,transparent_1px)] [background-size:24px_24px] pointer-events-none" />
@@ -416,6 +458,7 @@ export default function Hero({ onOpenQuoteModal, onOpenVideoModal }) {
                   className="absolute -bottom-2 left-0 w-full h-3 text-blue-500/40"
                   viewBox="0 0 100 20"
                   preserveAspectRatio="none"
+                  aria-hidden="true"
                 >
                   <path
                     d="M0 15 Q 50 0 100 15"
@@ -441,7 +484,7 @@ export default function Hero({ onOpenQuoteModal, onOpenVideoModal }) {
                   ref={addFeatureRef}
                   className="flex items-center justify-center sm:justify-start gap-2 bg-slate-800/80 backdrop-blur-sm px-3.5 py-2 rounded-xl border border-slate-700/60"
                 >
-                  <CheckCircle2 className="w-4 h-4 text-blue-400 shrink-0" />
+                  <CheckCircle2 className="w-4 h-4 text-blue-400 shrink-0" aria-hidden="true" />
                   <span>{feature}</span>
                 </div>
               ))}
@@ -452,9 +495,10 @@ export default function Hero({ onOpenQuoteModal, onOpenVideoModal }) {
                 ref={addCtaRef}
                 onClick={onOpenQuoteModal}
                 className="w-full sm:w-auto bg-blue-600 hover:bg-blue-500 active:scale-95 text-white font-bold text-sm sm:text-base px-7 py-3.5 sm:py-4 rounded-full shadow-lg shadow-blue-600/30 hover:shadow-blue-600/50 transition-all duration-300 flex items-center justify-center gap-3 group"
+                aria-label="Get a free quote"
               >
                 <span>{t('hero.ctaPrimary')}</span>
-                <ArrowRight className="w-5 h-5 group-hover:translate-x-1.5 transition-transform" />
+                <ArrowRight className="w-5 h-5 group-hover:translate-x-1.5 transition-transform" aria-hidden="true" />
               </button>
 
               <a
@@ -472,15 +516,15 @@ export default function Hero({ onOpenQuoteModal, onOpenVideoModal }) {
             >
               <div className="flex -space-x-2 overflow-hidden shrink-0">
                 {[
-                  'https://images.pexels.com/photos/774909/pexels-photo-774909.jpeg?auto=compress&cs=tinysrgb&fit=crop&h=100&w=100',
-                  'https://images.pexels.com/photos/220453/pexels-photo-220453.jpeg?auto=compress&cs=tinysrgb&fit=crop&h=100&w=100',
-                  'https://images.pexels.com/photos/1239291/pexels-photo-1239291.jpeg?auto=compress&cs=tinysrgb&fit=crop&h=100&w=100'
-                ].map((src, i) => (
+                  { src: 'https://images.pexels.com/photos/774909/pexels-photo-774909.jpeg?auto=compress&cs=tinysrgb&fit=crop&h=100&w=100', alt: 'Client avatar' },
+                  { src: 'https://images.pexels.com/photos/220453/pexels-photo-220453.jpeg?auto=compress&cs=tinysrgb&fit=crop&h=100&w=100', alt: 'Client avatar' },
+                  { src: 'https://images.pexels.com/photos/1239291/pexels-photo-1239291.jpeg?auto=compress&cs=tinysrgb&fit=crop&h=100&w=100', alt: 'Client avatar' }
+                ].map(({ src, alt }, i) => (
                   <div
                     key={i}
                     className="relative w-8 h-8 sm:w-9 sm:h-9 rounded-full ring-2 ring-slate-900 overflow-hidden"
                   >
-                    <Image fill sizes="36px" src={src} alt="Client" className="object-cover" />
+                    <Image fill sizes="36px" src={src} alt={alt} className="object-cover" />
                   </div>
                 ))}
               </div>
@@ -488,7 +532,7 @@ export default function Hero({ onOpenQuoteModal, onOpenVideoModal }) {
               <div className="text-center sm:text-left">
                 <div className="flex items-center justify-center sm:justify-start gap-1 text-amber-400">
                   {[...Array(5)].map((_, i) => (
-                    <Star key={i} className="w-3.5 h-3.5 fill-amber-400" />
+                    <Star key={i} className="w-3.5 h-3.5 fill-amber-400" aria-hidden="true" />
                   ))}
                   <span className="text-xs font-bold text-white ml-1">5.0</span>
                 </div>
@@ -509,7 +553,7 @@ export default function Hero({ onOpenQuoteModal, onOpenVideoModal }) {
               >
                 <Image
                   src="https://images.pexels.com/photos/15555955/pexels-photo-15555955.jpeg?auto=compress&cs=tinysrgb&fit=crop&h=800&w=1000"
-                  alt="BigTeeWise Digital Marketing Strategy"
+                  alt="BigTeeWise Digital team working on creative strategy and book marketing campaigns"
                   fill
                   sizes="(max-width: 1024px) 100vw, 50vw"
                   priority
@@ -522,8 +566,9 @@ export default function Hero({ onOpenQuoteModal, onOpenVideoModal }) {
                   onClick={onOpenVideoModal}
                   className="absolute inset-0 m-auto w-14 h-14 sm:w-16 sm:h-16 rounded-full bg-blue-600/90 text-white flex items-center justify-center shadow-xl hover:scale-110 hover:bg-blue-500 transition-all duration-300 z-10"
                   title="Watch BigTeeWise Agency Showreel"
+                  aria-label="Watch agency showreel video"
                 >
-                  <Play className="w-6 h-6 sm:w-7 sm:h-7 fill-white ml-1" />
+                  <Play className="w-6 h-6 sm:w-7 sm:h-7 fill-white ml-1" aria-hidden="true" />
                   <span className="absolute -inset-2 rounded-full border-2 border-blue-400/50 animate-ping pointer-events-none" />
                 </button>
 
@@ -542,7 +587,7 @@ export default function Hero({ onOpenQuoteModal, onOpenVideoModal }) {
                 className="absolute -top-4 -left-2 sm:-top-6 sm:-left-6 bg-white text-slate-900 p-3 sm:p-4 rounded-2xl shadow-xl border border-slate-100 flex items-center gap-2.5 sm:gap-3 z-20"
               >
                 <div className="w-9 h-9 sm:w-12 sm:h-12 rounded-xl bg-blue-100 text-blue-600 flex items-center justify-center shrink-0">
-                  <BookOpen className="w-5 h-5 sm:w-6 sm:h-6" />
+                  <BookOpen className="w-5 h-5 sm:w-6 sm:h-6" aria-hidden="true" />
                 </div>
 
                 <div>
@@ -558,7 +603,7 @@ export default function Hero({ onOpenQuoteModal, onOpenVideoModal }) {
                 className="absolute -bottom-4 -right-2 sm:-bottom-6 sm:-right-6 bg-blue-600 text-white p-3 sm:p-4 rounded-2xl shadow-xl border border-blue-400/30 flex items-center gap-2.5 sm:gap-3 z-20"
               >
                 <div className="w-9 h-9 sm:w-12 sm:h-12 rounded-xl bg-white/20 text-white flex items-center justify-center shrink-0">
-                  <TrendingUp className="w-5 h-5 sm:w-6 sm:h-6" />
+                  <TrendingUp className="w-5 h-5 sm:w-6 sm:h-6" aria-hidden="true" />
                 </div>
 
                 <div>
@@ -582,7 +627,7 @@ export default function Hero({ onOpenQuoteModal, onOpenVideoModal }) {
             >
               <Image
                 src="https://images.pexels.com/photos/3184465/pexels-photo-3184465.jpeg?auto=compress&cs=tinysrgb&fit=crop&w=900"
-                alt="BigTeeWise clients and creative strategy"
+                alt="BigTeeWise Digital team collaborating on creative strategy for authors and brands"
                 fill
                 sizes="(max-width: 1024px) 100vw, 33vw"
                 className="object-cover group-hover:scale-105 transition-transform duration-700"
@@ -611,7 +656,7 @@ export default function Hero({ onOpenQuoteModal, onOpenVideoModal }) {
 
                 <div className="flex items-center justify-between mb-5">
                   <div className="w-10 h-10 rounded-xl bg-slate-700 flex items-center justify-center text-amber-400">
-                    <Star className="w-5 h-5 fill-current" />
+                    <Star className="w-5 h-5 fill-current" aria-hidden="true" />
                   </div>
 
                   <span className="text-[10px] bg-slate-700 px-3 py-1 rounded-full text-slate-300">
@@ -638,7 +683,7 @@ export default function Hero({ onOpenQuoteModal, onOpenVideoModal }) {
 
                 <div className="flex items-center justify-between mb-5">
                   <div className="w-10 h-10 rounded-xl bg-white/15 flex items-center justify-center">
-                    <Award className="w-5 h-5" />
+                    <Award className="w-5 h-5" aria-hidden="true" />
                   </div>
 
                   <span className="text-[10px] bg-white/10 px-3 py-1 rounded-full">
@@ -671,7 +716,7 @@ export default function Hero({ onOpenQuoteModal, onOpenVideoModal }) {
               >
                 <div className="flex-1">
                   <div className="inline-flex items-center gap-2 bg-blue-50 text-blue-600 rounded-full px-3 py-1 text-[10px] font-bold uppercase">
-                    <BarChart3 className="w-3 h-3" />
+                    <BarChart3 className="w-3 h-3" aria-hidden="true" />
                     {t('hero.provenResults')}
                   </div>
 
@@ -685,15 +730,15 @@ export default function Hero({ onOpenQuoteModal, onOpenVideoModal }) {
 
                   <div className="flex flex-wrap gap-4 mt-4 text-xs font-semibold text-slate-600">
                     <span className="flex items-center gap-1.5">
-                      <BarChart3 className="w-4 h-4 text-emerald-500" />
+                      <BarChart3 className="w-4 h-4 text-emerald-500" aria-hidden="true" />
                       {t('hero.dataBacked')}
                     </span>
                     <span className="flex items-center gap-1.5">
-                      <BookOpen className="w-4 h-4 text-blue-500" />
+                      <BookOpen className="w-4 h-4 text-blue-500" aria-hidden="true" />
                       {t('hero.launchesCount')}
                     </span>
                     <span className="flex items-center gap-1.5">
-                      <ShieldCheck className="w-4 h-4 text-blue-500" />
+                      <ShieldCheck className="w-4 h-4 text-blue-500" aria-hidden="true" />
                       {t('hero.provenStrategy')}
                     </span>
                   </div>
@@ -702,7 +747,7 @@ export default function Hero({ onOpenQuoteModal, onOpenVideoModal }) {
                 <div className="relative w-full md:w-40 h-32 rounded-2xl overflow-hidden bg-slate-900 shrink-0">
                   <Image
                     src="https://images.pexels.com/photos/3769021/pexels-photo-3769021.jpeg?auto=compress&cs=tinysrgb&fit=crop&w=500"
-                    alt="BigTeeWise digital strategy"
+                    alt="BigTeeWise Digital strategy session"
                     fill
                     sizes="160px"
                     className="object-cover"
@@ -727,12 +772,12 @@ export default function Hero({ onOpenQuoteModal, onOpenVideoModal }) {
             </div>
 
             <div className="flex items-center justify-center gap-2 text-xs sm:text-sm font-semibold text-slate-200 border-y sm:border-y-0 sm:border-x border-slate-700 py-3 sm:py-0">
-              <CalendarCheck2 className="w-4 h-4 text-blue-400" />
+              <CalendarCheck2 className="w-4 h-4 text-blue-400" aria-hidden="true" />
               {t('hero.freeConsultation')}
             </div>
 
             <div className="flex items-center justify-center gap-2 text-xs sm:text-sm font-semibold text-slate-200">
-              <ShieldCheck className="w-4 h-4 text-blue-400" />
+              <ShieldCheck className="w-4 h-4 text-blue-400" aria-hidden="true" />
               {t('hero.provenResults')}
             </div>
           </div>
@@ -768,7 +813,7 @@ export default function Hero({ onOpenQuoteModal, onOpenVideoModal }) {
                   className={`group w-[calc(50%-6px)] sm:w-auto sm:min-w-[175px] lg:min-w-[186px] flex items-center gap-3 px-3.5 sm:px-4 py-3.5 rounded-xl bg-slate-800/90 border border-slate-700/90 ${colorClass} hover:bg-slate-800 hover:-translate-y-1 shadow-sm hover:shadow-lg transition-all duration-300`}
                 >
                   <div className={`w-9 h-9 sm:w-10 sm:h-10 rounded-lg border flex items-center justify-center shrink-0 transition-all duration-300 ${bgClass}`}>
-                    <Icon className={`w-5 h-5 ${iconColor}`} />
+                    <Icon className={`w-5 h-5 ${iconColor}`} aria-hidden="true" />
                   </div>
 
                   <div className="min-w-0">

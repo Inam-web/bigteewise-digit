@@ -1,13 +1,13 @@
 'use client';
 
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect, useRef, useCallback } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
 import {
   BookOpenCheck, UserCheck, Palette, Box, TrendingUp, Share2,
   Sparkles, FileText, Search, Compass, Target, Lightbulb,
   ArrowRight, Star, Users,
-  MessageCircle // ✅ ADD THIS
+  MessageCircle
 } from 'lucide-react';
 
 import { SERVICES } from '../app/Data/content';
@@ -20,11 +20,10 @@ if (typeof window !== 'undefined') {
   gsap.registerPlugin(ScrollTrigger);
 }
 
-// ✅ FIXED: Use absolute paths from public folder
 const SERVICE_IMAGES = {
   'book-marketing': '/images/services/book-marketing.jpg',
   'author-branding': '/images/services/author-branding-v2.jpg',
-  'book-cover-design': '/images/services/book-cover-design-v3.png',
+  'book-cover-design': '/images/services/book-cover-design-v3.jpeg',
   'book-mockup-design': '/images/services/book-mockup-design-v2.png',
   'digital-marketing': '/images/services/digital-marketing.jpg',
   'social-media-marketing': '/images/services/social-media-marketing.jpg',
@@ -42,7 +41,10 @@ export default function ServicesSection({ onOpenQuoteModal }) {
   const pathname = usePathname();
   const [selectedCategory, setSelectedCategory] = useState('all');
   const [imageErrors, setImageErrors] = useState({});
+  const [isMounted, setIsMounted] = useState(false);
+  const [isFiltering, setIsFiltering] = useState(false);
   const sectionRef = useRef(null);
+  const filterRefs = useRef({});
 
   const iconMap = {
     BookOpenCheck: <BookOpenCheck className="w-5 h-5" />,
@@ -67,7 +69,12 @@ export default function ServicesSection({ onOpenQuoteModal }) {
     return service.category === selectedCategory;
   });
 
-  // Get translated category labels
+  // ✅ Mount state for hydration
+  useEffect(() => {
+    setIsMounted(true);
+  }, []);
+
+  // ✅ Get translated category labels
   const getCategoryLabel = (category) => {
     if (category === 'specialization') return t('services.specialization') || 'Specialization';
     if (category === 'marketing') return t('services.digitalMarketingTab') || 'Digital Marketing & SEO';
@@ -77,50 +84,84 @@ export default function ServicesSection({ onOpenQuoteModal }) {
 
   // ✅ Get the correct image path with fallback
   const getServiceImage = (service) => {
-    // Check if service has custom image
     if (service.image) return service.image;
     if (service.coverImage) return service.coverImage;
-
-    // Check mapped images
     if (SERVICE_IMAGES[service.id]) return SERVICE_IMAGES[service.id];
-
-    // ✅ Use service title to generate a filename (fallback)
     const titleSlug = service.title?.toLowerCase().replace(/[^a-z0-9]+/g, '-') || 'default';
     return `/images/services/${titleSlug}.jpg`;
   };
 
   // Handle image errors
-  const handleImageError = (serviceId) => {
+  const handleImageError = useCallback((serviceId) => {
     setImageErrors(prev => ({ ...prev, [serviceId]: true }));
-  };
+  }, []);
 
-  // GSAP Animations
+  // ✅ Handle filter change with smooth scroll
+  const handleFilterChange = useCallback((category) => {
+    if (category === selectedCategory) return;
+    
+    setIsFiltering(true);
+    setSelectedCategory(category);
+    
+    // ✅ Smooth scroll to services section on mobile
+    if (window.innerWidth < 768) {
+      const servicesSection = document.getElementById('services');
+      if (servicesSection) {
+        servicesSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      }
+    }
+    
+    // Reset filtering state after animation
+    setTimeout(() => {
+      setIsFiltering(false);
+    }, 800);
+  }, [selectedCategory]);
+
+  // ✅ GSAP Animations - Optimized
   useEffect(() => {
+    if (!sectionRef.current || !isMounted) return;
+
     const ctx = gsap.context(() => {
+      const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+      const isMobile = window.innerWidth < 768;
+
+      if (reduceMotion) {
+        gsap.set('.services-header-item, .service-row-item', {
+          opacity: 1,
+          y: 0,
+          clearProps: 'transform,opacity'
+        });
+        return;
+      }
+
+      // ✅ Header animations
       gsap.fromTo(
         '.services-header-item',
         { y: 35, opacity: 0 },
         {
           y: 0,
           opacity: 1,
-          duration: 1.1,
-          stagger: 0.18,
+          duration: isMobile ? 0.8 : 1.1,
+          stagger: isMobile ? 0.12 : 0.18,
           ease: 'power3.out',
+          overwrite: 'auto',
           scrollTrigger: {
             trigger: sectionRef.current,
             start: 'top 80%',
             toggleActions: 'play none none none',
           },
-          clearProps: 'transform,opacity',
         }
       );
 
+      // ✅ Service row animations
       const rows = gsap.utils.toArray('.service-row-item');
-      rows.forEach((row) => {
+      rows.forEach((row, index) => {
         const imageCol = row.querySelector('.service-image-col');
         const cardCol = row.querySelector('.service-card-col');
 
         if (imageCol && cardCol) {
+          const delay = isMobile ? index * 0.1 : 0;
+
           gsap.fromTo(
             imageCol,
             { y: 40, opacity: 0, scale: 0.96 },
@@ -128,14 +169,15 @@ export default function ServicesSection({ onOpenQuoteModal }) {
               y: 0,
               opacity: 1,
               scale: 1,
-              duration: 1.2,
+              duration: isMobile ? 0.9 : 1.2,
+              delay,
               ease: 'power3.out',
+              overwrite: 'auto',
               scrollTrigger: {
                 trigger: row,
                 start: 'top 82%',
                 toggleActions: 'play none none none',
               },
-              clearProps: 'transform,opacity',
             }
           );
 
@@ -145,25 +187,34 @@ export default function ServicesSection({ onOpenQuoteModal }) {
             {
               y: 0,
               opacity: 1,
-              duration: 1.3,
-              delay: 0.2,
+              duration: isMobile ? 1 : 1.3,
+              delay: delay + 0.15,
               ease: 'power3.out',
+              overwrite: 'auto',
               scrollTrigger: {
                 trigger: row,
                 start: 'top 82%',
                 toggleActions: 'play none none none',
               },
-              clearProps: 'transform,opacity',
             }
           );
         }
       });
+
+      // ✅ Refreshing ScrollTrigger after filter changes
+      if (isFiltering) {
+        setTimeout(() => {
+          ScrollTrigger.refresh();
+        }, 100);
+      }
     }, sectionRef);
 
-    return () => ctx.revert();
-  }, [filteredServices]);
+    return () => {
+      ctx.revert();
+    };
+  }, [isMounted, isFiltering]);
 
-  // Get translated service title
+  // ✅ Get translated service title
   const getServiceTitle = (service) => {
     if (service.translationKey) {
       return t(service.translationKey) || service.title;
@@ -171,7 +222,7 @@ export default function ServicesSection({ onOpenQuoteModal }) {
     return service.title;
   };
 
-  // Get translated service description
+  // ✅ Get translated service description
   const getServiceDesc = (service) => {
     if (service.descTranslationKey) {
       return t(service.descTranslationKey) || service.fullDesc || service.shortDesc;
@@ -193,6 +244,11 @@ export default function ServicesSection({ onOpenQuoteModal }) {
 
   const currentLocale = getCurrentLocale();
 
+  // ✅ Prevent hydration mismatch
+  if (!isMounted) {
+    return null;
+  }
+
   return (
     <section ref={sectionRef} id="services" className="py-16 sm:py-24 bg-slate-50 relative overflow-hidden">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
@@ -201,7 +257,7 @@ export default function ServicesSection({ onOpenQuoteModal }) {
         <div className="flex flex-col lg:flex-row lg:items-end justify-between mb-12 gap-6">
           <div className="space-y-3 max-w-2xl">
             <div className="services-header-item inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-blue-100/80 border border-blue-200 text-blue-700 text-xs sm:text-sm font-bold tracking-wide uppercase">
-              <span className="text-blue-600 font-black">//</span>
+              <span className="text-blue-600 font-black" aria-hidden="true">//</span>
               <span>{t('services.badge')}</span>
             </div>
 
@@ -218,241 +274,243 @@ export default function ServicesSection({ onOpenQuoteModal }) {
             <button
               onClick={() => onOpenQuoteModal && onOpenQuoteModal()}
               className="bg-blue-600 hover:bg-blue-700 active:scale-95 text-white font-bold text-sm px-6 py-3 rounded-full shadow-md shadow-blue-600/20 transition-all duration-300 flex items-center justify-center gap-2 touch-manipulation"
+              aria-label="Request a proposal"
             >
               <span>{t('services.requestProposal')}</span>
-              <ArrowRight className="w-4 h-4" />
+              <ArrowRight className="w-4 h-4" aria-hidden="true" />
             </button>
           </div>
         </div>
 
-        {/* Filter Category Pills */}
+        {/* Filter Category Pills - Enhanced UX */}
         <div className="services-header-item flex flex-wrap items-center gap-2 mb-16 pb-4 border-b border-slate-200">
-          <button
-            onClick={() => setSelectedCategory('all')}
-            className={`px-5 py-2.5 rounded-full text-xs sm:text-sm font-bold transition-all duration-300 ${selectedCategory === 'all'
-              ? 'bg-blue-600 text-white shadow-md'
-              : 'bg-white text-slate-600 hover:bg-slate-200 hover:text-slate-900'
-              }`}
-          >
-            {t('services.allServices')} ({servicesList.length})
-          </button>
+          {[
+            { id: 'all', label: t('services.allServices'), count: servicesList.length },
+            { id: 'specialization', label: t('services.specializationsTab'), icon: <Star className="w-4 h-4 fill-amber-400 text-amber-500" /> },
+            { id: 'marketing', label: t('services.digitalMarketingTab') },
+            { id: 'creative', label: t('services.creativeDesignTab') },
+          ].map((category) => {
+            const isActive = selectedCategory === category.id;
+            const isSpecial = category.id === 'specialization';
+            const baseClasses = "px-5 py-2.5 rounded-full text-xs sm:text-sm font-bold transition-all duration-300 touch-manipulation";
+            
+            let classes = baseClasses;
+            if (isActive) {
+              classes += isSpecial 
+                ? ' bg-gradient-to-r from-amber-500 to-amber-600 text-white shadow-md'
+                : ' bg-blue-600 text-white shadow-md';
+            } else {
+              classes += isSpecial
+                ? ' bg-amber-50 text-amber-700 border border-amber-200 hover:bg-amber-100'
+                : ' bg-white text-slate-600 hover:bg-slate-200 hover:text-slate-900';
+            }
 
-          <button
-            onClick={() => setSelectedCategory('specialization')}
-            className={`px-5 py-2.5 rounded-full text-xs sm:text-sm font-bold transition-all duration-300 flex items-center gap-1.5 ${selectedCategory === 'specialization'
-              ? 'bg-gradient-to-r from-amber-500 to-amber-600 text-white shadow-md'
-              : 'bg-amber-50 text-amber-700 border border-amber-200 hover:bg-amber-100'
-              }`}
-          >
-            <Star className="w-4 h-4 fill-amber-400 text-amber-500" />
-            <span>{t('services.specializationsTab')}</span>
-          </button>
-
-          <button
-            onClick={() => setSelectedCategory('marketing')}
-            className={`px-5 py-2.5 rounded-full text-xs sm:text-sm font-bold transition-all duration-300 ${selectedCategory === 'marketing'
-              ? 'bg-blue-600 text-white shadow-md'
-              : 'bg-white text-slate-600 hover:bg-slate-200 hover:text-slate-900'
-              }`}
-          >
-            {t('services.digitalMarketingTab')}
-          </button>
-
-          <button
-            onClick={() => setSelectedCategory('creative')}
-            className={`px-5 py-2.5 rounded-full text-xs sm:text-sm font-bold transition-all duration-300 ${selectedCategory === 'creative'
-              ? 'bg-blue-600 text-white shadow-md'
-              : 'bg-white text-slate-600 hover:bg-slate-200 hover:text-slate-900'
-              }`}
-          >
-            {t('services.creativeDesignTab')}
-          </button>
+            return (
+              <button
+                key={category.id}
+                ref={(el) => { filterRefs.current[category.id] = el; }}
+                onClick={() => handleFilterChange(category.id)}
+                className={classes}
+                aria-pressed={isActive}
+                aria-label={`Filter by ${category.label}`}
+              >
+                {category.icon && <span className="mr-1.5">{category.icon}</span>}
+                <span>{category.label}</span>
+                {category.id === 'all' && (
+                  <span className="ml-1 text-xs opacity-70">({category.count})</span>
+                )}
+              </button>
+            );
+          })}
         </div>
 
         {/* Services Showcase List */}
         <div className="space-y-16 lg:space-y-20">
-          {filteredServices.map((service, index) => {
-            const isEven = index % 2 === 0;
-            const stepNumber = String(index + 1).padStart(2, '0');
+          {filteredServices.length > 0 ? (
+            filteredServices.map((service, index) => {
+              const isEven = index % 2 === 0;
+              const stepNumber = String(index + 1).padStart(2, '0');
 
-            // ✅ Get image path with fallback
-            const imagePath = getServiceImage(service);
+              const imagePath = getServiceImage(service);
+              const hasError = imageErrors[service.id];
+              const serviceTitle = getServiceTitle(service);
+              const serviceDesc = getServiceDesc(service);
+              const categoryLabel = getCategoryLabel(service.category);
+              const serviceHref = `/${currentLocale}/services/${service.id}`;
+              const isSpecialization = service.isSpecialization;
 
-            // ✅ Check if image has errored
-            const hasError = imageErrors[service.id];
-
-            const serviceTitle = getServiceTitle(service);
-            const serviceDesc = getServiceDesc(service);
-            const categoryLabel = getCategoryLabel(service.category);
-
-            // ✅ Build the correct href with locale
-            const serviceHref = `/${currentLocale}/services/${service.id}`;
-
-            return (
-              <div
-                key={service.id || index}
-                className={`service-row-item flex flex-col lg:flex-row items-center justify-between gap-0 relative bg-white rounded-3xl shadow-xl border border-slate-200/80 overflow-hidden lg:bg-transparent lg:shadow-none lg:border-none lg:overflow-visible ${isEven ? 'lg:flex-row' : 'lg:flex-row-reverse'
-                  }`}
-              >
-                {/* Compact Image Column */}
-                <div className="service-image-col w-full lg:w-[40%] shrink-0 relative z-10">
-                  <div className="relative aspect-[4/3] sm:aspect-[1.1/1] rounded-none lg:rounded-[2.2rem] overflow-hidden shadow-none lg:shadow-lg border-none lg:border lg:border-slate-200/80 bg-slate-100">
-                    {!hasError ? (
-                      <Image
-                        src={imagePath}
-                        alt={serviceTitle}
-                        fill
-                        sizes="(max-width: 768px) 100vw, (max-width: 1200px) 40vw, 500px"
-                        quality={80}
-                        priority={index < 2}
-                        className="object-cover transition-transform duration-700 ease-out hover:scale-105"
-                        onError={() => handleImageError(service.id)}
-                      />
-                    ) : (
-                      // ✅ Fallback placeholder when image fails to load
-                      <div className="w-full h-full flex items-center justify-center bg-gradient-to-br from-blue-50 to-indigo-50">
-                        <div className="text-center p-6">
-                          <div className="w-16 h-16 mx-auto rounded-full bg-blue-100 text-blue-600 flex items-center justify-center">
-                            {iconMap[service.iconName] || <Sparkles className="w-8 h-8" />}
-                          </div>
-                          <p className="mt-3 text-sm font-semibold text-slate-600">{serviceTitle}</p>
-                          <p className="text-xs text-slate-400">Image coming soon</p>
-                        </div>
-                      </div>
-                    )}
-
-                    {/* Top Stat Badge */}
-                    <div className="absolute top-3 right-3 bg-white/95 backdrop-blur-md rounded-xl p-2.5 shadow-md border border-slate-100 flex items-center gap-2 z-20">
-                      <div className="w-7 h-7 rounded-lg bg-blue-50 text-blue-600 flex items-center justify-center shrink-0">
-                        {iconMap[service.iconName] || <Users className="w-3.5 h-3.5" />}
-                      </div>
-                      <div>
-                        <div className="text-xs font-extrabold text-slate-900 leading-none">
-                          {service.statTopValue || '45+'}
-                        </div>
-                        <div className="text-[9px] font-bold text-slate-400 uppercase tracking-wider mt-0.5">
-                          {service.statTopLabel || t('services.projects') || 'PROJECTS'}
-                        </div>
-                      </div>
-                    </div>
-
-                    {/* Bottom Stat Badge */}
-                    <div className="absolute bottom-3 left-3 bg-white/95 backdrop-blur-md rounded-xl p-2.5 shadow-md border border-slate-100 flex items-center gap-2 z-20">
-                      <div className="w-7 h-7 rounded-lg bg-blue-50 text-blue-600 flex items-center justify-center shrink-0">
-                        <TrendingUp className="w-3.5 h-3.5" />
-                      </div>
-                      <div>
-                        <div className="text-xs font-extrabold text-slate-900 leading-none">
-                          {service.statBottomValue || '3x'}
-                        </div>
-                        <div className="text-[9px] font-bold text-slate-400 uppercase tracking-wider mt-0.5">
-                          {service.statBottomLabel || t('services.growth') || 'GROWTH'}
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-
-                {/* Dominant Overlapping Content Card */}
+              return (
                 <div
-                  className={`service-card-col w-full lg:w-[68%] relative z-20 mt-0 ${isEven ? 'lg:-ml-12' : 'lg:-mr-12'
-                    }`}
+                  key={service.id || index}
+                  className={`service-row-item flex flex-col lg:flex-row items-center justify-between gap-0 relative bg-white rounded-3xl shadow-xl border border-slate-200/80 overflow-hidden lg:bg-transparent lg:shadow-none lg:border-none lg:overflow-visible ${
+                    isEven ? 'lg:flex-row' : 'lg:flex-row-reverse'
+                  }`}
                 >
-                  <div className="bg-transparent lg:bg-white rounded-none lg:rounded-3xl p-6 sm:p-10 lg:p-12 shadow-none lg:shadow-xl border-none lg:border lg:border-slate-200/80 space-y-6">
-
-                    {/* Header Badges */}
-                    <div className="flex flex-wrap items-center justify-between gap-2">
-                      <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-blue-50 border border-blue-100 text-blue-700 text-xs font-extrabold uppercase tracking-wider">
-                        <span className="bg-blue-600 text-white text-[10px] px-2 py-0.5 rounded-md font-black">
-                          {stepNumber}
-                        </span>
-                        <span>{categoryLabel}</span>
-                      </div>
-
-                      {service.isSpecialization && (
-                        <span className="bg-gradient-to-r from-amber-500 to-amber-600 text-white text-[11px] font-extrabold px-3.5 py-1 rounded-full uppercase tracking-wider flex items-center gap-1 shadow-sm">
-                          <Star className="w-3 h-3 fill-amber-300 text-amber-300" />
-                          <span>{t('services.specializationBadge')}</span>
-                        </span>
+                  {/* Compact Image Column */}
+                  <div className="service-image-col w-full lg:w-[40%] shrink-0 relative z-10">
+                    <div className="relative aspect-[4/3] sm:aspect-[1.1/1] rounded-none lg:rounded-[2.2rem] overflow-hidden shadow-none lg:shadow-lg border-none lg:border lg:border-slate-200/80 bg-slate-100">
+                      {!hasError ? (
+                        <Image
+                          src={imagePath}
+                          alt={`${serviceTitle} - ${categoryLabel} service`}
+                          fill
+                          sizes="(max-width: 768px) 100vw, (max-width: 1200px) 40vw, 500px"
+                          quality={80}
+                          priority={index < 2}
+                          className="object-cover transition-transform duration-700 ease-out hover:scale-105"
+                          onError={() => handleImageError(service.id)}
+                          loading={index < 2 ? 'eager' : 'lazy'}
+                        />
+                      ) : (
+                        <div className="w-full h-full flex items-center justify-center bg-gradient-to-br from-blue-50 to-indigo-50">
+                          <div className="text-center p-6">
+                            <div className="w-16 h-16 mx-auto rounded-full bg-blue-100 text-blue-600 flex items-center justify-center">
+                              {iconMap[service.iconName] || <Sparkles className="w-8 h-8" />}
+                            </div>
+                            <p className="mt-3 text-sm font-semibold text-slate-600">{serviceTitle}</p>
+                            <p className="text-xs text-slate-400">Image coming soon</p>
+                          </div>
+                        </div>
                       )}
-                    </div>
 
-                    {/* Title */}
-                    <h3 className="text-2xl sm:text-3xl lg:text-4xl font-extrabold text-slate-900 tracking-tight leading-tight">
-                      {serviceTitle}
-                    </h3>
-
-                    {/* Description */}
-                    <p className="text-slate-600 text-sm sm:text-base leading-relaxed">
-                      {serviceDesc}
-                    </p>
-
-                    {/* Deliverables Grid */}
-                    {service.deliverables && service.deliverables.length > 0 && (
-                      <ul className="grid grid-cols-1 sm:grid-cols-2 gap-3 pt-1">
-                        {service.deliverables.slice(0, 4).map((item, idx) => (
-                          <li key={idx} className="flex items-start gap-2.5 text-xs sm:text-sm font-semibold text-slate-700">
-                            <span className="w-2 h-2 rounded-full bg-blue-600 shrink-0 mt-1.5" />
-                            <span>{item}</span>
-                          </li>
-                        ))}
-                      </ul>
-                    )}
-
-                    {/* Platforms */}
-                    {service.platforms && service.platforms.length > 0 && (
-                      <div className="pt-1 flex flex-wrap items-center gap-2">
-                        <span className="text-xs font-extrabold text-slate-400 uppercase tracking-wider mr-1">
-                          {t('services.platforms')}:
-                        </span>
-                        {service.platforms.map((plat, pIdx) => (
-                          <span key={pIdx} className="px-3 py-1 rounded-full bg-slate-100 text-slate-700 text-xs font-semibold">
-                            {plat}
-                          </span>
-                        ))}
+                      {/* Top Stat Badge */}
+                      <div className="absolute top-3 right-3 bg-white/95 backdrop-blur-md rounded-xl p-2.5 shadow-md border border-slate-100 flex items-center gap-2 z-20">
+                        <div className="w-7 h-7 rounded-lg bg-blue-50 text-blue-600 flex items-center justify-center shrink-0">
+                          {iconMap[service.iconName] || <Users className="w-3.5 h-3.5" />}
+                        </div>
+                        <div>
+                          <div className="text-xs font-extrabold text-slate-900 leading-none">
+                            {service.statTopValue || '45+'}
+                          </div>
+                          <div className="text-[9px] font-bold text-slate-400 uppercase tracking-wider mt-0.5">
+                            {service.statTopLabel || t('services.projects') || 'PROJECTS'}
+                          </div>
+                        </div>
                       </div>
-                    )}
 
-                    {/* Footer Actions */}
-                    <div className="pt-4 border-t border-slate-100 flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-3">
-                      <Link
-                        href={serviceHref}
-                        className="text-sm font-bold text-blue-600 hover:text-blue-700 flex items-center justify-center sm:justify-start gap-1.5 transition-colors duration-200 group"
-                      >
-                        <span>{t('services.learnMore')}</span>
-                        <ArrowRight className="w-4 h-4 transition-transform duration-300 group-hover:translate-x-1" />
-                      </Link>
-
-                      <div className="flex items-center gap-2">
-                        {/* Inquire Now Button */}
-                        <button
-                          onClick={() => onOpenQuoteModal && onOpenQuoteModal(service.title)}
-                          className="inline-flex items-center justify-center gap-2 bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 active:scale-95 text-white font-bold text-sm px-5 py-3 rounded-full shadow-lg shadow-blue-600/20 transition-all duration-300 touch-manipulation"
-                        >
-                          <span>{t('services.inquireNow')}</span>
-                          <ArrowRight className="w-4 h-4" />
-                        </button>
-
-                        {/* WhatsApp Button - CLOSER TO INQUIRE NOW */}
-                        <a
-                          href={`https://wa.me/2348073527146?text=Hi!%20I'm%20interested%20in%20"${encodeURIComponent(service.title)}"%20service.%20Can%20you%20tell%20me%20more?`}
-                          target="_blank"
-                          rel="noopener noreferrer"
-                          className="inline-flex items-center justify-center gap-1.5 bg-[#25D366] hover:bg-[#1DA851] text-white font-bold text-sm px-4 py-3 rounded-full shadow-lg shadow-[#25D366]/20 transition-all duration-300 hover:-translate-y-0.5 active:scale-95"
-                        >
-                          <MessageCircle className="w-4 h-4" />
-                          <span>WhatsApp</span>
-                        </a>
+                      {/* Bottom Stat Badge */}
+                      <div className="absolute bottom-3 left-3 bg-white/95 backdrop-blur-md rounded-xl p-2.5 shadow-md border border-slate-100 flex items-center gap-2 z-20">
+                        <div className="w-7 h-7 rounded-lg bg-blue-50 text-blue-600 flex items-center justify-center shrink-0">
+                          <TrendingUp className="w-3.5 h-3.5" />
+                        </div>
+                        <div>
+                          <div className="text-xs font-extrabold text-slate-900 leading-none">
+                            {service.statBottomValue || '3x'}
+                          </div>
+                          <div className="text-[9px] font-bold text-slate-400 uppercase tracking-wider mt-0.5">
+                            {service.statBottomLabel || t('services.growth') || 'GROWTH'}
+                          </div>
+                        </div>
                       </div>
                     </div>
-
-
                   </div>
-                </div>
 
-              </div>
-            );
-          })}
+                  {/* Content Card */}
+                  <div
+                    className={`service-card-col w-full lg:w-[68%] relative z-20 mt-0 ${
+                      isEven ? 'lg:-ml-12' : 'lg:-mr-12'
+                    }`}
+                  >
+                    <div className="bg-transparent lg:bg-white rounded-none lg:rounded-3xl p-6 sm:p-10 lg:p-12 shadow-none lg:shadow-xl border-none lg:border lg:border-slate-200/80 space-y-6">
+
+                      {/* Header Badges */}
+                      <div className="flex flex-wrap items-center justify-between gap-2">
+                        <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-blue-50 border border-blue-100 text-blue-700 text-xs font-extrabold uppercase tracking-wider">
+                          <span className="bg-blue-600 text-white text-[10px] px-2 py-0.5 rounded-md font-black">
+                            {stepNumber}
+                          </span>
+                          <span>{categoryLabel}</span>
+                        </div>
+
+                        {isSpecialization && (
+                          <span className="bg-gradient-to-r from-amber-500 to-amber-600 text-white text-[11px] font-extrabold px-3.5 py-1 rounded-full uppercase tracking-wider flex items-center gap-1 shadow-sm">
+                            <Star className="w-3 h-3 fill-amber-300 text-amber-300" aria-hidden="true" />
+                            <span>{t('services.specializationBadge')}</span>
+                          </span>
+                        )}
+                      </div>
+
+                      {/* Title */}
+                      <h3 className="text-2xl sm:text-3xl lg:text-4xl font-extrabold text-slate-900 tracking-tight leading-tight">
+                        {serviceTitle}
+                      </h3>
+
+                      {/* Description */}
+                      <p className="text-slate-600 text-sm sm:text-base leading-relaxed">
+                        {serviceDesc}
+                      </p>
+
+                      {/* Deliverables Grid */}
+                      {service.deliverables && service.deliverables.length > 0 && (
+                        <ul className="grid grid-cols-1 sm:grid-cols-2 gap-3 pt-1">
+                          {service.deliverables.slice(0, 4).map((item, idx) => (
+                            <li key={idx} className="flex items-start gap-2.5 text-xs sm:text-sm font-semibold text-slate-700">
+                              <span className="w-2 h-2 rounded-full bg-blue-600 shrink-0 mt-1.5" aria-hidden="true" />
+                              <span>{item}</span>
+                            </li>
+                          ))}
+                        </ul>
+                      )}
+
+                      {/* Platforms */}
+                      {service.platforms && service.platforms.length > 0 && (
+                        <div className="pt-1 flex flex-wrap items-center gap-2">
+                          <span className="text-xs font-extrabold text-slate-400 uppercase tracking-wider mr-1">
+                            {t('services.platforms')}:
+                          </span>
+                          {service.platforms.map((plat, pIdx) => (
+                            <span key={pIdx} className="px-3 py-1 rounded-full bg-slate-100 text-slate-700 text-xs font-semibold">
+                              {plat}
+                            </span>
+                          ))}
+                        </div>
+                      )}
+
+                      {/* Footer Actions */}
+                      <div className="pt-4 border-t border-slate-100 flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-3">
+                        <Link
+                          href={serviceHref}
+                          className="text-sm font-bold text-blue-600 hover:text-blue-700 flex items-center justify-center sm:justify-start gap-1.5 transition-colors duration-200 group"
+                          aria-label={`Learn more about ${serviceTitle}`}
+                        >
+                          <span>{t('services.learnMore')}</span>
+                          <ArrowRight className="w-4 h-4 transition-transform duration-300 group-hover:translate-x-1" aria-hidden="true" />
+                        </Link>
+
+                        <div className="flex items-center gap-2">
+                          <button
+                            onClick={() => onOpenQuoteModal && onOpenQuoteModal(service.title)}
+                            className="inline-flex items-center justify-center gap-2 bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 active:scale-95 text-white font-bold text-sm px-5 py-3 rounded-full shadow-lg shadow-blue-600/20 transition-all duration-300 touch-manipulation"
+                            aria-label={`Inquire about ${serviceTitle}`}
+                          >
+                            <span>{t('services.inquireNow')}</span>
+                            <ArrowRight className="w-4 h-4" aria-hidden="true" />
+                          </button>
+
+                          <a
+                            href={`https://wa.me/2348073527146?text=Hi!%20I'm%20interested%20in%20"${encodeURIComponent(service.title)}"%20service.%20Can%20you%20tell%20me%20more?`}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="inline-flex items-center justify-center gap-1.5 bg-[#25D366] hover:bg-[#1DA851] text-white font-bold text-sm px-4 py-3 rounded-full shadow-lg shadow-[#25D366]/20 transition-all duration-300 hover:-translate-y-0.5 active:scale-95"
+                            aria-label={`Chat on WhatsApp about ${serviceTitle}`}
+                          >
+                            <MessageCircle className="w-4 h-4" aria-hidden="true" />
+                            <span>WhatsApp</span>
+                          </a>
+                        </div>
+                      </div>
+
+                    </div>
+                  </div>
+
+                </div>
+              );
+            })
+          ) : (
+            <div className="text-center py-16">
+              <p className="text-slate-500 text-lg">No services found for this category.</p>
+            </div>
+          )}
         </div>
 
       </div>

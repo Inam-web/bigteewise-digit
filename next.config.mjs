@@ -1,6 +1,7 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   images: {
+
     qualities: [75, 80, 85],
     remotePatterns: [
       {
@@ -20,8 +21,9 @@ const nextConfig = {
       },
     ],
   },
+
   experimental: {
-    optimizePackageImports: ['gsap', 'lenis', '@gsap/react'],
+    optimizePackageImports: ['lucide-react', 'gsap', 'lenis', '@gsap/react'],
   },
 };
 
