@@ -39,8 +39,8 @@ if (typeof window !== 'undefined') {
 const SERVICE_IMAGES = {
   'book-marketing': '/images/services/book-marketing.jpg',
   'author-branding': '/images/services/author-branding-v2.jpg',
-  'book-cover-design': '/images/services/book-cover-design-v3.jpg',
-  'book-mockup-design': '/images/services/book-mockup-design-v2.jpeg',
+  'book-cover-design': '/images/services/book-cover-design-v3.png',
+  'book-mockup-design': '/images/services/book-mockup-design-v2.png',
   'digital-marketing': '/images/services/digital-marketing.jpg',
   'social-media-marketing': '/images/services/social-media-marketing.jpg',
   'social-media-graphics': '/images/services/social-media-graphics.jpg',
@@ -469,6 +469,7 @@ export default function ServiceDetailPage() {
                       sizes="(max-width: 768px) 100vw, (max-width: 1200px) 40vw, 500px"
                       className="object-cover"
                       priority
+                      quality={80}
                       onError={() => setImageError(true)}
                     />
                   ) : (
@@ -480,10 +481,10 @@ export default function ServiceDetailPage() {
                       </div>
                     </div>
                   )}
-                  
+
                   {/* Dark overlay for text readability */}
                   <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/10 to-transparent" />
-                  
+
                   {/* Top badges */}
                   <div className="absolute top-5 left-5 right-5 flex items-center justify-between z-10">
                     <span className="text-[9px] font-black tracking-[0.2em] text-white/80 uppercase bg-black/30 px-3 py-1 rounded-full backdrop-blur-sm">
@@ -895,24 +896,21 @@ export default function ServiceDetailPage() {
                         </span>
 
                         <span
-                          className={`w-8 h-8 rounded-full border flex items-center justify-center shrink-0 transition-all duration-300 ${
-                            isOpen
-                              ? 'bg-blue-600 border-blue-600 text-white'
-                              : 'bg-slate-50 border-slate-200 text-slate-400'
-                          }`}
+                          className={`w-8 h-8 rounded-full border flex items-center justify-center shrink-0 transition-all duration-300 ${isOpen
+                            ? 'bg-blue-600 border-blue-600 text-white'
+                            : 'bg-slate-50 border-slate-200 text-slate-400'
+                            }`}
                         >
                           <ChevronDown
-                            className={`w-4 h-4 transition-transform duration-300 ${
-                              isOpen ? 'rotate-180' : ''
-                            }`}
+                            className={`w-4 h-4 transition-transform duration-300 ${isOpen ? 'rotate-180' : ''
+                              }`}
                           />
                         </span>
                       </button>
 
                       <div
-                        className={`grid transition-[grid-template-rows] duration-300 ease-out ${
-                          isOpen ? 'grid-rows-[1fr]' : 'grid-rows-[0fr]'
-                        }`}
+                        className={`grid transition-[grid-template-rows] duration-300 ease-out ${isOpen ? 'grid-rows-[1fr]' : 'grid-rows-[0fr]'
+                          }`}
                       >
                         <div className="overflow-hidden">
                           <div className="px-5 sm:px-6 pb-6 text-sm text-slate-600 leading-relaxed border-t border-slate-100 pt-4">

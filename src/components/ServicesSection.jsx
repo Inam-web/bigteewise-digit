@@ -24,8 +24,8 @@ if (typeof window !== 'undefined') {
 const SERVICE_IMAGES = {
   'book-marketing': '/images/services/book-marketing.jpg',
   'author-branding': '/images/services/author-branding-v2.jpg',
-  'book-cover-design': '/images/services/book-cover-design-v3.jpg',
-  'book-mockup-design': '/images/services/book-mockup-design-v2.jpeg',
+  'book-cover-design': '/images/services/book-cover-design-v3.png',
+  'book-mockup-design': '/images/services/book-mockup-design-v2.png',
   'digital-marketing': '/images/services/digital-marketing.jpg',
   'social-media-marketing': '/images/services/social-media-marketing.jpg',
   'social-media-graphics': '/images/services/social-media-graphics.jpg',

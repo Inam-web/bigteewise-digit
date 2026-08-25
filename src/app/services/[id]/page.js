@@ -35,12 +35,12 @@ if (typeof window !== 'undefined') {
   gsap.registerPlugin(ScrollTrigger);
 }
 
-// ✅ EXACT MATCHING IMAGE PATHS FROM YOUR PUBLIC FOLDER
+// ✅ EXACT MATCHING IMAGE PATHS - SAME AS ServicesSection
 const SERVICE_IMAGES = {
   'book-marketing': '/images/services/book-marketing.jpg',
   'author-branding': '/images/services/author-branding-v2.jpg',
-  'book-cover-design': '/images/services/book-cover-design-v3.jpg',
-  'book-mockup-design': '/images/services/book-mockup-design-v2.jpeg',
+  'book-cover-design': '/images/services/book-cover-design-v3.png',
+  'book-mockup-design': '/images/services/book-mockup-design-v2.png',  // ✅ Same as ServicesSection
   'digital-marketing': '/images/services/digital-marketing.jpg',
   'social-media-marketing': '/images/services/social-media-marketing.jpg',
   'social-media-graphics': '/images/services/social-media-graphics.jpg',
@@ -66,12 +66,14 @@ export default function ServiceDetailPage() {
 
   const service = SERVICES.find((s) => s.id === serviceId) || SERVICES[0];
 
-  // ✅ Get the service image
+  // ✅ Get the service image - SAME LOGIC as ServicesSection
   const getServiceImage = () => {
     if (service.image) return service.image;
     if (service.coverImage) return service.coverImage;
     if (SERVICE_IMAGES[service.id]) return SERVICE_IMAGES[service.id];
-    return SERVICE_IMAGES['default'];
+    // Fallback using service title
+    const titleSlug = service.title?.toLowerCase().replace(/[^a-z0-9]+/g, '-') || 'default';
+    return `/images/services/${titleSlug}.jpg`;
   };
 
   const serviceImage = getServiceImage();
@@ -453,13 +455,13 @@ export default function ServiceDetailPage() {
                 </div>
               </div>
 
-              {/* ✅ HERO VISUAL - WITH ACTUAL IMAGE */}
+              {/* ✅ HERO VISUAL - WITH IMAGE */}
+              {/* ✅ HERO VISUAL - WITH IMAGE */}
               <div className="hero-visual lg:col-span-5 relative min-h-[400px] sm:min-h-[480px]">
                 <div className="hero-orbit absolute inset-[7%] rounded-full border border-blue-200/60 border-dashed" />
                 <div className="hero-orbit absolute inset-[17%] rounded-full border border-slate-200/80 border-dashed" />
                 <div className="hero-glow absolute top-[14%] right-[8%] w-28 h-28 rounded-full bg-blue-500/20 blur-3xl" />
 
-                {/* ✅ THE IMAGE CONTAINER - NO BLUE GRADIENT */}
                 <div className="absolute inset-[12%] sm:inset-[14%] rounded-[2rem] overflow-hidden shadow-2xl shadow-slate-900/20 border border-white/10 bg-slate-900">
                   {!imageError ? (
                     <Image
@@ -467,8 +469,9 @@ export default function ServiceDetailPage() {
                       alt={serviceTitle}
                       fill
                       sizes="(max-width: 768px) 100vw, (max-width: 1200px) 40vw, 500px"
-                      className="object-cover"
+                      className="object-contain"
                       priority
+                      quality={80}
                       onError={() => setImageError(true)}
                     />
                   ) : (
@@ -480,11 +483,9 @@ export default function ServiceDetailPage() {
                       </div>
                     </div>
                   )}
-                  
-                  {/* Dark overlay for text readability */}
+
                   <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/10 to-transparent" />
-                  
-                  {/* Top badges */}
+
                   <div className="absolute top-5 left-5 right-5 flex items-center justify-between z-10">
                     <span className="text-[9px] font-black tracking-[0.2em] text-white/80 uppercase bg-black/30 px-3 py-1 rounded-full backdrop-blur-sm">
                       {tr('serviceDetailPage.serviceLabel', 'Service')} / {service.category || '01'}
@@ -495,7 +496,6 @@ export default function ServiceDetailPage() {
                     </span>
                   </div>
 
-                  {/* Bottom info */}
                   <div className="absolute bottom-5 left-5 right-5 z-10">
                     <div className="flex items-end justify-between">
                       <div>
@@ -895,24 +895,21 @@ export default function ServiceDetailPage() {
                         </span>
 
                         <span
-                          className={`w-8 h-8 rounded-full border flex items-center justify-center shrink-0 transition-all duration-300 ${
-                            isOpen
-                              ? 'bg-blue-600 border-blue-600 text-white'
-                              : 'bg-slate-50 border-slate-200 text-slate-400'
-                          }`}
+                          className={`w-8 h-8 rounded-full border flex items-center justify-center shrink-0 transition-all duration-300 ${isOpen
+                            ? 'bg-blue-600 border-blue-600 text-white'
+                            : 'bg-slate-50 border-slate-200 text-slate-400'
+                            }`}
                         >
                           <ChevronDown
-                            className={`w-4 h-4 transition-transform duration-300 ${
-                              isOpen ? 'rotate-180' : ''
-                            }`}
+                            className={`w-4 h-4 transition-transform duration-300 ${isOpen ? 'rotate-180' : ''
+                              }`}
                           />
                         </span>
                       </button>
 
                       <div
-                        className={`grid transition-[grid-template-rows] duration-300 ease-out ${
-                          isOpen ? 'grid-rows-[1fr]' : 'grid-rows-[0fr]'
-                        }`}
+                        className={`grid transition-[grid-template-rows] duration-300 ease-out ${isOpen ? 'grid-rows-[1fr]' : 'grid-rows-[0fr]'
+                          }`}
                       >
                         <div className="overflow-hidden">
                           <div className="px-5 sm:px-6 pb-6 text-sm text-slate-600 leading-relaxed border-t border-slate-100 pt-4">
