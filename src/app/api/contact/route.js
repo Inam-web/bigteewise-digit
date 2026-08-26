@@ -445,9 +445,8 @@ export async function POST(request) {
         </div>
       </div>
 
-      ${
-        clientBudget
-          ? `
+      ${clientBudget
+        ? `
       <div class="field-group">
         <div class="label">Budget Range</div>
 
@@ -456,12 +455,11 @@ export async function POST(request) {
         </div>
       </div>
       `
-          : ''
+        : ''
       }
 
-      ${
-        bookType
-          ? `
+      ${bookType
+        ? `
       <div class="field-group">
         <div class="label">Book Genre / Type</div>
 
@@ -470,12 +468,11 @@ export async function POST(request) {
         </div>
       </div>
       `
-          : ''
+        : ''
       }
 
-      ${
-        hasDesign
-          ? `
+      ${hasDesign
+        ? `
       <div class="field-group">
         <div class="label">Design Status</div>
 
@@ -484,7 +481,7 @@ export async function POST(request) {
         </div>
       </div>
       `
-          : ''
+        : ''
       }
 
       <div class="field-group">
@@ -535,19 +532,16 @@ Client Name: ${clientName}
 Client Email: ${clientEmail}
 Phone/WhatsApp: ${clientPhone}
 Service Needed: ${selectedService}
-${
-  clientBudget
-    ? `Budget Range: ${clientBudget}\n`
-    : ''
-}${
-  bookType
-    ? `Book Genre/Type: ${bookType}\n`
-    : ''
-}${
-  hasDesign
-    ? `Design Status: ${hasDesign}\n`
-    : ''
-}
+${clientBudget
+        ? `Budget Range: ${clientBudget}\n`
+        : ''
+      }${bookType
+        ? `Book Genre/Type: ${bookType}\n`
+        : ''
+      }${hasDesign
+        ? `Design Status: ${hasDesign}\n`
+        : ''
+      }
 
 Message/Details:
 ${clientMessage}
@@ -563,7 +557,9 @@ Reply to this email directly to answer ${clientName}.
     // =========================================================
 
     // ✅ Using Resend's default sender (no domain verification needed)
-    const senderEmail = 'BigTeeWise Digital <noreply@bigteewisedigital.com>';
+    const senderEmail =
+      process.env.SENDER_EMAIL ||
+      'BigTeeWise Digital <noreply@bigteewisedigital.com>';
 
     // =========================================================
     // 10. SEND EMAIL

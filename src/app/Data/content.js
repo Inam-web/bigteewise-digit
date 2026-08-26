@@ -262,7 +262,7 @@ export const TEAM_MEMBERS = [
     id: 1,
     name: "Peter Taiwo Godswill",
     initials: "PT",
-    image: null, // Replace with your uploaded image path (or leave null if not uploaded)
+    image: "images/team/peter.png", // Replace with your uploaded image path (or leave null if not uploaded)
     accentColor: "#2563EB",
     role: "Founder & Creative Director",
     department: "Leadership",
