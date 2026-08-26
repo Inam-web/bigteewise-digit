@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useEffect, useRef } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import Image from 'next/image';
 import * as ContentModule from '../app/Data/content';
 import { Star, Quote, Sparkles, Users } from 'lucide-react';
@@ -96,12 +96,32 @@ const DEFAULT_TESTIMONIALS = [
 ];
 
 export default function TestimonialsSection() {
+  const [isMounted, setIsMounted] = useState(false);
   const sectionRef = useRef(null);
 
   const testimonialsList = ContentModule.TESTIMONIALS || DEFAULT_TESTIMONIALS;
 
+  // ✅ Set mounted state
   useEffect(() => {
+    setIsMounted(true);
+  }, []);
+
+  // ✅ GSAP Animations - Only run when mounted
+  useEffect(() => {
+    if (!isMounted) return;
+
     const ctx = gsap.context(() => {
+      const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+      if (reduceMotion) {
+        gsap.set('.testimonial-header-item, .testimonial-card', {
+          opacity: 1,
+          y: 0,
+          clearProps: 'transform,opacity',
+        });
+        return;
+      }
+
       // Header Animation
       gsap.fromTo(
         '.testimonial-header-item',
@@ -112,12 +132,12 @@ export default function TestimonialsSection() {
           duration: 1,
           stagger: 0.15,
           ease: 'power3.out',
+          overwrite: 'auto',
           scrollTrigger: {
             trigger: sectionRef.current,
             start: 'top 80%',
             toggleActions: 'play none none none',
           },
-          clearProps: 'transform,opacity',
         }
       );
 
@@ -129,6 +149,7 @@ export default function TestimonialsSection() {
         repeat: -1,
         yoyo: true,
         ease: 'sine.inOut',
+        overwrite: 'auto',
       });
 
       gsap.to('.testimonial-orb-2', {
@@ -139,11 +160,25 @@ export default function TestimonialsSection() {
         yoyo: true,
         ease: 'sine.inOut',
         delay: 0.5,
+        overwrite: 'auto',
       });
     }, sectionRef);
 
-    return () => ctx.revert();
-  }, []);
+    return () => {
+      ctx.revert();
+      // Clean up ScrollTriggers
+      ScrollTrigger.getAll().forEach(st => {
+        if (st.trigger === sectionRef.current || sectionRef.current?.contains(st.trigger)) {
+          st.kill();
+        }
+      });
+    };
+  }, [isMounted]);
+
+  // ✅ Prevent rendering until mounted
+  if (!isMounted) {
+    return null;
+  }
 
   return (
     <section 
@@ -166,7 +201,7 @@ export default function TestimonialsSection() {
         {/* Section Header */}
         <div className="text-center max-w-3xl mx-auto mb-14 sm:mb-20 space-y-3">
           <div className="testimonial-header-item inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-blue-500/10 border border-blue-500/30 text-blue-400 text-xs sm:text-sm font-bold tracking-wide uppercase">
-            <span className="text-blue-400 font-extrabold">//</span>
+            <span className="text-blue-400 font-extrabold" aria-hidden="true">//</span>
             <span>Testimonials</span>
           </div>
 
@@ -179,9 +214,9 @@ export default function TestimonialsSection() {
           </p>
 
           <div className="testimonial-header-item flex items-center justify-center gap-2 text-xs text-slate-500 mt-2">
-            <Users className="w-3.5 h-3.5 text-blue-400" />
+            <Users className="w-3.5 h-3.5 text-blue-400" aria-hidden="true" />
             <span>Trusted by 2000+ clients worldwide</span>
-            <Sparkles className="w-3.5 h-3.5 text-blue-400" />
+            <Sparkles className="w-3.5 h-3.5 text-blue-400" aria-hidden="true" />
           </div>
         </div>
 
@@ -195,7 +230,7 @@ export default function TestimonialsSection() {
               >
                 {/* Quote Icon - Decorative */}
                 <div className="testimonial-quote-icon absolute top-6 right-6 sm:top-8 sm:right-8 opacity-20 group-hover:opacity-40 transition-opacity duration-500">
-                  <Quote className="w-12 h-12 sm:w-14 sm:h-14 text-blue-400" strokeWidth={1.5} />
+                  <Quote className="w-12 h-12 sm:w-14 sm:h-14 text-blue-400" strokeWidth={1.5} aria-hidden="true" />
                 </div>
 
                 {/* Gradient accent line */}
@@ -205,7 +240,7 @@ export default function TestimonialsSection() {
                   {/* Rating Stars */}
                   <div className="testimonial-stars flex items-center gap-1.5 mb-4">
                     {[...Array(item.rating || 5)].map((_, i) => (
-                      <Star key={i} className="w-4 h-4 fill-amber-400 text-amber-400" strokeWidth={0} />
+                      <Star key={i} className="w-4 h-4 fill-amber-400 text-amber-400" strokeWidth={0} aria-hidden="true" />
                     ))}
                     <span className="text-xs font-bold text-slate-400 ml-2">5.0</span>
                   </div>

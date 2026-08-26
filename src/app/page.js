@@ -1,63 +1,73 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import dynamic from 'next/dynamic';
 
+// ✅ Import Header and Hero normally (they load first)
 import Header from '@/components/Header';
 import Hero from '@/components/Hero';
-import MarqueeStrip from '@/components/MarqueeStrip';
-import AboutSection from '@/components/AboutSection';
-import ServicesSection from '@/components/ServicesSection';
-import { TeamSection } from '@/components/TeamSection';
-import ProcessSection from '@/components/ProcessSection';
-import WhyChooseUs from '@/components/WhyChooseUs';
-import TestimonialsSection from '@/components/TestimonialsSection';
-import BlogSection from '@/components/BlogSection';
-import FAQSection from '@/components/FAQSection';
-import ContactSection from '@/components/ContactSection';
-import { Footer } from '@/components/Footer';
-import StatsBanner from '@/components/StatsBanner';
 
+// ✅ Lazy load everything else
+const MarqueeStrip = dynamic(() => import('@/components/MarqueeStrip'), { ssr: false });
+const AboutSection = dynamic(() => import('@/components/AboutSection'), { ssr: false });
+const ServicesSection = dynamic(() => import('@/components/ServicesSection'), { ssr: false });
+const ProcessSection = dynamic(() => import('@/components/ProcessSection'), { ssr: false });
+const WhyChooseUs = dynamic(() => import('@/components/WhyChooseUs'), { ssr: false });
+const TestimonialsSection = dynamic(() => import('@/components/TestimonialsSection'), { ssr: false });
+const TeamSection = dynamic(() => import('@/components/TeamSection'), { ssr: false });
+const BlogSection = dynamic(() => import('@/components/BlogSection'), { ssr: false });
+const FAQSection = dynamic(() => import('@/components/FAQSection'), { ssr: false });
+const Newsletter = dynamic(() => import('@/components/Newsletter'), { ssr: false });
+const ContactSection = dynamic(() => import('@/components/ContactSection'), { ssr: false });
+const Footer = dynamic(() => import('@/components/Footer'), { ssr: false });
+
+// ✅ Modals
 import { InteractiveQuoteModal } from '@/components/InteractiveQuoteModal';
 import { Toast } from '@/components/Toast';
 import { VideoModal } from '@/components/VideoModal';
 import { WhatsAppWidget } from '@/components/WhatsAppWidget';
-import Newsletter from '@/components/Newsletter';
 
 export default function Home() {
   const [isQuoteModalOpen, setIsQuoteModalOpen] = useState(false);
   const [isVideoModalOpen, setIsVideoModalOpen] = useState(false);
   const [quoteService, setQuoteService] = useState('Book Marketing');
-
-  // Toast state
   const [toastMessage, setToastMessage] = useState(null);
 
-  // Open Quote Modal
+  // ✅ Refresh ScrollTrigger after everything loads
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      if (typeof window !== 'undefined') {
+        try {
+          const { ScrollTrigger } = require('gsap/ScrollTrigger');
+          ScrollTrigger.refresh();
+        } catch (e) {}
+      }
+    }, 500);
+
+    return () => clearTimeout(timer);
+  }, []);
+
   const handleOpenQuote = (serviceName) => {
     setQuoteService(serviceName || 'Book Marketing');
     setIsQuoteModalOpen(true);
   };
 
-  // Close Quote Modal
   const handleCloseQuote = () => {
     setIsQuoteModalOpen(false);
   };
 
-  // Open Video Modal
   const handleOpenVideo = () => {
     setIsVideoModalOpen(true);
   };
 
-  // Close Video Modal
   const handleCloseVideo = () => {
     setIsVideoModalOpen(false);
   };
 
-  // Show Success Toast
   const handleSuccessToast = (message) => {
     setToastMessage(message);
   };
 
-  // Close Toast
   const handleCloseToast = () => {
     setToastMessage(null);
   };
@@ -65,63 +75,27 @@ export default function Home() {
   return (
     <main className="min-h-screen bg-slate-900">
 
-      {/* Header */}
-      <Header
-        onOpenQuoteModal={handleOpenQuote}
-      />
+      {/* ✅ Header - Loads First */}
+      <Header onOpenQuoteModal={handleOpenQuote} />
 
-      {/* Hero */}
-      <Hero
-        onOpenQuoteModal={handleOpenQuote}
-        onOpenVideoModal={handleOpenVideo}
-      />
+      {/* ✅ Hero - Loads Second */}
+      <Hero onOpenQuoteModal={handleOpenQuote} onOpenVideoModal={handleOpenVideo} />
 
-      {/* Marquee */}
+      {/* ✅ Everything else - Loads After Hero */}
       <MarqueeStrip />
-
-      {/* About */}
-      <AboutSection
-        onOpenQuoteModal={handleOpenQuote}
-        onOpenVideoModal={handleOpenVideo}
-      />
-
-      {/* Services */}
-      <ServicesSection
-        onOpenQuoteModal={handleOpenQuote}
-      />
-
-      {/* Process */}
+      <AboutSection onOpenQuoteModal={handleOpenQuote} onOpenVideoModal={handleOpenVideo} />
+      <ServicesSection onOpenQuoteModal={handleOpenQuote} />
       <ProcessSection />
-
-      {/* Why Choose Us */}
-      <WhyChooseUs
-        onOpenQuoteModal={handleOpenQuote}
-        onOpenVideoModal={handleOpenVideo}
-      />
-
-      {/* Testimonials */}
+      <WhyChooseUs onOpenQuoteModal={handleOpenQuote} onOpenVideoModal={handleOpenVideo} />
       <TestimonialsSection />
-
-      {/* Team */}
       <TeamSection />
-
-      {/* Blog */}
       <BlogSection />
-
-      {/* FAQ */}
       <FAQSection />
-
-        {/* Newsletter */}
-      <Newsletter
-        onSuccessToast={handleSuccessToast}
-      />
-
-      {/* Contact */}
+      <Newsletter onSuccessToast={handleSuccessToast} />
       <ContactSection />
-
       <Footer onOpenQuoteModal={handleOpenQuote} />
 
-      {/* Interactive Quote Modal */}
+      {/* Modals */}
       <InteractiveQuoteModal
         isOpen={isQuoteModalOpen}
         onClose={handleCloseQuote}
@@ -129,20 +103,14 @@ export default function Home() {
         onSuccessToast={handleSuccessToast}
       />
 
-      {/* Video Modal */}
       <VideoModal
         isOpen={isVideoModalOpen}
         onClose={handleCloseVideo}
         onOpenQuoteModal={handleOpenQuote}
       />
 
-      {/* Success Toast */}
-      <Toast
-        message={toastMessage}
-        onClose={handleCloseToast}
-      />
+      <Toast message={toastMessage} onClose={handleCloseToast} />
 
-      {/* WhatsApp Widget */}
       <WhatsAppWidget />
 
     </main>

@@ -91,27 +91,25 @@ export default function Hero({ onOpenQuoteModal, onOpenVideoModal }) {
 
   // ✅ GSAP Animations - Optimized
   useEffect(() => {
+    // ✅ Don't run animations if not mounted
     if (!containerRef.current || !isMounted) return;
 
     const ctx = gsap.context(() => {
-      // ✅ Check for reduced motion preference
       const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
       const isMobile = window.innerWidth < 768;
       
-      // ✅ Animation durations based on device
       const dur = isMobile ? 0.5 : 0.8;
       const staggerDur = isMobile ? 0.06 : 0.1;
 
-      // Only apply if not reduced motion
       if (!reduceMotion) {
         const tl = gsap.timeline({
           defaults: {
             ease: 'power3.out',
-            force3D: true, // ✅ GPU acceleration
+            force3D: true,
           }
         });
 
-        // Initial states
+        // Initial states - check if refs exist
         gsap.set(
           [
             badgeRef.current,
@@ -125,47 +123,47 @@ export default function Hero({ onOpenQuoteModal, onOpenVideoModal }) {
             statusRef.current,
             platformHeadingRef.current,
             platformsRef.current
-          ],
+          ].filter(Boolean),
           {
             opacity: 0,
             willChange: 'transform, opacity',
           }
         );
 
-        gsap.set(featuresRef.current, {
+        gsap.set(featuresRef.current.filter(Boolean), {
           opacity: 0,
           willChange: 'transform, opacity',
         });
 
-        gsap.set(ctasRef.current, {
+        gsap.set(ctasRef.current.filter(Boolean), {
           opacity: 0,
           willChange: 'transform, opacity',
         });
 
-        gsap.set(resultItemsRef.current, {
+        gsap.set(resultItemsRef.current.filter(Boolean), {
           opacity: 0,
           willChange: 'transform, opacity',
         });
 
-        gsap.set(platformCardsRef.current, {
+        gsap.set(platformCardsRef.current.filter(Boolean), {
           opacity: 0,
           y: 30,
           willChange: 'transform, opacity',
         });
 
-        gsap.set(badgeRef.current, { y: -20 });
-        gsap.set(headingRef.current, { y: 30 });
-        gsap.set(descRef.current, { y: 20 });
-        gsap.set(featuresRef.current, { y: 15 });
-        gsap.set(ctasRef.current, { y: 20 });
-        gsap.set(socialRef.current, { y: 15 });
-        gsap.set(imageBoxRef.current, { scale: 0.92 });
-        gsap.set(floatTopRef.current, { x: -30 });
-        gsap.set(floatBottomRef.current, { x: 30 });
-        gsap.set(resultsRef.current, { y: 30 });
-        gsap.set(statusRef.current, { y: 20 });
-        gsap.set(platformHeadingRef.current, { y: 20 });
-        gsap.set(platformsRef.current, { y: 20 });
+        if (badgeRef.current) gsap.set(badgeRef.current, { y: -20 });
+        if (headingRef.current) gsap.set(headingRef.current, { y: 30 });
+        if (descRef.current) gsap.set(descRef.current, { y: 20 });
+        if (featuresRef.current.length) gsap.set(featuresRef.current, { y: 15 });
+        if (ctasRef.current.length) gsap.set(ctasRef.current, { y: 20 });
+        if (socialRef.current) gsap.set(socialRef.current, { y: 15 });
+        if (imageBoxRef.current) gsap.set(imageBoxRef.current, { scale: 0.92 });
+        if (floatTopRef.current) gsap.set(floatTopRef.current, { x: -30 });
+        if (floatBottomRef.current) gsap.set(floatBottomRef.current, { x: 30 });
+        if (resultsRef.current) gsap.set(resultsRef.current, { y: 30 });
+        if (statusRef.current) gsap.set(statusRef.current, { y: 20 });
+        if (platformHeadingRef.current) gsap.set(platformHeadingRef.current, { y: 20 });
+        if (platformsRef.current) gsap.set(platformsRef.current, { y: 20 });
 
         // ✅ Main animation sequence
         tl.to(badgeRef.current, {
@@ -322,24 +320,28 @@ export default function Hero({ onOpenQuoteModal, onOpenVideoModal }) {
 
         // ✅ Floating animations (only on desktop)
         if (!isMobile) {
-          gsap.to(floatTopRef.current, {
-            y: -8,
-            duration: 3,
-            repeat: -1,
-            yoyo: true,
-            ease: 'power1.inOut',
-            overwrite: 'auto',
-          });
+          if (floatTopRef.current) {
+            gsap.to(floatTopRef.current, {
+              y: -8,
+              duration: 3,
+              repeat: -1,
+              yoyo: true,
+              ease: 'power1.inOut',
+              overwrite: 'auto',
+            });
+          }
 
-          gsap.to(floatBottomRef.current, {
-            y: 8,
-            duration: 3.5,
-            repeat: -1,
-            yoyo: true,
-            ease: 'power1.inOut',
-            delay: 0.5,
-            overwrite: 'auto',
-          });
+          if (floatBottomRef.current) {
+            gsap.to(floatBottomRef.current, {
+              y: 8,
+              duration: 3.5,
+              repeat: -1,
+              yoyo: true,
+              ease: 'power1.inOut',
+              delay: 0.5,
+              overwrite: 'auto',
+            });
+          }
         }
       } else {
         // ✅ If reduced motion, just show everything without animation
@@ -360,7 +362,7 @@ export default function Hero({ onOpenQuoteModal, onOpenVideoModal }) {
             ...ctasRef.current,
             ...resultItemsRef.current,
             ...platformCardsRef.current,
-          ],
+          ].filter(Boolean),
           {
             opacity: 1,
             y: 0,

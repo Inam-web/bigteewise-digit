@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useEffect, useRef } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { PROCESS_STEPS } from '../app/Data/content';
 import { FileSpreadsheet, Lightbulb, Layers, Smile, ArrowRight, Sparkles } from 'lucide-react';
 import gsap from 'gsap';
@@ -13,6 +13,7 @@ if (typeof window !== 'undefined') {
 
 export default function ProcessSection({ onOpenQuoteModal }) {
   const { t } = useLanguage();
+  const [isMounted, setIsMounted] = useState(false);
   const sectionRef = useRef(null);
   const cardsRef = useRef([]);
 
@@ -51,7 +52,15 @@ export default function ProcessSection({ onOpenQuoteModal }) {
     }
   };
 
+  // ✅ Set mounted state
   useEffect(() => {
+    setIsMounted(true);
+  }, []);
+
+  // ✅ GSAP Animations - Only run when mounted
+  useEffect(() => {
+    if (!isMounted) return;
+
     const ctx = gsap.context(() => {
       // Header entrance animation
       gsap.fromTo(
@@ -63,12 +72,12 @@ export default function ProcessSection({ onOpenQuoteModal }) {
           duration: 1,
           stagger: 0.15,
           ease: 'power3.out',
+          overwrite: 'auto',
           scrollTrigger: {
             trigger: sectionRef.current,
             start: 'top 80%',
             toggleActions: 'play none none none',
           },
-          clearProps: 'transform,opacity',
         }
       );
 
@@ -87,12 +96,12 @@ export default function ProcessSection({ onOpenQuoteModal }) {
           duration: 0.9,
           stagger: 0.12,
           ease: 'power3.out',
+          overwrite: 'auto',
           scrollTrigger: {
             trigger: '.process-cards-container',
             start: 'top 80%',
             toggleActions: 'play none none none',
           },
-          clearProps: 'transform,opacity,scale',
         }
       );
 
@@ -108,12 +117,12 @@ export default function ProcessSection({ onOpenQuoteModal }) {
           opacity: 1,
           duration: 1.2,
           ease: 'power2.out',
+          overwrite: 'auto',
           scrollTrigger: {
             trigger: '.process-cards-container',
             start: 'top 75%',
             toggleActions: 'play none none none',
           },
-          clearProps: 'transform,opacity',
         }
       );
 
@@ -130,96 +139,108 @@ export default function ProcessSection({ onOpenQuoteModal }) {
           duration: 0.6,
           stagger: 0.15,
           ease: 'back.out(1.7)',
+          overwrite: 'auto',
           scrollTrigger: {
             trigger: '.process-cards-container',
             start: 'top 78%',
             toggleActions: 'play none none none',
           },
-          clearProps: 'transform,opacity',
         }
       );
 
-      // Hover animations for cards
+      // Hover animations for cards (desktop only)
       const cards = document.querySelectorAll('.process-card-item');
-      cards.forEach((card) => {
-        const icon = card.querySelector('.process-icon');
-        const number = card.querySelector('.process-step-number');
-        const title = card.querySelector('.process-title');
-        const desc = card.querySelector('.process-desc');
+      const isMobile = window.innerWidth < 768;
+      
+      if (!isMobile) {
+        cards.forEach((card) => {
+          const icon = card.querySelector('.process-icon');
+          const number = card.querySelector('.process-step-number');
+          const title = card.querySelector('.process-title');
+          const desc = card.querySelector('.process-desc');
 
-        card.addEventListener('mouseenter', () => {
-          if (icon) {
-            gsap.to(icon, {
-              scale: 1.15,
-              rotation: 5,
-              duration: 0.4,
-              ease: 'power2.out',
-            });
-          }
+          card.addEventListener('mouseenter', () => {
+            if (icon) {
+              gsap.to(icon, {
+                scale: 1.15,
+                rotation: 5,
+                duration: 0.4,
+                ease: 'power2.out',
+                overwrite: 'auto',
+              });
+            }
 
-          if (number) {
-            gsap.to(number, {
-              scale: 1.1,
-              rotation: -3,
-              duration: 0.3,
-              ease: 'power2.out',
-            });
-          }
+            if (number) {
+              gsap.to(number, {
+                scale: 1.1,
+                rotation: -3,
+                duration: 0.3,
+                ease: 'power2.out',
+                overwrite: 'auto',
+              });
+            }
 
-          if (title) {
-            gsap.to(title, {
-              color: '#2563eb',
-              duration: 0.3,
-              ease: 'power2.out',
-            });
-          }
+            if (title) {
+              gsap.to(title, {
+                color: '#2563eb',
+                duration: 0.3,
+                ease: 'power2.out',
+                overwrite: 'auto',
+              });
+            }
 
-          if (desc) {
-            gsap.to(desc, {
-              color: '#1e293b',
-              duration: 0.3,
-              ease: 'power2.out',
-              delay: 0.05,
-            });
-          }
+            if (desc) {
+              gsap.to(desc, {
+                color: '#1e293b',
+                duration: 0.3,
+                ease: 'power2.out',
+                delay: 0.05,
+                overwrite: 'auto',
+              });
+            }
+          });
+
+          card.addEventListener('mouseleave', () => {
+            if (icon) {
+              gsap.to(icon, {
+                scale: 1,
+                rotation: 0,
+                duration: 0.4,
+                ease: 'power2.out',
+                overwrite: 'auto',
+              });
+            }
+
+            if (number) {
+              gsap.to(number, {
+                scale: 1,
+                rotation: 0,
+                duration: 0.3,
+                ease: 'power2.out',
+                overwrite: 'auto',
+              });
+            }
+
+            if (title) {
+              gsap.to(title, {
+                color: '#0f172a',
+                duration: 0.3,
+                ease: 'power2.out',
+                overwrite: 'auto',
+              });
+            }
+
+            if (desc) {
+              gsap.to(desc, {
+                color: '#475569',
+                duration: 0.3,
+                ease: 'power2.out',
+                overwrite: 'auto',
+              });
+            }
+          });
         });
-
-        card.addEventListener('mouseleave', () => {
-          if (icon) {
-            gsap.to(icon, {
-              scale: 1,
-              rotation: 0,
-              duration: 0.4,
-              ease: 'power2.out',
-            });
-          }
-
-          if (number) {
-            gsap.to(number, {
-              scale: 1,
-              rotation: 0,
-              duration: 0.3,
-              ease: 'power2.out',
-            });
-          }
-
-          if (title) {
-            gsap.to(title, {
-              color: '#0f172a',
-              duration: 0.3,
-              ease: 'power2.out',
-            });
-          }
-
-          if (desc) {
-            gsap.to(desc, {
-              color: '#475569',
-              duration: 0.3,
-              ease: 'power2.out',
-            });
-          }
-        });
-      });
+      }
 
       // Mobile touch feedback
       if (window.innerWidth < 1024) {
@@ -229,6 +250,7 @@ export default function ProcessSection({ onOpenQuoteModal }) {
               scale: 0.97,
               duration: 0.15,
               ease: 'power2.out',
+              overwrite: 'auto',
             });
           }, { passive: true });
 
@@ -237,14 +259,28 @@ export default function ProcessSection({ onOpenQuoteModal }) {
               scale: 1,
               duration: 0.2,
               ease: 'power2.out',
+              overwrite: 'auto',
             });
           }, { passive: true });
         });
       }
     }, sectionRef);
 
-    return () => ctx.revert();
-  }, [stepsList]);
+    return () => {
+      ctx.revert();
+      // Clean up ScrollTriggers
+      ScrollTrigger.getAll().forEach(st => {
+        if (st.trigger === sectionRef.current || sectionRef.current?.contains(st.trigger)) {
+          st.kill();
+        }
+      });
+    };
+  }, [isMounted, stepsList]);
+
+  // ✅ Prevent rendering until mounted
+  if (!isMounted) {
+    return null;
+  }
 
   return (
     <section 
@@ -267,7 +303,7 @@ export default function ProcessSection({ onOpenQuoteModal }) {
         {/* Section Header */}
         <div className="text-center max-w-3xl mx-auto mb-14 sm:mb-20 space-y-3">
           <div className="process-header-item inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-blue-50 border border-blue-100 text-blue-700 text-xs sm:text-sm font-extrabold tracking-wide uppercase">
-            <span className="text-blue-600 font-black">//</span>
+            <span className="text-blue-600 font-black" aria-hidden="true">//</span>
             <span>{t('process.badge')}</span>
           </div>
 
@@ -280,9 +316,9 @@ export default function ProcessSection({ onOpenQuoteModal }) {
           </p>
 
           <div className="process-header-item flex items-center justify-center gap-2 text-xs text-slate-400 mt-2">
-            <Sparkles className="w-3 h-3 text-blue-500" />
+            <Sparkles className="w-3 h-3 text-blue-500" aria-hidden="true" />
             <span>{t('process.stepsCount')}</span>
-            <Sparkles className="w-3 h-3 text-blue-500" />
+            <Sparkles className="w-3 h-3 text-blue-500" aria-hidden="true" />
           </div>
         </div>
 
@@ -341,14 +377,14 @@ export default function ProcessSection({ onOpenQuoteModal }) {
                   {/* Mobile Step Flow Arrow (Hidden on last item) */}
                   {index < stepsList.length - 1 && (
                     <div className="lg:hidden absolute -bottom-6 sm:-bottom-8 left-1/2 -translate-x-1/2 text-blue-400/60 bg-white rounded-full p-1 border border-blue-100 shadow-sm">
-                      <ArrowRight className="w-4 h-4" />
+                      <ArrowRight className="w-4 h-4" aria-hidden="true" />
                     </div>
                   )}
 
                   {/* Desktop Step Flow Arrow (Hidden on last item) */}
                   {index < stepsList.length - 1 && (
                     <div className="hidden lg:flex absolute -right-4 top-[72px] z-20 text-blue-400 bg-white rounded-full p-1.5 border border-blue-100 shadow-sm group-hover:border-blue-300 group-hover:text-blue-600 transition-all duration-300">
-                      <ArrowRight className="w-3.5 h-3.5" />
+                      <ArrowRight className="w-3.5 h-3.5" aria-hidden="true" />
                     </div>
                   )}
                 </div>
@@ -366,9 +402,10 @@ export default function ProcessSection({ onOpenQuoteModal }) {
             <button 
               onClick={handleLetsTalk}
               className="inline-flex items-center gap-1.5 text-blue-600 hover:text-blue-700 font-bold text-xs sm:text-sm transition-colors duration-200 group cursor-pointer"
+              aria-label="Start your project"
             >
               <span>{t('process.ctaButton')}</span>
-              <ArrowRight className="w-3.5 h-3.5 group-hover:translate-x-1 transition-transform duration-200" />
+              <ArrowRight className="w-3.5 h-3.5 group-hover:translate-x-1 transition-transform duration-200" aria-hidden="true" />
             </button>
           </div>
         </div>
