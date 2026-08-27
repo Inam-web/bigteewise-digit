@@ -11,6 +11,10 @@ if (typeof window !== 'undefined') {
   gsap.registerPlugin(ScrollTrigger);
 }
 
+const prefersReducedMotion = () =>
+  typeof window !== 'undefined' &&
+  window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
 const DEFAULT_TESTIMONIALS = [
   {
     id: 1,
@@ -101,19 +105,18 @@ export default function TestimonialsSection() {
 
   const testimonialsList = ContentModule.TESTIMONIALS || DEFAULT_TESTIMONIALS;
 
-  // ✅ Set mounted state
   useEffect(() => {
     setIsMounted(true);
   }, []);
 
-  // ✅ GSAP Animations - Only run when mounted
+  // ============================================================
+  // GSAP ANIMATIONS - OPTIMIZED FOR ALL SCREENS
+  // ============================================================
   useEffect(() => {
-    if (!isMounted) return;
+    if (!isMounted || !sectionRef.current) return;
 
     const ctx = gsap.context(() => {
-      const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-
-      if (reduceMotion) {
+      if (prefersReducedMotion()) {
         gsap.set('.testimonial-header-item, .testimonial-card', {
           opacity: 1,
           y: 0,
@@ -122,51 +125,92 @@ export default function TestimonialsSection() {
         return;
       }
 
-      // Header Animation
-      gsap.fromTo(
-        '.testimonial-header-item',
-        { y: 30, opacity: 0 },
-        {
-          y: 0,
-          opacity: 1,
-          duration: 1,
-          stagger: 0.15,
-          ease: 'power3.out',
+      const isMobile = window.innerWidth < 768;
+      const isTablet = window.innerWidth >= 768 && window.innerWidth < 1024;
+      
+      // ✅ Device-specific durations
+      const dur = isMobile ? 0.5 : (isTablet ? 0.7 : 1);
+      const staggerDur = isMobile ? 0.06 : (isTablet ? 0.1 : 0.15);
+      const yOffset = isMobile ? 20 : (isTablet ? 30 : 40);
+
+      // ====== SET INITIAL STATES ======
+      gsap.set('.testimonial-header-item', {
+        y: yOffset,
+        opacity: 0,
+        willChange: 'transform, opacity',
+      });
+
+      gsap.set('.testimonial-card', {
+        opacity: 0,
+        scale: isMobile ? 0.97 : 0.95,
+        willChange: 'transform, opacity',
+      });
+
+      // ====== HEADER ANIMATION ======
+      gsap.to('.testimonial-header-item', {
+        y: 0,
+        opacity: 1,
+        duration: dur,
+        stagger: staggerDur * 1.2,
+        ease: 'power4.out',
+        scrollTrigger: {
+          trigger: sectionRef.current,
+          start: isMobile ? 'top 88%' : 'top 80%',
+          once: true,
+        },
+      });
+
+      // ====== FLOATING ORBS (Desktop only) ======
+      if (!isMobile && !isTablet) {
+        gsap.to('.testimonial-orb-1', {
+          y: -25,
+          x: 20,
+          duration: 5,
+          repeat: -1,
+          yoyo: true,
+          ease: 'sine.inOut',
           overwrite: 'auto',
-          scrollTrigger: {
-            trigger: sectionRef.current,
-            start: 'top 80%',
-            toggleActions: 'play none none none',
-          },
-        }
-      );
+        });
 
-      // Floating orbs
-      gsap.to('.testimonial-orb-1', {
-        y: -25,
-        x: 20,
-        duration: 5,
-        repeat: -1,
-        yoyo: true,
-        ease: 'sine.inOut',
-        overwrite: 'auto',
+        gsap.to('.testimonial-orb-2', {
+          y: 30,
+          x: -15,
+          duration: 4.5,
+          repeat: -1,
+          yoyo: true,
+          ease: 'sine.inOut',
+          delay: 0.5,
+          overwrite: 'auto',
+        });
+      }
+
+      // ====== CARD SCROLL-TRIGGERED ANIMATION ======
+      // Animate cards when they come into view
+      const cards = document.querySelectorAll('.testimonial-card');
+      cards.forEach((card) => {
+        gsap.fromTo(card,
+          { opacity: 0, scale: isMobile ? 0.97 : 0.95 },
+          {
+            opacity: 1,
+            scale: 1,
+            duration: isMobile ? 0.5 : 0.8,
+            ease: 'power4.out',
+            scrollTrigger: {
+              trigger: card,
+              start: 'top 90%',
+              once: true,
+            },
+          }
+        );
       });
 
-      gsap.to('.testimonial-orb-2', {
-        y: 30,
-        x: -15,
-        duration: 4.5,
-        repeat: -1,
-        yoyo: true,
-        ease: 'sine.inOut',
-        delay: 0.5,
-        overwrite: 'auto',
-      });
+      // ====== REFRESH SCROLLTRIGGER ======
+      ScrollTrigger.refresh();
+
     }, sectionRef);
 
     return () => {
       ctx.revert();
-      // Clean up ScrollTriggers
       ScrollTrigger.getAll().forEach(st => {
         if (st.trigger === sectionRef.current || sectionRef.current?.contains(st.trigger)) {
           st.kill();
@@ -175,7 +219,6 @@ export default function TestimonialsSection() {
     };
   }, [isMounted]);
 
-  // ✅ Prevent rendering until mounted
   if (!isMounted) {
     return null;
   }
@@ -192,7 +235,6 @@ export default function TestimonialsSection() {
         <div className="testimonial-orb-2 absolute -bottom-32 -left-32 w-80 h-80 bg-indigo-600/15 rounded-full blur-3xl" />
         <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-blue-500/5 rounded-full blur-3xl" />
         
-        {/* Subtle grid pattern */}
         <div className="absolute inset-0 opacity-[0.03] bg-[radial-gradient(#ffffff_1px,transparent_1px)] [background-size:24px_24px]" />
       </div>
 
@@ -315,6 +357,11 @@ export default function TestimonialsSection() {
         @media (prefers-reduced-motion: reduce) {
           .carousel-track {
             animation: none;
+          }
+        }
+        @media (max-width: 767px) {
+          .carousel-track {
+            animation-duration: 14s;
           }
         }
       `}</style>

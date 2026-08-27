@@ -17,6 +17,10 @@ if (typeof window !== 'undefined') {
   gsap.registerPlugin(ScrollTrigger);
 }
 
+const prefersReducedMotion = () =>
+  typeof window !== 'undefined' &&
+  window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
 /* =========================================================
    INLINE SOCIAL ICONS
 ========================================================= */
@@ -132,7 +136,6 @@ export const TeamSection = () => {
   const member = members[active];
   const accent = getAccent(member, active);
 
-  // Translation helper
   const tr = (key, fallback) => {
     try {
       const result = t(key);
@@ -160,129 +163,140 @@ export const TeamSection = () => {
     });
   }, [members]);
 
-  /* =======================================================
-     GSAP ENTRANCE ANIMATIONS
-  ======================================================= */
+  // ============================================================
+  // GSAP ANIMATIONS - OPTIMIZED FOR ALL SCREENS
+  // ============================================================
   useEffect(() => {
     if (!sectionRef.current) return;
 
     const ctx = gsap.context(() => {
-      const media = gsap.matchMedia();
-
-      media.add('(prefers-reduced-motion: no-preference)', () => {
-        // Set initial states
-        gsap.set('.team-reveal', {
-          opacity: 0,
-          y: 40,
+      if (prefersReducedMotion()) {
+        gsap.set([
+          '.team-reveal',
+          '.team-orb',
+          '.team-card',
+          '.team-nav-item',
+          '.team-philosophy',
+        ], {
+          opacity: 1,
+          y: 0,
+          scale: 1,
+          clearProps: 'transform,opacity'
         });
+        return;
+      }
 
-        gsap.set('.team-orb', {
-          opacity: 0,
-          scale: 0.7,
-        });
+      const isMobile = window.innerWidth < 768;
+      const isTablet = window.innerWidth >= 768 && window.innerWidth < 1024;
+      
+      // ✅ Device-specific durations
+      const dur = isMobile ? 0.5 : (isTablet ? 0.7 : 1);
+      const staggerDur = isMobile ? 0.06 : (isTablet ? 0.08 : 0.1);
+      const yOffset = isMobile ? 20 : (isTablet ? 30 : 40);
 
-        gsap.set('.team-card', {
-          opacity: 0,
-          y: 60,
-          scale: 0.96,
-        });
-
-        gsap.set('.team-nav-item', {
-          opacity: 0,
-          y: 30,
-        });
-
-        gsap.set('.team-philosophy', {
-          opacity: 0,
-          y: 50,
-        });
-
-        // Main entrance timeline
-        const intro = gsap.timeline({
-          scrollTrigger: {
-            trigger: sectionRef.current,
-            start: 'top 80%',
-            once: true,
-          },
-        });
-
-        intro
-          .to('.team-reveal', {
-            opacity: 1,
-            y: 0,
-            duration: 1,
-            stagger: 0.1,
-            ease: 'power3.out',
-          })
-          .to(
-            '.team-orb',
-            {
-              opacity: 1,
-              scale: 1,
-              duration: 1.6,
-              ease: 'power3.out',
-            },
-            '-=0.8'
-          )
-          .to(
-            '.team-card',
-            {
-              opacity: 1,
-              y: 0,
-              scale: 1,
-              duration: 1.2,
-              ease: 'power3.out',
-            },
-            '-=1.2'
-          )
-          .to(
-            '.team-nav-item',
-            {
-              opacity: 1,
-              y: 0,
-              duration: 0.8,
-              stagger: 0.08,
-              ease: 'power3.out',
-            },
-            '-=0.8'
-          )
-          .to(
-            '.team-philosophy',
-            {
-              opacity: 1,
-              y: 0,
-              duration: 1,
-              ease: 'power3.out',
-            },
-            '-=0.6'
-          );
-
-        // Orb floating animation
-        if (orbRef.current) {
-          gsap.to(orbRef.current, {
-            x: 30,
-            y: -25,
-            duration: 5,
-            repeat: -1,
-            yoyo: true,
-            ease: 'sine.inOut',
-          });
-        }
-
-        // Parallax on scroll for background elements
-        gsap.to('.team-bg-grid', {
-          y: -40,
-          ease: 'none',
-          scrollTrigger: {
-            trigger: sectionRef.current,
-            start: 'top bottom',
-            end: 'bottom top',
-            scrub: 1,
-          },
-        });
+      // ====== SET INITIAL STATES ======
+      gsap.set('.team-reveal', {
+        opacity: 0,
+        y: yOffset,
+        willChange: 'transform, opacity',
       });
 
-      return () => media.revert();
+      gsap.set('.team-orb', {
+        opacity: 0,
+        scale: 0.7,
+        willChange: 'transform, opacity',
+      });
+
+      gsap.set('.team-card', {
+        opacity: 0,
+        y: isMobile ? 30 : 60,
+        scale: isMobile ? 0.97 : 0.96,
+        willChange: 'transform, opacity',
+      });
+
+      gsap.set('.team-nav-item', {
+        opacity: 0,
+        y: isMobile ? 15 : 30,
+        willChange: 'transform, opacity',
+      });
+
+      gsap.set('.team-philosophy', {
+        opacity: 0,
+        y: isMobile ? 25 : 50,
+        willChange: 'transform, opacity',
+      });
+
+      // ====== MAIN ENTRANCE TIMELINE ======
+      const intro = gsap.timeline({
+        scrollTrigger: {
+          trigger: sectionRef.current,
+          start: isMobile ? 'top 85%' : 'top 80%',
+          once: true,
+        },
+      });
+
+      intro
+        .to('.team-reveal', {
+          opacity: 1,
+          y: 0,
+          duration: dur,
+          stagger: staggerDur,
+          ease: 'power4.out',
+        })
+        .to('.team-orb', {
+          opacity: 1,
+          scale: 1,
+          duration: dur + 0.6,
+          ease: 'power4.out',
+        }, '-=0.6')
+        .to('.team-card', {
+          opacity: 1,
+          y: 0,
+          scale: 1,
+          duration: dur + 0.2,
+          ease: 'power4.out',
+        }, '-=0.8')
+        .to('.team-nav-item', {
+          opacity: 1,
+          y: 0,
+          duration: isMobile ? 0.4 : 0.8,
+          stagger: isMobile ? 0.04 : 0.08,
+          ease: 'power4.out',
+        }, '-=0.5')
+        .to('.team-philosophy', {
+          opacity: 1,
+          y: 0,
+          duration: dur,
+          ease: 'power4.out',
+        }, '-=0.4');
+
+      // ====== ORB FLOATING (Desktop only) ======
+      if (!isMobile && !isTablet && orbRef.current) {
+        gsap.to(orbRef.current, {
+          x: 30,
+          y: -25,
+          duration: 5,
+          repeat: -1,
+          yoyo: true,
+          ease: 'sine.inOut',
+        });
+      }
+
+      // ====== PARALLAX ON SCROLL ======
+      gsap.to('.team-bg-grid', {
+        y: -40,
+        ease: 'none',
+        scrollTrigger: {
+          trigger: sectionRef.current,
+          start: 'top bottom',
+          end: 'bottom top',
+          scrub: 1,
+        },
+      });
+
+      // ====== REFRESH SCROLLTRIGGER ======
+      ScrollTrigger.refresh();
+
     }, sectionRef);
 
     return () => ctx.revert();
@@ -302,10 +316,7 @@ export const TeamSection = () => {
         return;
       }
 
-      if (
-        window.matchMedia &&
-        window.matchMedia('(prefers-reduced-motion: reduce)').matches
-      ) {
+      if (prefersReducedMotion()) {
         setActive(nextIndex);
         return;
       }
@@ -318,6 +329,9 @@ export const TeamSection = () => {
         numberRef.current,
       ].filter(Boolean);
 
+      const isMobile = window.innerWidth < 768;
+      const dur = isMobile ? 0.15 : 0.25;
+
       const tl = gsap.timeline({
         onComplete: () => {
           setActive(nextIndex);
@@ -327,15 +341,15 @@ export const TeamSection = () => {
 
       tl.to(targets, {
         opacity: 0,
-        y: 20,
-        duration: 0.25,
-        stagger: 0.03,
+        y: isMobile ? 10 : 20,
+        duration: dur,
+        stagger: isMobile ? 0.02 : 0.03,
         ease: 'power2.in',
       }).to(targets, {
         opacity: 1,
         y: 0,
-        duration: 0.6,
-        stagger: 0.06,
+        duration: isMobile ? 0.4 : 0.6,
+        stagger: isMobile ? 0.04 : 0.06,
         ease: 'power3.out',
       });
     },
@@ -348,8 +362,7 @@ export const TeamSection = () => {
   useEffect(() => {
     if (!statsRef.current || !member?.stat?.value) return;
 
-    const media = window.matchMedia('(prefers-reduced-motion: reduce)');
-    if (media.matches) return;
+    if (prefersReducedMotion()) return;
 
     const statEl = statsRef.current;
     const value = member.stat.value;
@@ -373,13 +386,12 @@ export const TeamSection = () => {
   }, [active, member?.stat?.value]);
 
   /* =======================================================
-     HOVER EFFECTS - MAGNETIC BUTTONS
+     HOVER EFFECTS - MAGNETIC BUTTONS (Desktop only)
   ======================================================= */
   useEffect(() => {
     if (!sectionRef.current) return;
-
-    const media = window.matchMedia('(prefers-reduced-motion: reduce)');
-    if (media.matches) return;
+    if (prefersReducedMotion()) return;
+    if (window.innerWidth < 768) return;
 
     const magneticBtns = sectionRef.current.querySelectorAll('.magnetic-btn');
 
@@ -426,13 +438,12 @@ export const TeamSection = () => {
   }, [active]);
 
   /* =======================================================
-     HOVER EFFECTS - NAV ITEMS
+     HOVER EFFECTS - NAV ITEMS (Desktop only)
   ======================================================= */
   useEffect(() => {
     if (!navRef.current) return;
-
-    const media = window.matchMedia('(prefers-reduced-motion: reduce)');
-    if (media.matches) return;
+    if (prefersReducedMotion()) return;
+    if (window.innerWidth < 768) return;
 
     const navItems = navRef.current.querySelectorAll('.nav-item');
 

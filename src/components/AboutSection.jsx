@@ -12,194 +12,216 @@ if (typeof window !== 'undefined') {
   gsap.registerPlugin(ScrollTrigger);
 }
 
+// Reduce motion helper
+const prefersReducedMotion = () =>
+  typeof window !== 'undefined' &&
+  window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
 export default function AboutSection({ onOpenVideoModal, onOpenQuoteModal }) {
   const { t } = useLanguage();
   const sectionRef = useRef(null);
   const progressRef = useRef(null);
   const [isMounted, setIsMounted] = useState(false);
 
-  // ✅ Set mounted state for hydration
   useEffect(() => {
     setIsMounted(true);
   }, []);
 
+  // ============================================================
+  // GSAP ANIMATIONS - OPTIMIZED FOR ALL SCREENS
+  // ============================================================
   useEffect(() => {
     if (!sectionRef.current || !isMounted) return;
 
     const ctx = gsap.context(() => {
       const isMobile = window.matchMedia('(max-width: 767px)').matches;
       const isTablet = window.matchMedia('(min-width: 768px) and (max-width: 1279px)').matches;
-      const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
-      // ✅ Initial states
-      gsap.set('.about-reveal', { 
-        opacity: 0, 
-        y: isMobile ? 20 : 35,
-        willChange: 'transform, opacity',
-      });
-      gsap.set('.about-photo', { 
-        opacity: 0, 
-        scale: 0.96,
-        willChange: 'transform, opacity',
-      });
-      gsap.set('.about-play-btn', { 
-        opacity: 0, 
-        scale: 0.7,
-        willChange: 'transform, opacity',
-      });
-
-      if (!reduceMotion) {
-        // ✅ Main intro timeline
-        const intro = gsap.timeline({
-          scrollTrigger: {
-            trigger: sectionRef.current,
-            start: 'top 78%',
-            once: true,
-          },
-        });
-
-        intro
-          .to('.about-photo', {
-            opacity: 1,
-            scale: 1,
-            duration: isMobile ? 0.7 : 1,
-            stagger: 0.12,
-            ease: 'power3.out',
-            overwrite: 'auto',
-          })
-          .to(
-            '.about-play-btn',
-            {
-              opacity: 1,
-              scale: 1,
-              duration: 0.7,
-              ease: 'back.out(1.6)',
-              overwrite: 'auto',
-            },
-            '-=0.55'
-          )
-          .to(
-            '.about-reveal',
-            {
-              opacity: 1,
-              y: 0,
-              duration: isMobile ? 0.65 : 0.8,
-              stagger: isMobile ? 0.08 : 0.12,
-              ease: 'power3.out',
-              overwrite: 'auto',
-            },
-            '-=0.35'
-          );
-
-        // ✅ Desktop-only floating animations
-        if (!isMobile && !isTablet) {
-          gsap.to('.about-orbit', {
-            y: -14,
-            x: 6,
-            duration: 4,
-            repeat: -1,
-            yoyo: true,
-            ease: 'sine.inOut',
-            overwrite: 'auto',
-          });
-
-          gsap.to('.about-photo-main', {
-            y: -8,
-            duration: 5,
-            repeat: -1,
-            yoyo: true,
-            ease: 'sine.inOut',
-            overwrite: 'auto',
-          });
-
-          gsap.to('.about-photo-secondary', {
-            y: 10,
-            duration: 4.5,
-            repeat: -1,
-            yoyo: true,
-            ease: 'sine.inOut',
-            delay: 0.4,
-            overwrite: 'auto',
-          });
-
-          // ✅ Scroll-triggered card animations
-          const cardsTrigger = ScrollTrigger.create({
-            trigger: '.about-scroll-content',
-            start: 'top 72%',
-            onEnter: () => {
-              gsap.fromTo(
-                '.about-scroll-card',
-                { y: 50, opacity: 0 },
-                {
-                  y: 0,
-                  opacity: 1,
-                  stagger: 0.15,
-                  duration: 0.8,
-                  ease: 'power3.out',
-                  overwrite: 'auto',
-                }
-              );
-            },
-            once: true,
-          });
-
-          // ✅ Progress bar
-          gsap.to('.about-progress', {
-            scaleY: 1,
-            transformOrigin: 'top center',
-            ease: 'none',
-            scrollTrigger: {
-              trigger: sectionRef.current,
-              start: 'top top',
-              end: 'bottom bottom',
-              scrub: 0.5,
-              invalidateOnRefresh: true,
-            },
-          });
-
-          // ✅ Store trigger for cleanup
-          return () => {
-            cardsTrigger.kill();
-          };
-        }
-      } else {
-        // ✅ Reduced motion: show everything instantly
+      if (prefersReducedMotion()) {
         gsap.set([
           '.about-reveal',
           '.about-photo',
           '.about-play-btn',
           '.about-scroll-card',
+          '.about-stat',
         ], {
           opacity: 1,
           y: 0,
           scale: 1,
           clearProps: 'transform,opacity',
         });
+        return;
       }
 
-      // ✅ Stats animation (works on all screens)
-      gsap.fromTo(
-        '.about-stat',
-        { opacity: 0, y: 20 },
-        {
+      // ====== DEVICE-SPECIFIC DURATIONS ======
+      const dur = isMobile ? 0.5 : (isTablet ? 0.7 : 1);
+      const staggerDur = isMobile ? 0.06 : (isTablet ? 0.09 : 0.12);
+      const yOffset = isMobile ? 15 : (isTablet ? 25 : 35);
+
+      // ====== SET INITIAL STATES ======
+      gsap.set('.about-reveal', {
+        opacity: 0,
+        y: yOffset,
+        willChange: 'transform, opacity',
+      });
+      gsap.set('.about-photo', {
+        opacity: 0,
+        scale: isMobile ? 0.98 : 0.96,
+        willChange: 'transform, opacity',
+      });
+      gsap.set('.about-play-btn', {
+        opacity: 0,
+        scale: 0.7,
+        willChange: 'transform, opacity',
+      });
+      gsap.set('.about-stat', {
+        opacity: 0,
+        y: isMobile ? 12 : 20,
+        willChange: 'transform, opacity',
+      });
+      gsap.set('.about-scroll-card', {
+        opacity: 0,
+        y: isMobile ? 25 : 50,
+        willChange: 'transform, opacity',
+      });
+
+      // ====== MAIN INTRO TIMELINE ======
+      const intro = gsap.timeline({
+        defaults: {
+          ease: 'power4.out',
+        },
+        scrollTrigger: {
+          trigger: sectionRef.current,
+          start: isMobile ? 'top 85%' : 'top 78%',
+          once: true,
+        },
+      });
+
+      intro
+        .to('.about-photo', {
+          opacity: 1,
+          scale: 1,
+          duration: dur,
+          stagger: isMobile ? 0.08 : 0.12,
+          overwrite: 'auto',
+        })
+        .to('.about-play-btn', {
+          opacity: 1,
+          scale: 1,
+          duration: isMobile ? 0.5 : 0.7,
+          ease: 'back.out(1.6)',
+          overwrite: 'auto',
+        }, '-=0.4')
+        .to('.about-reveal', {
           opacity: 1,
           y: 0,
-          duration: 0.65,
-          stagger: 0.1,
-          ease: 'power3.out',
+          duration: isMobile ? 0.5 : 0.8,
+          stagger: isMobile ? 0.06 : 0.12,
           overwrite: 'auto',
+        }, '-=0.25');
+
+      // ====== SCROLL-TRIGGERED CARD ANIMATIONS ======
+      const cardsTrigger = ScrollTrigger.create({
+        trigger: '.about-scroll-content',
+        start: isMobile ? 'top 80%' : 'top 72%',
+        onEnter: () => {
+          gsap.fromTo('.about-scroll-card',
+            { y: isMobile ? 25 : 50, opacity: 0 },
+            {
+              y: 0,
+              opacity: 1,
+              stagger: isMobile ? 0.08 : 0.15,
+              duration: isMobile ? 0.5 : 0.8,
+              ease: 'power3.out',
+              overwrite: 'auto',
+            }
+          );
+        },
+        once: true,
+      });
+
+      // ====== STATS ANIMATION ======
+      const statsTrigger = ScrollTrigger.create({
+        trigger: '.about-stats',
+        start: isMobile ? 'top 90%' : 'top 85%',
+        onEnter: () => {
+          gsap.fromTo('.about-stat',
+            { opacity: 0, y: isMobile ? 12 : 20 },
+            {
+              opacity: 1,
+              y: 0,
+              duration: isMobile ? 0.4 : 0.65,
+              stagger: isMobile ? 0.06 : 0.1,
+              ease: 'power3.out',
+              overwrite: 'auto',
+            }
+          );
+        },
+        once: true,
+      });
+
+      // ====== FLOATING ANIMATIONS - Desktop only ======
+      if (!isMobile && !isTablet) {
+        // Orbit floating
+        gsap.to('.about-orbit', {
+          y: -14,
+          x: 6,
+          duration: 4,
+          repeat: -1,
+          yoyo: true,
+          ease: 'sine.inOut',
+          overwrite: 'auto',
+        });
+
+        // Main photo floating
+        gsap.to('.about-photo-main', {
+          y: -8,
+          duration: 5,
+          repeat: -1,
+          yoyo: true,
+          ease: 'sine.inOut',
+          overwrite: 'auto',
+        });
+
+        // Secondary photo floating
+        gsap.to('.about-photo-secondary', {
+          y: 10,
+          duration: 4.5,
+          repeat: -1,
+          yoyo: true,
+          ease: 'sine.inOut',
+          delay: 0.4,
+          overwrite: 'auto',
+        });
+
+        // ====== PROGRESS BAR ======
+        gsap.to('.about-progress', {
+          scaleY: 1,
+          transformOrigin: 'top center',
+          ease: 'none',
           scrollTrigger: {
-            trigger: '.about-stats',
-            start: 'top 85%',
-            once: true,
+            trigger: sectionRef.current,
+            start: 'top top',
+            end: 'bottom bottom',
+            scrub: 0.5,
+            invalidateOnRefresh: true,
           },
-        }
-      );
+        });
+      }
+
+      // ====== REFRESH SCROLLTRIGGER ======
+      ScrollTrigger.refresh();
+
+      // ====== STORE TRIGGERS FOR CLEANUP ======
+      return () => {
+        cardsTrigger.kill();
+        statsTrigger.kill();
+      };
+
     }, sectionRef);
 
     return () => {
       ctx.revert();
-      // ✅ Kill all ScrollTriggers associated with this section
       ScrollTrigger.getAll().forEach(st => {
         if (st.trigger === sectionRef.current || sectionRef.current?.contains(st.trigger)) {
           st.kill();
@@ -208,6 +230,9 @@ export default function AboutSection({ onOpenVideoModal, onOpenQuoteModal }) {
     };
   }, [isMounted]);
 
+  // ============================================================
+  // DATA
+  // ============================================================
   const values = [
     {
       icon: CheckCircle2,
@@ -237,6 +262,9 @@ export default function AboutSection({ onOpenVideoModal, onOpenQuoteModal }) {
     { value: t('about.stats.satisfactionValue'), label: t('about.stats.satisfactionLabel'), color: 'light' },
   ];
 
+  // ============================================================
+  // COLOR HELPERS
+  // ============================================================
   const getStatColor = (color) => {
     const colors = {
       blue: 'bg-blue-600 text-white',
@@ -255,7 +283,9 @@ export default function AboutSection({ onOpenVideoModal, onOpenQuoteModal }) {
     return colors[color] || colors.blue;
   };
 
-  // ✅ Prevent hydration mismatch
+  // ============================================================
+  // RENDER
+  // ============================================================
   if (!isMounted) {
     return null;
   }
@@ -438,7 +468,7 @@ export default function AboutSection({ onOpenVideoModal, onOpenQuoteModal }) {
                   const colorClass = getStatColor(stat.color);
                   const labelColor = getStatLabelColor(stat.color);
                   return (
-                    <div key={index} className={`about-stat rounded-2xl ${colorClass} p-4 sm:p-5`}>
+                    <div key={index} className="about-stat rounded-2xl ${colorClass} p-4 sm:p-5">
                       <div className="text-2xl sm:text-3xl font-black">{stat.value}</div>
                       <p className={`text-[10px] sm:text-xs ${labelColor} font-semibold uppercase tracking-wide mt-1`}>
                         {stat.label}
@@ -452,10 +482,20 @@ export default function AboutSection({ onOpenVideoModal, onOpenQuoteModal }) {
               <div className="about-scroll-card bg-white rounded-[2rem] border border-slate-200 shadow-sm p-6 sm:p-7">
                 <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-5">
                   <div className="flex items-center gap-3.5">
+                    {/* ✅ Founder Avatar - Peter Taiwo Godswill */}
+                    <div className="relative w-14 h-14 rounded-full overflow-hidden border-2 border-blue-500/30 shadow-lg shadow-blue-500/10 shrink-0">
+                      <Image
+                        src="/images/team/peter.png"
+                        alt="Peter Taiwo Godswill - Founder"
+                        fill
+                        sizes="56px"
+                        className="object-cover"
+                      />
+                    </div>
                     <div>
-                      <h4 className="font-bold text-slate-900">{t('about.founderName')}</h4>
+                      <h4 className="font-bold text-slate-900">{t('about.founderName') || 'Peter Taiwo Godswill'}</h4>
                       <p className="text-[10px] sm:text-xs text-blue-600 font-bold uppercase tracking-wider mt-1">
-                        {t('about.founderRole')}
+                        {t('about.founderRole') || 'Founder & Creative Director'}
                       </p>
                     </div>
                   </div>
@@ -464,7 +504,7 @@ export default function AboutSection({ onOpenVideoModal, onOpenQuoteModal }) {
                     className="w-full sm:w-auto inline-flex items-center justify-center gap-2 bg-blue-600 hover:bg-blue-700 text-white font-bold text-sm px-6 py-3.5 rounded-full shadow-lg shadow-blue-600/20 transition-all duration-300 active:scale-95"
                     aria-label="Work with us - get a free quote"
                   >
-                    {t('about.workWithUs')}
+                    {t('about.workWithUs') || 'Work With Us'}
                     <ArrowRight className="w-4 h-4" aria-hidden="true" />
                   </button>
                 </div>

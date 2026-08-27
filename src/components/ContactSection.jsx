@@ -14,6 +14,10 @@ if (typeof window !== 'undefined') {
   gsap.registerPlugin(ScrollTrigger);
 }
 
+const prefersReducedMotion = () =>
+  typeof window !== 'undefined' &&
+  window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
 const businessInfo = {
   address: 'UK, United Kingdom',
   phone: '+234 807 352 7146',
@@ -41,7 +45,7 @@ export default function ContactSection({ initialService = '', onSuccessToast }) 
     service: initialService || t('contact.form.serviceDefault') || 'Book Marketing',
     budget: '$1,000 - $3,000',
     message: '',
-    website: '', // Honeypot field for anti-spam
+    website: '',
   });
   const [submitted, setSubmitted] = useState(false);
   const [loading, setLoading] = useState(false);
@@ -53,7 +57,6 @@ export default function ContactSection({ initialService = '', onSuccessToast }) 
   const leftRef = useRef(null);
   const rightRef = useRef(null);
 
-  // Contact items with translation keys
   const contactItems = [
     {
       icon: MapPin,
@@ -81,60 +84,108 @@ export default function ContactSection({ initialService = '', onSuccessToast }) 
     },
   ];
 
+  // ============================================================
+  // GSAP ANIMATIONS - OPTIMIZED FOR ALL SCREENS
+  // ============================================================
   useEffect(() => {
+    if (!sectionRef.current) return;
+
     const ctx = gsap.context(() => {
-      gsap.fromTo(
-        headerRef.current.children,
-        { y: 50, opacity: 0 },
-        {
+      if (prefersReducedMotion()) {
+        gsap.set([
+          '.contact-header-item',
+          '.contact-left-item',
+          '.contact-right-item',
+        ], {
+          opacity: 1,
           y: 0,
-          opacity: 1,
-          duration: 1.2,
-          stagger: 0.15,
-          ease: 'power3.out',
-          scrollTrigger: {
-            trigger: headerRef.current,
-            start: 'top 85%',
-            toggleActions: 'play none none reverse',
-          },
-        }
-      );
-
-      gsap.fromTo(
-        leftRef.current,
-        { x: -60, opacity: 0 },
-        {
           x: 0,
-          opacity: 1,
-          duration: 1.4,
-          ease: 'power3.out',
-          scrollTrigger: {
-            trigger: sectionRef.current,
-            start: 'top 70%',
-            toggleActions: 'play none none reverse',
-          },
-        }
-      );
+          clearProps: 'transform,opacity',
+        });
+        return;
+      }
 
-      gsap.fromTo(
-        rightRef.current,
-        { x: 60, opacity: 0 },
-        {
-          x: 0,
-          opacity: 1,
-          duration: 1.4,
-          delay: 0.15,
-          ease: 'power3.out',
-          scrollTrigger: {
-            trigger: sectionRef.current,
-            start: 'top 70%',
-            toggleActions: 'play none none reverse',
-          },
-        }
-      );
+      const isMobile = window.innerWidth < 768;
+      const isTablet = window.innerWidth >= 768 && window.innerWidth < 1024;
+      
+      // ✅ Device-specific durations
+      const dur = isMobile ? 0.5 : (isTablet ? 0.7 : 1);
+      const staggerDur = isMobile ? 0.06 : (isTablet ? 0.1 : 0.15);
+      const yOffset = isMobile ? 20 : (isTablet ? 30 : 40);
+
+      // ====== SET INITIAL STATES ======
+      gsap.set('.contact-header-item', {
+        y: yOffset,
+        opacity: 0,
+        willChange: 'transform, opacity',
+      });
+
+      gsap.set('.contact-left-item', {
+        x: isMobile ? -30 : -60,
+        opacity: 0,
+        willChange: 'transform, opacity',
+      });
+
+      gsap.set('.contact-right-item', {
+        x: isMobile ? 30 : 60,
+        opacity: 0,
+        willChange: 'transform, opacity',
+      });
+
+      // ====== HEADER ANIMATION ======
+      gsap.to('.contact-header-item', {
+        y: 0,
+        opacity: 1,
+        duration: dur,
+        stagger: staggerDur * 1.2,
+        ease: 'power4.out',
+        scrollTrigger: {
+          trigger: headerRef.current,
+          start: isMobile ? 'top 88%' : 'top 85%',
+          once: true,
+        },
+      });
+
+      // ====== LEFT PANEL ANIMATION ======
+      gsap.to('.contact-left-item', {
+        x: 0,
+        opacity: 1,
+        duration: dur + 0.2,
+        ease: 'power4.out',
+        scrollTrigger: {
+          trigger: sectionRef.current,
+          start: isMobile ? 'top 88%' : 'top 70%',
+          once: true,
+        },
+      });
+
+      // ====== RIGHT PANEL ANIMATION ======
+      gsap.to('.contact-right-item', {
+        x: 0,
+        opacity: 1,
+        duration: dur + 0.2,
+        delay: isMobile ? 0.05 : 0.15,
+        ease: 'power4.out',
+        scrollTrigger: {
+          trigger: sectionRef.current,
+          start: isMobile ? 'top 88%' : 'top 70%',
+          once: true,
+        },
+      });
+
+      // ====== REFRESH SCROLLTRIGGER ======
+      ScrollTrigger.refresh();
+
     }, sectionRef);
 
-    return () => ctx.revert();
+    return () => {
+      ctx.revert();
+      ScrollTrigger.getAll().forEach(st => {
+        if (st.trigger === sectionRef.current || sectionRef.current?.contains(st.trigger)) {
+          st.kill();
+        }
+      });
+    };
   }, []);
 
   const handleSubmit = async (e) => {
@@ -181,7 +232,6 @@ export default function ContactSection({ initialService = '', onSuccessToast }) 
       <div className="absolute top-0 left-1/4 w-[600px] h-[600px] bg-blue-400/10 rounded-full blur-[120px] pointer-events-none" />
       <div className="absolute bottom-0 right-1/4 w-[500px] h-[500px] bg-indigo-400/10 rounded-full blur-[100px] pointer-events-none" />
       
-      {/* Subtle Grid Pattern */}
       <div className="absolute inset-0 opacity-[0.025] pointer-events-none" style={{
         backgroundImage: `radial-gradient(circle at 1px 1px, rgb(15 23 42) 1px, transparent 0)`,
         backgroundSize: '40px 40px'
@@ -191,16 +241,16 @@ export default function ContactSection({ initialService = '', onSuccessToast }) 
         
         {/* Header */}
         <div ref={headerRef} className="text-center max-w-3xl mx-auto mb-16 lg:mb-20 space-y-4">
-          <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-blue-100/80 border border-blue-200 text-blue-700 text-xs sm:text-sm font-bold tracking-wide uppercase shadow-sm">
+          <div className="contact-header-item inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-blue-100/80 border border-blue-200 text-blue-700 text-xs sm:text-sm font-bold tracking-wide uppercase shadow-sm">
             <span className="font-extrabold text-blue-600">//</span>
             <span>{t('contact.badge')}</span>
           </div>
 
-          <h2 className="text-3xl sm:text-4xl lg:text-5xl font-extrabold text-slate-900 tracking-tight leading-tight">
+          <h2 className="contact-header-item text-3xl sm:text-4xl lg:text-5xl font-extrabold text-slate-900 tracking-tight leading-tight">
             {t('contact.heading')}
           </h2>
 
-          <p className="text-slate-600 text-sm sm:text-base leading-relaxed max-w-2xl mx-auto">
+          <p className="contact-header-item text-slate-600 text-sm sm:text-base leading-relaxed max-w-2xl mx-auto">
             {t('contact.subheading')}
           </p>
         </div>
@@ -211,10 +261,9 @@ export default function ContactSection({ initialService = '', onSuccessToast }) 
           {/* LEFT: Dark Premium Info Panel */}
           <div 
             ref={leftRef} 
-            className="lg:col-span-5 relative"
+            className="contact-left-item lg:col-span-5 relative"
           >
             <div className="h-full bg-slate-900 text-white rounded-[2.2rem] p-8 sm:p-10 border border-slate-800 shadow-2xl relative overflow-hidden flex flex-col">
-              {/* Inner Glow */}
               <div className="absolute top-0 right-0 w-64 h-64 bg-blue-600/10 rounded-full blur-[80px] pointer-events-none" />
               
               <div className="relative z-10 flex flex-col h-full">
@@ -282,9 +331,8 @@ export default function ContactSection({ initialService = '', onSuccessToast }) 
           </div>
 
           {/* RIGHT: Form Panel */}
-          <div ref={rightRef} className="lg:col-span-7">
+          <div ref={rightRef} className="contact-right-item lg:col-span-7">
             <div className="h-full bg-white rounded-[2.2rem] p-8 sm:p-10 lg:p-12 border border-slate-200/80 shadow-xl relative overflow-hidden">
-              {/* Decorative corner accent */}
               <div className="absolute top-0 right-0 w-32 h-32 bg-gradient-to-bl from-blue-50 to-transparent pointer-events-none" />
 
               {submitted ? (
@@ -326,7 +374,6 @@ export default function ContactSection({ initialService = '', onSuccessToast }) 
                 </div>
               ) : (
                 <form onSubmit={handleSubmit} className="relative z-10 space-y-7">
-                  {/* Anti-spam Honeypot Field */}
                   <input
                     type="text"
                     name="website"
@@ -337,7 +384,6 @@ export default function ContactSection({ initialService = '', onSuccessToast }) 
                     className="hidden absolute top-0 left-0 w-0 h-0 opacity-0 pointer-events-none"
                   />
 
-                  {/* Error Alert Box */}
                   {errorMessage && (
                     <div className="p-4 rounded-2xl bg-red-50 border border-red-200 text-red-700 text-xs sm:text-sm font-medium flex items-start gap-3 animate-in fade-in">
                       <AlertCircle className="w-5 h-5 text-red-500 shrink-0 mt-0.5" />
@@ -353,7 +399,6 @@ export default function ContactSection({ initialService = '', onSuccessToast }) 
                   </div>
 
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
-                    {/* Name */}
                     <div className="space-y-2">
                       <label className="text-[11px] font-extrabold text-slate-800 uppercase tracking-wider ml-1">{t('contact.form.nameLabel')} *</label>
                       <div className="relative">
@@ -372,7 +417,6 @@ export default function ContactSection({ initialService = '', onSuccessToast }) 
                       </div>
                     </div>
 
-                    {/* Email */}
                     <div className="space-y-2">
                       <label className="text-[11px] font-extrabold text-slate-800 uppercase tracking-wider ml-1">{t('contact.form.emailLabel')} *</label>
                       <div className="relative">
@@ -391,7 +435,6 @@ export default function ContactSection({ initialService = '', onSuccessToast }) 
                       </div>
                     </div>
 
-                    {/* Phone */}
                     <div className="space-y-2">
                       <label className="text-[11px] font-extrabold text-slate-800 uppercase tracking-wider ml-1">{t('contact.form.phoneLabel')} *</label>
                       <div className="relative">
@@ -410,7 +453,6 @@ export default function ContactSection({ initialService = '', onSuccessToast }) 
                       </div>
                     </div>
 
-                    {/* Service */}
                     <div className="space-y-2">
                       <label className="text-[11px] font-extrabold text-slate-800 uppercase tracking-wider ml-1">{t('contact.form.serviceLabel')} *</label>
                       <div className="relative">
@@ -432,7 +474,6 @@ export default function ContactSection({ initialService = '', onSuccessToast }) 
                     </div>
                   </div>
 
-                  {/* Message */}
                   <div className="space-y-2">
                     <label className="text-[11px] font-extrabold text-slate-800 uppercase tracking-wider ml-1">{t('contact.form.messageLabel')} *</label>
                     <textarea
@@ -449,7 +490,6 @@ export default function ContactSection({ initialService = '', onSuccessToast }) 
                     />
                   </div>
 
-                  {/* Submit */}
                   <div className="pt-2">
                     <button
                       type="submit"
@@ -469,7 +509,6 @@ export default function ContactSection({ initialService = '', onSuccessToast }) 
                           </>
                         )}
                       </span>
-                      {/* Shine effect */}
                       <div className="absolute inset-0 -translate-x-full group-hover:translate-x-full bg-gradient-to-r from-transparent via-white/20 to-transparent transition-transform duration-1000 ease-in-out" />
                     </button>
                     

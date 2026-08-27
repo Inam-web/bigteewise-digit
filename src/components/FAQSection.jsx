@@ -11,7 +11,10 @@ if (typeof window !== 'undefined') {
   gsap.registerPlugin(ScrollTrigger);
 }
 
-// Extended FAQ data - add more questions here
+const prefersReducedMotion = () =>
+  typeof window !== 'undefined' &&
+  window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
 const EXTENDED_FAQS = [
   {
     id: '1',
@@ -54,7 +57,6 @@ export default function FAQSection({ onOpenQuoteModal }) {
   const faqListRef = useRef(null);
   const sideCardRef = useRef(null);
 
-  // ✅ Set mounted state
   useEffect(() => {
     setIsMounted(true);
   }, []);
@@ -63,94 +65,103 @@ export default function FAQSection({ onOpenQuoteModal }) {
     setOpenFaqId((prev) => (prev === id ? '' : id));
   };
 
-  // ✅ GSAP Animations - Only run when mounted
+  // ============================================================
+  // GSAP ANIMATIONS - OPTIMIZED FOR ALL SCREENS
+  // ============================================================
   useEffect(() => {
-    if (!isMounted) return;
+    if (!isMounted || !sectionRef.current) return;
 
     const ctx = gsap.context(() => {
-      const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-
-      if (reduceMotion) {
-        gsap.set(
-          [
-            headerRef.current?.children,
-            faqListRef.current?.children,
-            sideCardRef.current?.children,
-          ],
-          {
-            opacity: 1,
-            y: 0,
-            x: 0,
-            clearProps: 'transform,opacity',
-          }
-        );
+      if (prefersReducedMotion()) {
+        gsap.set([
+          '.faq-header-item',
+          '.faq-item',
+          '.faq-side-item',
+        ], {
+          opacity: 1,
+          y: 0,
+          x: 0,
+          clearProps: 'transform,opacity',
+        });
         return;
       }
 
-      if (headerRef.current) {
-        gsap.fromTo(
-          headerRef.current.children,
-          { y: 40, opacity: 0 },
-          {
-            y: 0,
-            opacity: 1,
-            duration: 1.2,
-            stagger: 0.2,
-            ease: 'power3.out',
-            overwrite: 'auto',
-            scrollTrigger: {
-              trigger: headerRef.current,
-              start: 'top 85%',
-              toggleActions: 'play none none reverse',
-            },
-          }
-        );
-      }
+      const isMobile = window.innerWidth < 768;
+      const isTablet = window.innerWidth >= 768 && window.innerWidth < 1024;
+      
+      // ✅ Device-specific durations
+      const dur = isMobile ? 0.5 : (isTablet ? 0.7 : 1);
+      const staggerDur = isMobile ? 0.06 : (isTablet ? 0.1 : 0.15);
+      const yOffset = isMobile ? 20 : (isTablet ? 30 : 40);
 
-      if (faqListRef.current) {
-        gsap.fromTo(
-          faqListRef.current.children,
-          { y: 50, opacity: 0 },
-          {
-            y: 0,
-            opacity: 1,
-            duration: 1.4,
-            stagger: 0.1,
-            ease: 'power2.out',
-            overwrite: 'auto',
-            scrollTrigger: {
-              trigger: faqListRef.current,
-              start: 'top 80%',
-              toggleActions: 'play none none reverse',
-            },
-          }
-        );
-      }
+      // ====== SET INITIAL STATES ======
+      gsap.set('.faq-header-item', {
+        y: yOffset,
+        opacity: 0,
+        willChange: 'transform, opacity',
+      });
 
-      if (sideCardRef.current) {
-        gsap.fromTo(
-          sideCardRef.current.children,
-          { x: 40, opacity: 0 },
-          {
-            x: 0,
-            opacity: 1,
-            duration: 1.4,
-            stagger: 0.15,
-            ease: 'power2.out',
-            overwrite: 'auto',
-            scrollTrigger: {
-              trigger: sideCardRef.current,
-              start: 'top 80%',
-              toggleActions: 'play none none reverse',
-            },
-          }
-        );
-      }
+      gsap.set('.faq-item', {
+        y: isMobile ? 25 : 50,
+        opacity: 0,
+        willChange: 'transform, opacity',
+      });
+
+      gsap.set('.faq-side-item', {
+        x: isMobile ? 20 : 40,
+        opacity: 0,
+        willChange: 'transform, opacity',
+      });
+
+      // ====== HEADER ANIMATION ======
+      gsap.to('.faq-header-item', {
+        y: 0,
+        opacity: 1,
+        duration: dur,
+        stagger: staggerDur * 1.2,
+        ease: 'power4.out',
+        scrollTrigger: {
+          trigger: headerRef.current,
+          start: isMobile ? 'top 88%' : 'top 85%',
+          once: true,
+        },
+      });
+
+      // ====== FAQ ITEMS ANIMATION ======
+      gsap.to('.faq-item', {
+        y: 0,
+        opacity: 1,
+        duration: dur,
+        stagger: staggerDur,
+        ease: 'power4.out',
+        scrollTrigger: {
+          trigger: faqListRef.current,
+          start: isMobile ? 'top 88%' : 'top 80%',
+          once: true,
+        },
+      });
+
+      // ====== SIDE CARD ANIMATION ======
+      gsap.to('.faq-side-item', {
+        x: 0,
+        opacity: 1,
+        duration: dur,
+        stagger: staggerDur * 0.8,
+        ease: 'power4.out',
+        scrollTrigger: {
+          trigger: sideCardRef.current,
+          start: isMobile ? 'top 90%' : 'top 80%',
+          once: true,
+        },
+      });
+
+      // ====== REFRESH SCROLLTRIGGER ======
+      ScrollTrigger.refresh();
+
     }, sectionRef);
 
     return () => {
       ctx.revert();
-      // Clean up ScrollTriggers
       ScrollTrigger.getAll().forEach(st => {
         if (st.trigger === sectionRef.current || sectionRef.current?.contains(st.trigger)) {
           st.kill();
@@ -159,7 +170,6 @@ export default function FAQSection({ onOpenQuoteModal }) {
     };
   }, [isMounted]);
 
-  // ✅ Prevent hydration mismatch
   if (!isMounted) {
     return null;
   }
@@ -182,21 +192,21 @@ export default function FAQSection({ onOpenQuoteModal }) {
         {/* Header */}
         <div ref={headerRef} className="flex flex-col md:flex-row md:items-end justify-between mb-14 gap-6">
           <div className="space-y-3 max-w-2xl">
-            <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-blue-50 border border-blue-100 text-blue-600 text-xs sm:text-sm font-bold tracking-wide uppercase">
+            <div className="faq-header-item inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-blue-50 border border-blue-100 text-blue-600 text-xs sm:text-sm font-bold tracking-wide uppercase">
               <span className="text-blue-600 font-extrabold" aria-hidden="true">//</span>
               <span>{t('faq.badge')}</span>
             </div>
 
-            <h2 className="text-3xl sm:text-4xl lg:text-5xl font-extrabold text-slate-900 tracking-tight leading-tight">
+            <h2 className="faq-header-item text-3xl sm:text-4xl lg:text-5xl font-extrabold text-slate-900 tracking-tight leading-tight">
               {t('faq.heading')}
             </h2>
 
-            <p className="text-slate-600 text-sm sm:text-base leading-relaxed">
+            <p className="faq-header-item text-slate-600 text-sm sm:text-base leading-relaxed">
               {t('faq.subheading')}
             </p>
           </div>
 
-          <div className="inline-flex items-center gap-2 text-xs text-slate-400 bg-slate-50 px-4 py-2 rounded-full border border-slate-200">
+          <div className="faq-header-item inline-flex items-center gap-2 text-xs text-slate-400 bg-slate-50 px-4 py-2 rounded-full border border-slate-200">
             <HelpCircle className="w-3.5 h-3.5 text-blue-500" aria-hidden="true" />
             <span>{EXTENDED_FAQS.length} {t('faq.commonQuestions')}</span>
           </div>
@@ -212,7 +222,7 @@ export default function FAQSection({ onOpenQuoteModal }) {
               return (
                 <div
                   key={faq.id}
-                  className={`rounded-2xl transition-all duration-400 overflow-hidden border will-change-transform ${
+                  className={`faq-item rounded-2xl transition-all duration-400 overflow-hidden border will-change-transform ${
                     isOpen
                       ? 'bg-gradient-to-br from-blue-600 to-indigo-600 text-white border-blue-600 shadow-xl shadow-blue-600/20'
                       : 'bg-white text-slate-900 border-slate-200 hover:border-blue-300 hover:shadow-md hover:shadow-blue-100/50'
@@ -252,7 +262,7 @@ export default function FAQSection({ onOpenQuoteModal }) {
           <div ref={sideCardRef} className="lg:col-span-4 space-y-4">
             
             {/* Main Support Card */}
-            <div className="bg-gradient-to-br from-[#0F172A] to-[#1e293b] text-white p-6 sm:p-7 rounded-3xl border border-slate-800 shadow-xl space-y-4 text-center">
+            <div className="faq-side-item bg-gradient-to-br from-[#0F172A] to-[#1e293b] text-white p-6 sm:p-7 rounded-3xl border border-slate-800 shadow-xl space-y-4 text-center">
               <div className="w-14 h-14 rounded-2xl bg-blue-600 text-white flex items-center justify-center mx-auto shadow-lg shadow-blue-600/30">
                 <MessageSquare className="w-7 h-7" aria-hidden="true" />
               </div>
@@ -274,9 +284,9 @@ export default function FAQSection({ onOpenQuoteModal }) {
               </button>
             </div>
 
-            {/* Contact Grid - 2 columns with responsive text wrapping */}
+            {/* Contact Grid */}
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-              <div className="bg-white p-3.5 sm:p-4 rounded-2xl border border-slate-200 shadow-sm text-center hover:border-blue-300 transition-all duration-300 min-w-0 overflow-hidden">
+              <div className="faq-side-item bg-white p-3.5 sm:p-4 rounded-2xl border border-slate-200 shadow-sm text-center hover:border-blue-300 transition-all duration-300 min-w-0 overflow-hidden">
                 <div className="w-10 h-10 rounded-xl bg-blue-50 text-blue-600 flex items-center justify-center mx-auto mb-2 shrink-0">
                   <PhoneCall className="w-4 h-4" aria-hidden="true" />
                 </div>
@@ -289,7 +299,7 @@ export default function FAQSection({ onOpenQuoteModal }) {
                 </a>
               </div>
 
-              <div className="bg-white p-3.5 sm:p-4 rounded-2xl border border-slate-200 shadow-sm text-center hover:border-blue-300 transition-all duration-300 min-w-0 overflow-hidden">
+              <div className="faq-side-item bg-white p-3.5 sm:p-4 rounded-2xl border border-slate-200 shadow-sm text-center hover:border-blue-300 transition-all duration-300 min-w-0 overflow-hidden">
                 <div className="w-10 h-10 rounded-xl bg-blue-50 text-blue-600 flex items-center justify-center mx-auto mb-2 shrink-0">
                   <Mail className="w-4 h-4" aria-hidden="true" />
                 </div>
@@ -306,17 +316,17 @@ export default function FAQSection({ onOpenQuoteModal }) {
 
             {/* Trust Badges */}
             <div className="grid grid-cols-3 gap-2">
-              <div className="bg-slate-50/80 p-3 rounded-xl border border-slate-200 text-center hover:border-blue-300 transition-all duration-300">
+              <div className="faq-side-item bg-slate-50/80 p-3 rounded-xl border border-slate-200 text-center hover:border-blue-300 transition-all duration-300">
                 <Clock className="w-4 h-4 text-blue-500 mx-auto mb-1" aria-hidden="true" />
                 <span className="text-[9px] font-bold text-slate-600 block">{t('faq.under2hrs')}</span>
                 <span className="text-[7px] text-slate-400 uppercase tracking-wider">{t('faq.response')}</span>
               </div>
-              <div className="bg-slate-50/80 p-3 rounded-xl border border-slate-200 text-center hover:border-blue-300 transition-all duration-300">
+              <div className="faq-side-item bg-slate-50/80 p-3 rounded-xl border border-slate-200 text-center hover:border-blue-300 transition-all duration-300">
                 <Shield className="w-4 h-4 text-blue-500 mx-auto mb-1" aria-hidden="true" />
                 <span className="text-[9px] font-bold text-slate-600 block">100%</span>
                 <span className="text-[7px] text-slate-400 uppercase tracking-wider">{t('faq.satisfaction')}</span>
               </div>
-              <div className="bg-slate-50/80 p-3 rounded-xl border border-slate-200 text-center hover:border-blue-300 transition-all duration-300">
+              <div className="faq-side-item bg-slate-50/80 p-3 rounded-xl border border-slate-200 text-center hover:border-blue-300 transition-all duration-300">
                 <Sparkles className="w-4 h-4 text-blue-500 mx-auto mb-1" aria-hidden="true" />
                 <span className="text-[9px] font-bold text-slate-600 block">24/7</span>
                 <span className="text-[7px] text-slate-400 uppercase tracking-wider">{t('faq.support')}</span>

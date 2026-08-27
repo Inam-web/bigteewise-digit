@@ -4,6 +4,8 @@ import React, { useState, useEffect, useRef } from 'react';
 import Link from 'next/link';
 import { useLanguage } from '@/i18n/LanguageContext';
 import LanguageSwitcher from './LanguageSwitcher';
+import gsap from 'gsap';
+import { ScrollTrigger } from 'gsap/ScrollTrigger';
 
 import {
   Phone,
@@ -24,7 +26,17 @@ import {
   TikTokIcon,
 } from './SocialIcons';
 
-import gsap from 'gsap';
+// Register GSAP plugins
+if (typeof window !== 'undefined') {
+  gsap.registerPlugin(ScrollTrigger);
+}
+
+// ============================================================
+// REDUCED MOTION HELPER (from your portfolio)
+// ============================================================
+const prefersReducedMotion = () =>
+  typeof window !== 'undefined' &&
+  window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
 const BUSINESS_INFO = {
   phone: '+234 807 352 7146',
@@ -33,7 +45,7 @@ const BUSINESS_INFO = {
   socialHandle: '@bigteewisedigital',
 
   socialLinks: {
-    facebook: 'https://facebook.com', // Replace with actual Facebook link
+    facebook: 'https://facebook.com',
     instagram: 'https://www.instagram.com/petertaiwogodswill/',
     tiktok: 'https://www.tiktok.com/@bigteewisedigital',
   },
@@ -61,9 +73,20 @@ export default function Header({
     { name: t('nav.contact'), href: `/${locale}/#contact` },
   ];
 
+  // ============================================================
+  // SCROLL HANDLER - Optimized for all devices
+  // ============================================================
   useEffect(() => {
+    let ticking = false;
+    
     const handleScroll = () => {
-      setIsScrolled(window.scrollY > 24);
+      if (!ticking) {
+        window.requestAnimationFrame(() => {
+          setIsScrolled(window.scrollY > 24);
+          ticking = false;
+        });
+        ticking = true;
+      }
     };
 
     handleScroll();
@@ -71,6 +94,9 @@ export default function Header({
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
+  // ============================================================
+  // RESIZE HANDLER
+  // ============================================================
   useEffect(() => {
     const handleResize = () => {
       if (window.innerWidth >= 1024 && mobileMenuOpen) {
@@ -82,6 +108,9 @@ export default function Header({
     return () => window.removeEventListener('resize', handleResize);
   }, [mobileMenuOpen]);
 
+  // ============================================================
+  // BODY SCROLL LOCK FOR MOBILE MENU
+  // ============================================================
   useEffect(() => {
     if (mobileMenuOpen && window.innerWidth < 1024) {
       document.body.style.overflow = 'hidden';
@@ -94,158 +123,158 @@ export default function Header({
     };
   }, [mobileMenuOpen]);
 
+  // ============================================================
+  // HEADER ANIMATIONS - OPTIMIZED FOR ALL DEVICES
+  // ============================================================
   useEffect(() => {
-    const ctx = gsap.context(() => {
-      const reduceMotion = window.matchMedia(
-        '(prefers-reduced-motion: reduce)'
-      ).matches;
+    const header = headerRef.current;
+    if (!header) return;
 
-      if (reduceMotion) {
-        gsap.set(
-          [
-            '.header-utility',
-            '.header-shell',
-            '.header-logo',
-            '.header-nav-item',
-            '.header-cta',
-          ],
-          {
-            clearProps: 'all',
-          }
-        );
+    const ctx = gsap.context(() => {
+      const isMobile = window.innerWidth < 768;
+      const isTablet = window.innerWidth >= 768 && window.innerWidth < 1024;
+      
+      // ✅ Shorter durations on mobile for smoother feel
+      const dur = isMobile ? 0.4 : 0.55;
+      const staggerDur = isMobile ? 0.03 : 0.045;
+
+      if (prefersReducedMotion()) {
+        gsap.set([
+          '.header-utility',
+          '.header-shell',
+          '.header-logo',
+          '.header-nav-item',
+          '.header-cta',
+        ], { opacity: 1, y: 0, x: 0, scale: 1 });
         return;
       }
 
+      // ====== MASTER TIMELINE ======
       const tl = gsap.timeline({
         defaults: {
-          ease: 'power3.out',
+          ease: 'power4.out',
         },
       });
 
-      tl.fromTo(
-        '.header-utility',
-        {
-          y: -20,
-          opacity: 0,
-        },
-        {
-          y: 0,
-          opacity: 1,
-          duration: 0.55,
-        }
+      // Utility bar
+      tl.fromTo('.header-utility',
+        { y: -20, opacity: 0 },
+        { y: 0, opacity: 1, duration: dur }
       )
-        .fromTo(
-          '.header-shell',
-          {
-            y: -18,
-            opacity: 0,
+      // Main nav shell
+      .fromTo('.header-shell',
+        { y: -18, opacity: 0 },
+        { y: 0, opacity: 1, duration: dur },
+        '-=0.2'
+      )
+      // Logo
+      .fromTo('.header-logo',
+        { x: isMobile ? -10 : -20, opacity: 0 },
+        { x: 0, opacity: 1, duration: dur },
+        '-=0.25'
+      )
+      // Nav items with stagger
+      .fromTo('.header-nav-item',
+        { y: -12, opacity: 0 },
+        { y: 0, opacity: 1, duration: dur, stagger: staggerDur },
+        '-=0.2'
+      )
+      // CTA button
+      .fromTo('.header-cta',
+        { scale: 0.92, opacity: 0 },
+        { scale: 1, opacity: 1, duration: dur },
+        '-=0.2'
+      );
+
+      // ====== SCROLL-TRIGGERED ANIMATIONS ======
+      // Utility bar fade on scroll
+      const utilityBar = header.querySelector('.header-utility');
+      if (utilityBar) {
+        ScrollTrigger.create({
+          trigger: document.body,
+          start: 'top top',
+          end: 'top 100px',
+          scrub: 0.3,
+          onUpdate: (self) => {
+            const progress = self.progress;
+            gsap.to(utilityBar, {
+              opacity: 1 - progress,
+              maxHeight: progress > 0.5 ? 0 : 80,
+              duration: 0.1,
+              overwrite: 'auto',
+            });
           },
-          {
-            y: 0,
-            opacity: 1,
-            duration: 0.65,
+        });
+      }
+
+      // Navbar shadow on scroll
+      const shell = header.querySelector('.header-shell');
+      if (shell) {
+        ScrollTrigger.create({
+          trigger: document.body,
+          start: 'top top',
+          end: 'top 80px',
+          scrub: 0.3,
+          onUpdate: (self) => {
+            const progress = self.progress;
+            const bg = header.querySelector('.relative.bg-white\\/95');
+            if (bg) {
+              gsap.to(bg, {
+                boxShadow: progress > 0.3 
+                  ? '0 15px 50px -20px rgba(15,23,42,0.25)' 
+                  : '0 1px 3px rgba(15,23,42,0.05)',
+                borderColor: progress > 0.3 
+                  ? 'rgba(226,232,240,0.8)' 
+                  : 'rgba(226,232,240,0.3)',
+                duration: 0.1,
+                overwrite: 'auto',
+              });
+            }
           },
-          '-=0.3'
-        )
-        .fromTo(
-          '.header-logo',
-          {
-            x: -20,
-            opacity: 0,
-          },
-          {
-            x: 0,
-            opacity: 1,
-            duration: 0.55,
-          },
-          '-=0.35'
-        )
-        .fromTo(
-          '.header-nav-item',
-          {
-            y: -12,
-            opacity: 0,
-          },
-          {
-            y: 0,
-            opacity: 1,
-            duration: 0.45,
-            stagger: 0.045,
-          },
-          '-=0.3'
-        )
-        .fromTo(
-          '.header-cta',
-          {
-            scale: 0.92,
-            opacity: 0,
-          },
-          {
-            scale: 1,
-            opacity: 1,
-            duration: 0.5,
-          },
-          '-=0.3'
-        );
-    }, headerRef);
+        });
+      }
+
+    }, header);
 
     return () => ctx.revert();
   }, []);
 
+  // ============================================================
+  // MOBILE MENU ANIMATIONS - OPTIMIZED FOR MOBILE
+  // ============================================================
   useEffect(() => {
     if (!mobileMenuOpen || !mobileMenuRef.current) return;
 
     const ctx = gsap.context(() => {
-      const reduceMotion = window.matchMedia(
-        '(prefers-reduced-motion: reduce)'
-      ).matches;
+      if (prefersReducedMotion()) {
+        gsap.set(mobileMenuRef.current, { opacity: 1 });
+        gsap.set('.mobile-nav-item', { opacity: 1, x: 0 });
+        gsap.set('.mobile-social', { opacity: 1, y: 0 });
+        return;
+      }
 
-      if (reduceMotion) return;
+      const isMobile = window.innerWidth < 768;
+      const dur = isMobile ? 0.25 : 0.35;
+      const staggerDur = isMobile ? 0.04 : 0.055;
 
-      gsap.fromTo(
-        mobileMenuRef.current,
-        {
-          opacity: 0,
-          y: -12,
-        },
-        {
-          opacity: 1,
-          y: 0,
-          duration: 0.35,
-          ease: 'power3.out',
-        }
+      // Menu container fade in
+      gsap.fromTo(mobileMenuRef.current,
+        { opacity: 0, y: -12 },
+        { opacity: 1, y: 0, duration: dur, ease: 'power3.out' }
       );
 
-      gsap.fromTo(
-        '.mobile-nav-item',
-        {
-          opacity: 0,
-          x: -18,
-        },
-        {
-          opacity: 1,
-          x: 0,
-          duration: 0.4,
-          stagger: 0.055,
-          delay: 0.08,
-          ease: 'power3.out',
-        }
+      // Nav items stagger
+      gsap.fromTo('.mobile-nav-item',
+        { opacity: 0, x: -18 },
+        { opacity: 1, x: 0, duration: dur, stagger: staggerDur, delay: 0.05, ease: 'power3.out' }
       );
 
-      gsap.fromTo(
-        '.mobile-social',
-        {
-          opacity: 0,
-          y: 10,
-        },
-        {
-          opacity: 1,
-          y: 0,
-          duration: 0.45,
-          delay: 0.3,
-          ease: 'power3.out',
-        }
+      // Social section
+      gsap.fromTo('.mobile-social',
+        { opacity: 0, y: 10 },
+        { opacity: 1, y: 0, duration: dur + 0.1, delay: 0.2, ease: 'power3.out' }
       );
+
     }, mobileMenuRef);
 
     return () => ctx.revert();
@@ -270,7 +299,7 @@ export default function Header({
       ref={headerRef}
       className="fixed inset-x-0 top-0 z-[100] pointer-events-none"
     >
-      {/* UTILITY BAR - Only Facebook, TikTok, Instagram */}
+      {/* UTILITY BAR */}
       <div
         className={`header-utility pointer-events-auto hidden sm:block bg-slate-950 text-slate-300 border-b border-slate-800/80 transition-all duration-500 ${
           isScrolled
@@ -308,7 +337,6 @@ export default function Header({
                 {BUSINESS_INFO.socialHandle}
               </span>
 
-              {/* ✅ ONLY FACEBOOK, TIKTOK, INSTAGRAM */}
               <div className="flex items-center gap-1.5">
                 {[
                   {

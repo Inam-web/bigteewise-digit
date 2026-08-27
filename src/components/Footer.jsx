@@ -11,6 +11,14 @@ import {
 import { FacebookIcon, InstagramIcon, TikTokIcon } from './SocialIcons';
 import { useLanguage } from '@/i18n/LanguageContext';
 
+if (typeof window !== 'undefined') {
+  gsap.registerPlugin(ScrollTrigger);
+}
+
+const prefersReducedMotion = () =>
+  typeof window !== 'undefined' &&
+  window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
 const BUSINESS_INFO = {
   shortAbout: "Empowering authors and digital creators with strategic marketing, branding, and web design.",
   address: "UK, United Kingdom",
@@ -24,8 +32,6 @@ const BUSINESS_INFO = {
   },
 };
 
-gsap.registerPlugin(ScrollTrigger);
-
 export const Footer = ({ onOpenQuoteModal }) => {
   const { t } = useLanguage();
   const footerRef = useRef(null);
@@ -36,7 +42,6 @@ export const Footer = ({ onOpenQuoteModal }) => {
   const contactColRef = useRef(null);
   const copyrightRef = useRef(null);
 
-  // Navigation links with translation keys - UNIQUE KEYS
   const footerLinks = {
     navigation: [
       { id: 'nav-home', label: t('nav.home'), href: '#home' },
@@ -58,40 +63,67 @@ export const Footer = ({ onOpenQuoteModal }) => {
     ],
   };
 
+  // ============================================================
+  // GSAP ANIMATIONS - OPTIMIZED FOR ALL SCREENS
+  // ============================================================
   useGSAP(() => {
-    const mm = gsap.matchMedia();
-
-    mm.add("(min-width: 320px)", () => {
-      const tl = gsap.timeline({
-        scrollTrigger: {
-          trigger: footerRef.current,
-          start: "top 85%",
-          toggleActions: "play none none none",
-        },
-      });
-
-      tl.fromTo(
+    if (prefersReducedMotion()) {
+      gsap.set([
         ctaCardRef.current,
-        { opacity: 0, y: 50, scale: 0.97 },
-        { opacity: 1, y: 0, scale: 1, duration: 1.2, ease: "power3.out", force3D: true }
-      );
-
-      tl.fromTo(
-        [brandColRef.current, navColRef.current, servicesColRef.current, contactColRef.current],
-        { opacity: 0, y: 40 },
-        { opacity: 1, y: 0, duration: 1.1, stagger: 0.15, ease: "power2.out", force3D: true },
-        "-=0.7"
-      );
-
-      tl.fromTo(
+        brandColRef.current,
+        navColRef.current,
+        servicesColRef.current,
+        contactColRef.current,
         copyrightRef.current,
-        { opacity: 0, y: 20 },
-        { opacity: 1, y: 0, duration: 0.9, ease: "power2.out" },
-        "-=0.5"
-      );
+      ], {
+        opacity: 1,
+        y: 0,
+        scale: 1,
+        clearProps: 'transform,opacity',
+      });
+      return;
+    }
+
+    const isMobile = window.innerWidth < 768;
+    const isTablet = window.innerWidth >= 768 && window.innerWidth < 1024;
+    
+    const dur = isMobile ? 0.5 : (isTablet ? 0.7 : 1);
+    const staggerDur = isMobile ? 0.08 : (isTablet ? 0.12 : 0.15);
+    const yOffset = isMobile ? 20 : (isTablet ? 30 : 40);
+
+    const tl = gsap.timeline({
+      scrollTrigger: {
+        trigger: footerRef.current,
+        start: isMobile ? 'top 90%' : 'top 85%',
+        once: true,
+      },
     });
 
-    return () => mm.revert();
+    // CTA Card
+    tl.fromTo(ctaCardRef.current,
+      { opacity: 0, y: yOffset, scale: isMobile ? 0.98 : 0.97 },
+      { opacity: 1, y: 0, scale: 1, duration: dur + 0.2, ease: 'power4.out', force3D: true }
+    );
+
+    // Columns
+    tl.fromTo(
+      [brandColRef.current, navColRef.current, servicesColRef.current, contactColRef.current],
+      { opacity: 0, y: yOffset },
+      { opacity: 1, y: 0, duration: dur, stagger: staggerDur, ease: 'power4.out', force3D: true },
+      '-=0.5'
+    );
+
+    // Copyright
+    tl.fromTo(
+      copyrightRef.current,
+      { opacity: 0, y: isMobile ? 15 : 20 },
+      { opacity: 1, y: 0, duration: dur * 0.8, ease: 'power4.out' },
+      '-=0.3'
+    );
+
+    return () => {
+      tl.kill();
+    };
   }, { scope: footerRef });
 
   const scrollToTop = () => {
@@ -172,7 +204,6 @@ export const Footer = ({ onOpenQuoteModal }) => {
                 {t('footer.tagline')}
               </p>
 
-              {/* ✅ Socials - Only Facebook, Instagram, TikTok */}
               <div className="flex items-center gap-3">
                 {[
                   { icon: FacebookIcon, href: BUSINESS_INFO.socialLinks.facebook, label: 'Facebook', color: 'hover:bg-[#1877F2] hover:border-[#1877F2]' },
@@ -192,7 +223,6 @@ export const Footer = ({ onOpenQuoteModal }) => {
                 ))}
               </div>
 
-              {/* Trust Pill */}
               <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-emerald-500/10 border border-emerald-500/15 text-emerald-400 text-xs font-bold">
                 <Clock className="w-3.5 h-3.5" />
                 <span>{t('footer.responseTime')}</span>
@@ -300,17 +330,14 @@ export const Footer = ({ onOpenQuoteModal }) => {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
           <div className="flex flex-col md:flex-row items-center justify-between gap-4">
             
-            {/* Left Side - Copyright */}
             <div className="flex flex-col sm:flex-row items-center gap-2 sm:gap-4 text-xs text-slate-500 text-center sm:text-left">
               <p>© 2026 BigTeeWise Digital. {t('footer.rightsReserved')}</p>
               <span className="hidden sm:block w-1 h-1 rounded-full bg-slate-700" />
               <p>{t('footer.crafted')}</p>
             </div>
 
-            {/* Right Side */}
             <div className="flex flex-wrap items-center justify-center gap-3 md:gap-5">
               
-              {/* Privacy & Terms */}
               <div className="flex items-center gap-3">
                 <a
                   href="#privacy"
@@ -337,7 +364,6 @@ export const Footer = ({ onOpenQuoteModal }) => {
 
               <span className="hidden md:block w-px h-5 bg-slate-700" />
 
-              {/* Developer Credit */}
               <div className="flex items-center gap-2.5 px-3 py-1.5 rounded-lg bg-blue-500/5 border border-blue-500/10 hover:border-blue-500/30 transition-all duration-300">
                 <User className="w-3.5 h-3.5 text-blue-400" />
                 <span className="text-[11px] font-medium text-slate-400">Built by</span>
@@ -347,7 +373,6 @@ export const Footer = ({ onOpenQuoteModal }) => {
                 <Code className="w-3.5 h-3.5 text-blue-500/60" />
               </div>
 
-              {/* Back to Top */}
               <button
                 onClick={scrollToTop}
                 className="w-8 h-8 rounded-full bg-slate-800 hover:bg-blue-600 border border-slate-700 hover:border-blue-500 text-slate-400 hover:text-white flex items-center justify-center transition-all duration-300 hover:-translate-y-0.5"

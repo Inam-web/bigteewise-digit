@@ -10,6 +10,10 @@ if (typeof window !== 'undefined') {
   gsap.registerPlugin(ScrollTrigger);
 }
 
+const prefersReducedMotion = () =>
+  typeof window !== 'undefined' &&
+  window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
 export default function BlogSection() {
   const { t, locale } = useLanguage();
   const [selectedPost, setSelectedPost] = useState(null);
@@ -18,15 +22,12 @@ export default function BlogSection() {
   const headerRef = useRef(null);
   const cardsRef = useRef([]);
 
-  // ✅ Mount state for hydration
   useEffect(() => {
     setIsMounted(true);
   }, []);
 
-  // ✅ Get translated blog posts from language files
   const blogPostsData = t('blog.posts');
   
-  // ✅ Fallback posts if translations don't exist
   const defaultPosts = [
     {
       id: 1,
@@ -63,15 +64,12 @@ export default function BlogSection() {
     },
   ];
 
-  // ✅ Use translated posts if available, otherwise fallback to defaults
   const blogPosts = Array.isArray(blogPostsData) && blogPostsData.length > 0 
     ? blogPostsData 
     : defaultPosts;
 
-  // ✅ Get first 3 posts only for 3-column layout
   const displayPosts = blogPosts?.slice(0, 3) || [];
 
-  // Translation helper
   const tr = (key, fallback) => {
     try {
       const result = t(key);
@@ -84,14 +82,14 @@ export default function BlogSection() {
     }
   };
 
+  // ============================================================
+  // GSAP ANIMATIONS - OPTIMIZED FOR ALL SCREENS
+  // ============================================================
   useEffect(() => {
-    if (!isMounted) return;
+    if (!isMounted || !sectionRef.current) return;
 
     const ctx = gsap.context(() => {
-      const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-      const isMobile = window.innerWidth < 768;
-
-      if (reduceMotion) {
+      if (prefersReducedMotion()) {
         gsap.set(['.blog-header-item', '.blog-card'], {
           opacity: 1,
           y: 0,
@@ -101,44 +99,60 @@ export default function BlogSection() {
         return;
       }
 
-      // ✅ Header animation
-      gsap.fromTo(
-        '.blog-header-item',
-        { y: 40, opacity: 0 },
-        {
-          y: 0,
-          opacity: 1,
-          duration: 1.2,
-          stagger: 0.15,
-          ease: 'power3.out',
-          overwrite: 'auto',
-          scrollTrigger: {
-            trigger: headerRef.current,
-            start: 'top 85%',
-            toggleActions: 'play none none reverse',
-          },
-        }
-      );
+      const isMobile = window.innerWidth < 768;
+      const isTablet = window.innerWidth >= 768 && window.innerWidth < 1024;
+      
+      // ✅ Device-specific durations
+      const dur = isMobile ? 0.5 : (isTablet ? 0.7 : 1);
+      const staggerDur = isMobile ? 0.06 : (isTablet ? 0.1 : 0.15);
+      const yOffset = isMobile ? 20 : (isTablet ? 30 : 40);
 
-      // ✅ Card animations
-      gsap.fromTo(
-        '.blog-card',
-        { y: 60, opacity: 0, scale: 0.96 },
-        {
-          y: 0,
-          opacity: 1,
-          scale: 1,
-          duration: 1.2,
-          stagger: isMobile ? 0.1 : 0.15,
-          ease: 'power2.out',
-          overwrite: 'auto',
-          scrollTrigger: {
-            trigger: sectionRef.current,
-            start: 'top 75%',
-            toggleActions: 'play none none reverse',
-          },
-        }
-      );
+      // ====== SET INITIAL STATES ======
+      gsap.set('.blog-header-item', {
+        y: yOffset,
+        opacity: 0,
+        willChange: 'transform, opacity',
+      });
+
+      gsap.set('.blog-card', {
+        y: isMobile ? 30 : 60,
+        opacity: 0,
+        scale: isMobile ? 0.97 : 0.96,
+        willChange: 'transform, opacity',
+      });
+
+      // ====== HEADER ANIMATION ======
+      gsap.to('.blog-header-item', {
+        y: 0,
+        opacity: 1,
+        duration: dur,
+        stagger: staggerDur * 1.2,
+        ease: 'power4.out',
+        scrollTrigger: {
+          trigger: headerRef.current,
+          start: isMobile ? 'top 88%' : 'top 85%',
+          once: true,
+        },
+      });
+
+      // ====== CARD ANIMATIONS ======
+      gsap.to('.blog-card', {
+        y: 0,
+        opacity: 1,
+        scale: 1,
+        duration: dur,
+        stagger: isMobile ? 0.08 : 0.15,
+        ease: 'power4.out',
+        scrollTrigger: {
+          trigger: sectionRef.current,
+          start: isMobile ? 'top 88%' : 'top 75%',
+          once: true,
+        },
+      });
+
+      // ====== REFRESH SCROLLTRIGGER ======
+      ScrollTrigger.refresh();
+
     }, sectionRef);
 
     return () => {
@@ -146,7 +160,9 @@ export default function BlogSection() {
     };
   }, [isMounted]);
 
-  // ✅ Modal scroll lock
+  // ============================================================
+  // MODAL SCROLL LOCK
+  // ============================================================
   useEffect(() => {
     if (selectedPost) {
       const header = document.querySelector('header');
@@ -167,7 +183,6 @@ export default function BlogSection() {
     };
   }, [selectedPost]);
 
-  // ✅ Escape key handler
   useEffect(() => {
     const handleKeyDown = (e) => {
       if (e.key === 'Escape' && selectedPost) setSelectedPost(null);
@@ -178,7 +193,6 @@ export default function BlogSection() {
 
   const handleCloseModal = () => setSelectedPost(null);
 
-  // ✅ Prevent hydration mismatch
   if (!isMounted) {
     return null;
   }
@@ -213,7 +227,6 @@ export default function BlogSection() {
             {tr('blog.subheading', 'Actionable strategies on book marketing, Amazon optimization, author branding, and creative design trends that drive real results.')}
           </p>
 
-          {/* ✅ Decorative line */}
           <div className="blog-header-item flex items-center justify-center gap-2 mt-2">
             <span className="w-12 h-px bg-gradient-to-r from-transparent to-blue-300" />
             <BookMarked className="w-4 h-4 text-blue-400" />
@@ -230,7 +243,6 @@ export default function BlogSection() {
               onClick={() => setSelectedPost(post)}
               className="blog-card group bg-white rounded-3xl border border-slate-200/80 overflow-hidden shadow-sm hover:shadow-2xl hover:border-blue-400/50 hover:-translate-y-3 transition-all duration-500 cursor-pointer flex flex-col h-full relative"
             >
-              {/* ✅ Gradient overlay on hover */}
               <div className="absolute inset-0 bg-gradient-to-br from-blue-600/5 via-transparent to-indigo-600/5 opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none rounded-3xl" />
 
               {/* Image Container */}
@@ -241,16 +253,13 @@ export default function BlogSection() {
                   className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700 ease-out"
                   loading="lazy"
                 />
-                {/* ✅ Overlay gradient */}
                 <div className="absolute inset-0 bg-gradient-to-t from-black/20 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
                 
-                {/* ✅ Category Badge - Enhanced */}
                 <div className="absolute top-4 left-4 bg-gradient-to-r from-blue-600 to-blue-500 text-white text-[10px] font-bold px-3.5 py-1.5 rounded-full shadow-lg shadow-blue-600/30 uppercase tracking-wider flex items-center gap-1.5">
                   <BookOpen className="w-3 h-3" />
                   {post.category}
                 </div>
 
-                {/* ✅ Read time badge - floating */}
                 <div className="absolute top-4 right-4 bg-white/95 backdrop-blur-sm text-slate-700 text-[10px] font-bold px-3 py-1.5 rounded-full shadow-md flex items-center gap-1.5 border border-white/50">
                   <Clock className="w-3 h-3 text-blue-600" />
                   {post.readTime}
@@ -259,23 +268,19 @@ export default function BlogSection() {
 
               {/* Content */}
               <div className="p-6 flex flex-col flex-grow space-y-3 relative z-10">
-                {/* Date */}
                 <div className="flex items-center gap-2 text-xs text-slate-500 font-medium">
                   <Calendar className="w-3.5 h-3.5 text-blue-600" />
                   <span>{post.date}</span>
                 </div>
 
-                {/* Title */}
                 <h3 className="text-lg font-bold text-slate-900 group-hover:text-blue-600 transition-colors duration-300 leading-snug line-clamp-2 min-h-[56px]">
                   {post.title}
                 </h3>
 
-                {/* Snippet */}
                 <p className="text-slate-600 text-sm leading-relaxed line-clamp-3 flex-grow">
                   {post.snippet}
                 </p>
 
-                {/* Tags */}
                 {post.tags && (
                   <div className="flex flex-wrap gap-1.5 pt-1">
                     {post.tags.slice(0, 2).map((tag, i) => (
@@ -291,7 +296,6 @@ export default function BlogSection() {
                   </div>
                 )}
 
-                {/* Footer */}
                 <div className="pt-4 border-t border-slate-100 flex items-center justify-between">
                   <div className="flex items-center gap-2.5">
                     <div className="w-8 h-8 rounded-full bg-gradient-to-br from-blue-100 to-blue-50 flex items-center justify-center border border-blue-200/50">
@@ -305,7 +309,6 @@ export default function BlogSection() {
                   </span>
                 </div>
 
-                {/* ✅ Bottom accent line on hover */}
                 <div className="absolute bottom-0 left-0 right-0 h-0.5 bg-gradient-to-r from-blue-500 via-indigo-500 to-blue-500 scale-x-0 group-hover:scale-x-100 transition-transform duration-700 origin-left rounded-b-3xl" />
               </div>
             </div>
@@ -350,7 +353,6 @@ export default function BlogSection() {
               />
               <div className="absolute inset-0 bg-gradient-to-t from-slate-900/70 via-transparent to-transparent" />
               
-              {/* Close Button */}
               <button
                 type="button"
                 onClick={handleCloseModal}
@@ -360,7 +362,6 @@ export default function BlogSection() {
                 <X className="w-5 h-5" />
               </button>
 
-              {/* Bottom overlay content */}
               <div className="absolute bottom-5 left-5 sm:left-7 right-5 sm:right-7">
                 <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-gradient-to-r from-blue-600 to-blue-500 text-white text-[10px] font-bold uppercase tracking-wider mb-2.5 shadow-lg shadow-blue-600/30">
                   <BookOpen className="w-3 h-3" />
@@ -374,7 +375,6 @@ export default function BlogSection() {
 
             {/* Modal Body */}
             <div className="p-6 sm:p-8 space-y-5">
-              {/* Meta Info */}
               <div className="flex flex-wrap items-center gap-3 pb-5 border-b border-slate-100">
                 <div className="flex items-center gap-2.5">
                   <div className="w-8 h-8 rounded-full bg-blue-50 border border-blue-100 flex items-center justify-center">
@@ -402,14 +402,12 @@ export default function BlogSection() {
                 </div>
               </div>
 
-              {/* Content */}
               <div className="prose prose-slate prose-sm sm:prose-base max-w-none">
                 <p className="text-slate-600 leading-relaxed text-sm sm:text-base">
                   {selectedPost.content || selectedPost.snippet}
                 </p>
               </div>
 
-              {/* Tags */}
               {selectedPost.tags && (
                 <div className="flex flex-wrap gap-2 pt-1">
                   <span className="text-xs font-bold text-slate-400 uppercase tracking-wider mr-1">{tr('blog.tags', 'Tags')}:</span>
@@ -422,7 +420,6 @@ export default function BlogSection() {
                 </div>
               )}
 
-              {/* Footer */}
               <div className="pt-5 border-t border-slate-100 flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-4">
                 <div className="flex items-center gap-2">
                   <TrendingUp className="w-4 h-4 text-blue-600" />

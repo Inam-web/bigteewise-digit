@@ -11,17 +11,19 @@ if (typeof window !== 'undefined') {
   gsap.registerPlugin(ScrollTrigger);
 }
 
+const prefersReducedMotion = () =>
+  typeof window !== 'undefined' &&
+  window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
 export default function WhyChooseUs({ onOpenQuoteModal, onOpenVideoModal }) {
   const { t } = useLanguage();
   const sectionRef = useRef(null);
   const [isMounted, setIsMounted] = useState(false);
 
-  // ✅ Mount state for hydration
   useEffect(() => {
     setIsMounted(true);
   }, []);
 
-  // Translation helper
   const tr = (key, fallback) => {
     try {
       const result = t(key);
@@ -72,15 +74,14 @@ export default function WhyChooseUs({ onOpenQuoteModal, onOpenVideoModal }) {
     { value: '4.9★', label: tr('whyChooseUs.statRating', 'Client Rating') },
   ];
 
+  // ============================================================
+  // GSAP ANIMATIONS - OPTIMIZED FOR ALL SCREENS
+  // ============================================================
   useEffect(() => {
     if (!sectionRef.current || !isMounted) return;
 
     const ctx = gsap.context(() => {
-      const isMobile = window.matchMedia('(max-width: 767px)').matches;
-      const isTablet = window.matchMedia('(min-width: 768px) and (max-width: 1023px)').matches;
-      const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-
-      if (reduceMotion) {
+      if (prefersReducedMotion()) {
         gsap.set([
           '.why-header-item',
           '.why-media-card',
@@ -98,66 +99,100 @@ export default function WhyChooseUs({ onOpenQuoteModal, onOpenVideoModal }) {
         return;
       }
 
-      // ✅ Header Animation
-      gsap.fromTo(
-        '.why-header-item',
-        { y: 30, opacity: 0 },
-        {
-          y: 0,
-          opacity: 1,
-          duration: 1,
-          stagger: 0.15,
-          ease: 'power3.out',
-          overwrite: 'auto',
-          scrollTrigger: {
-            trigger: sectionRef.current,
-            start: 'top 80%',
-            toggleActions: 'play none none none',
-          },
-        }
-      );
+      const isMobile = window.innerWidth < 768;
+      const isTablet = window.innerWidth >= 768 && window.innerWidth < 1024;
+      
+      // ✅ Device-specific durations
+      const dur = isMobile ? 0.5 : (isTablet ? 0.7 : 1);
+      const staggerDur = isMobile ? 0.06 : (isTablet ? 0.09 : 0.12);
+      const yOffset = isMobile ? 20 : (isTablet ? 28 : 35);
 
-      // ✅ Media Card Animation
-      gsap.fromTo(
-        '.why-media-card',
-        { x: -40, opacity: 0, scale: 0.95 },
-        {
-          x: 0,
-          opacity: 1,
-          scale: 1,
-          duration: 1.2,
-          ease: 'power3.out',
-          overwrite: 'auto',
-          scrollTrigger: {
-            trigger: '.why-media-card',
-            start: 'top 80%',
-            toggleActions: 'play none none none',
-          },
-        }
-      );
+      // ====== SET INITIAL STATES ======
+      gsap.set('.why-header-item', {
+        y: yOffset,
+        opacity: 0,
+        willChange: 'transform, opacity',
+      });
 
-      // ✅ Feature Cards Animation
-      gsap.fromTo(
-        '.why-feature-card',
-        { y: 40, opacity: 0, scale: 0.96 },
-        {
-          y: 0,
-          opacity: 1,
-          scale: 1,
-          duration: isMobile ? 0.7 : 1,
-          stagger: isMobile ? 0.08 : 0.12,
-          ease: 'power3.out',
-          overwrite: 'auto',
-          scrollTrigger: {
-            trigger: '.why-grid-container',
-            start: 'top 80%',
-            toggleActions: 'play none none none',
-          },
-        }
-      );
+      gsap.set('.why-media-card', {
+        x: isMobile ? -20 : -40,
+        opacity: 0,
+        scale: isMobile ? 0.97 : 0.95,
+        willChange: 'transform, opacity',
+      });
 
-      // ✅ Floating Orbs (only on desktop)
-      if (!isMobile) {
+      gsap.set('.why-feature-card', {
+        y: isMobile ? 25 : 40,
+        opacity: 0,
+        scale: isMobile ? 0.97 : 0.96,
+        willChange: 'transform, opacity',
+      });
+
+      gsap.set('.why-stat-number', {
+        opacity: 0,
+        scale: 0.5,
+        willChange: 'transform, opacity',
+      });
+
+      // ====== HEADER ANIMATION ======
+      gsap.to('.why-header-item', {
+        y: 0,
+        opacity: 1,
+        duration: dur,
+        stagger: staggerDur * 1.2,
+        ease: 'power4.out',
+        scrollTrigger: {
+          trigger: sectionRef.current,
+          start: isMobile ? 'top 85%' : 'top 80%',
+          once: true,
+        },
+      });
+
+      // ====== MEDIA CARD ANIMATION ======
+      gsap.to('.why-media-card', {
+        x: 0,
+        opacity: 1,
+        scale: 1,
+        duration: dur + 0.2,
+        ease: 'power4.out',
+        scrollTrigger: {
+          trigger: '.why-media-card',
+          start: isMobile ? 'top 88%' : 'top 80%',
+          once: true,
+        },
+      });
+
+      // ====== FEATURE CARDS ANIMATION ======
+      gsap.to('.why-feature-card', {
+        y: 0,
+        opacity: 1,
+        scale: 1,
+        duration: dur,
+        stagger: staggerDur,
+        ease: 'power4.out',
+        scrollTrigger: {
+          trigger: '.why-grid-container',
+          start: isMobile ? 'top 88%' : 'top 80%',
+          once: true,
+        },
+      });
+
+      // ====== STATS ANIMATION ======
+      gsap.to('.why-stat-number', {
+        opacity: 1,
+        scale: 1,
+        duration: isMobile ? 0.5 : 0.8,
+        stagger: isMobile ? 0.08 : 0.15,
+        ease: 'back.out(1.7)',
+        scrollTrigger: {
+          trigger: '.why-stats-container',
+          start: isMobile ? 'top 90%' : 'top 85%',
+          once: true,
+        },
+      });
+
+      // ====== FLOATING ORBS (Desktop only) ======
+      if (!isMobile && !isTablet) {
         gsap.to('.why-orb-1', {
           y: -20,
           x: 15,
@@ -180,7 +215,7 @@ export default function WhyChooseUs({ onOpenQuoteModal, onOpenVideoModal }) {
         });
       }
 
-      // ✅ Play button pulse ring
+      // ====== PLAY BUTTON PULSE RING ======
       gsap.to('.why-pulse-ring', {
         scale: 1.4,
         opacity: 0,
@@ -191,8 +226,8 @@ export default function WhyChooseUs({ onOpenQuoteModal, onOpenVideoModal }) {
         overwrite: 'auto',
       });
 
-      // ✅ Feature card hover animations (desktop only)
-      if (!isMobile) {
+      // ====== FEATURE CARD HOVER (Desktop only) ======
+      if (!isMobile && !isTablet) {
         const cards = document.querySelectorAll('.why-feature-card');
         cards.forEach((card) => {
           const icon = card.querySelector('.why-feature-icon');
@@ -257,29 +292,13 @@ export default function WhyChooseUs({ onOpenQuoteModal, onOpenVideoModal }) {
         });
       }
 
-      // ✅ Stats Animation
-      gsap.fromTo(
-        '.why-stat-number',
-        { opacity: 0, scale: 0.5 },
-        {
-          opacity: 1,
-          scale: 1,
-          duration: 0.8,
-          stagger: 0.15,
-          ease: 'back.out(1.7)',
-          overwrite: 'auto',
-          scrollTrigger: {
-            trigger: '.why-stats-container',
-            start: 'top 85%',
-            toggleActions: 'play none none none',
-          },
-        }
-      );
+      // ====== REFRESH SCROLLTRIGGER ======
+      ScrollTrigger.refresh();
+
     }, sectionRef);
 
     return () => {
       ctx.revert();
-      // ✅ Clean up ScrollTriggers
       ScrollTrigger.getAll().forEach(st => {
         if (st.trigger === sectionRef.current || sectionRef.current?.contains(st.trigger)) {
           st.kill();
@@ -288,7 +307,6 @@ export default function WhyChooseUs({ onOpenQuoteModal, onOpenVideoModal }) {
     };
   }, [isMounted]);
 
-  // ✅ Prevent hydration mismatch
   if (!isMounted) {
     return null;
   }

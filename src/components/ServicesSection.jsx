@@ -20,6 +20,10 @@ if (typeof window !== 'undefined') {
   gsap.registerPlugin(ScrollTrigger);
 }
 
+const prefersReducedMotion = () =>
+  typeof window !== 'undefined' &&
+  window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
 const SERVICE_IMAGES = {
   'book-marketing': '/images/services/book-marketing.jpg',
   'author-branding': '/images/services/author-branding-v2.jpg',
@@ -42,9 +46,7 @@ export default function ServicesSection({ onOpenQuoteModal }) {
   const [selectedCategory, setSelectedCategory] = useState('all');
   const [imageErrors, setImageErrors] = useState({});
   const [isMounted, setIsMounted] = useState(false);
-  const [isFiltering, setIsFiltering] = useState(false);
   const sectionRef = useRef(null);
-  const filterRefs = useRef({});
 
   const iconMap = {
     BookOpenCheck: <BookOpenCheck className="w-5 h-5" />,
@@ -69,12 +71,10 @@ export default function ServicesSection({ onOpenQuoteModal }) {
     return service.category === selectedCategory;
   });
 
-  // ✅ Mount state for hydration
   useEffect(() => {
     setIsMounted(true);
   }, []);
 
-  // ✅ Get translated category labels
   const getCategoryLabel = (category) => {
     if (category === 'specialization') return t('services.specialization') || 'Specialization';
     if (category === 'marketing') return t('services.digitalMarketingTab') || 'Digital Marketing & SEO';
@@ -82,7 +82,6 @@ export default function ServicesSection({ onOpenQuoteModal }) {
     return t('services.specialization') || 'Specialization';
   };
 
-  // ✅ Get the correct image path with fallback
   const getServiceImage = (service) => {
     if (service.image) return service.image;
     if (service.coverImage) return service.coverImage;
@@ -91,130 +90,15 @@ export default function ServicesSection({ onOpenQuoteModal }) {
     return `/images/services/${titleSlug}.jpg`;
   };
 
-  // Handle image errors
   const handleImageError = useCallback((serviceId) => {
     setImageErrors(prev => ({ ...prev, [serviceId]: true }));
   }, []);
 
-  // ✅ Handle filter change with smooth scroll
   const handleFilterChange = useCallback((category) => {
     if (category === selectedCategory) return;
-    
-    setIsFiltering(true);
     setSelectedCategory(category);
-    
-    // ✅ Smooth scroll to services section on mobile
-    if (window.innerWidth < 768) {
-      const servicesSection = document.getElementById('services');
-      if (servicesSection) {
-        servicesSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
-      }
-    }
-    
-    // Reset filtering state after animation
-    setTimeout(() => {
-      setIsFiltering(false);
-    }, 800);
   }, [selectedCategory]);
 
-  // ✅ GSAP Animations - Optimized
-  useEffect(() => {
-    if (!sectionRef.current || !isMounted) return;
-
-    const ctx = gsap.context(() => {
-      const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-      const isMobile = window.innerWidth < 768;
-
-      if (reduceMotion) {
-        gsap.set('.services-header-item, .service-row-item', {
-          opacity: 1,
-          y: 0,
-          clearProps: 'transform,opacity'
-        });
-        return;
-      }
-
-      // ✅ Header animations
-      gsap.fromTo(
-        '.services-header-item',
-        { y: 35, opacity: 0 },
-        {
-          y: 0,
-          opacity: 1,
-          duration: isMobile ? 0.8 : 1.1,
-          stagger: isMobile ? 0.12 : 0.18,
-          ease: 'power3.out',
-          overwrite: 'auto',
-          scrollTrigger: {
-            trigger: sectionRef.current,
-            start: 'top 80%',
-            toggleActions: 'play none none none',
-          },
-        }
-      );
-
-      // ✅ Service row animations
-      const rows = gsap.utils.toArray('.service-row-item');
-      rows.forEach((row, index) => {
-        const imageCol = row.querySelector('.service-image-col');
-        const cardCol = row.querySelector('.service-card-col');
-
-        if (imageCol && cardCol) {
-          const delay = isMobile ? index * 0.1 : 0;
-
-          gsap.fromTo(
-            imageCol,
-            { y: 40, opacity: 0, scale: 0.96 },
-            {
-              y: 0,
-              opacity: 1,
-              scale: 1,
-              duration: isMobile ? 0.9 : 1.2,
-              delay,
-              ease: 'power3.out',
-              overwrite: 'auto',
-              scrollTrigger: {
-                trigger: row,
-                start: 'top 82%',
-                toggleActions: 'play none none none',
-              },
-            }
-          );
-
-          gsap.fromTo(
-            cardCol,
-            { y: 50, opacity: 0 },
-            {
-              y: 0,
-              opacity: 1,
-              duration: isMobile ? 1 : 1.3,
-              delay: delay + 0.15,
-              ease: 'power3.out',
-              overwrite: 'auto',
-              scrollTrigger: {
-                trigger: row,
-                start: 'top 82%',
-                toggleActions: 'play none none none',
-              },
-            }
-          );
-        }
-      });
-
-      // ✅ Refreshing ScrollTrigger after filter changes
-      if (isFiltering) {
-        setTimeout(() => {
-          ScrollTrigger.refresh();
-        }, 100);
-      }
-    }, sectionRef);
-
-    return () => {
-      ctx.revert();
-    };
-  }, [isMounted, isFiltering]);
-
-  // ✅ Get translated service title
   const getServiceTitle = (service) => {
     if (service.translationKey) {
       return t(service.translationKey) || service.title;
@@ -222,7 +106,6 @@ export default function ServicesSection({ onOpenQuoteModal }) {
     return service.title;
   };
 
-  // ✅ Get translated service description
   const getServiceDesc = (service) => {
     if (service.descTranslationKey) {
       return t(service.descTranslationKey) || service.fullDesc || service.shortDesc;
@@ -230,7 +113,6 @@ export default function ServicesSection({ onOpenQuoteModal }) {
     return service.fullDesc || service.shortDesc;
   };
 
-  // ✅ Helper to get the current locale from pathname (fallback)
   const getCurrentLocale = () => {
     if (locale) return locale;
     if (pathname) {
@@ -244,7 +126,125 @@ export default function ServicesSection({ onOpenQuoteModal }) {
 
   const currentLocale = getCurrentLocale();
 
-  // ✅ Prevent hydration mismatch
+  // ============================================================
+  // GSAP ANIMATIONS - OPTIMIZED FOR ALL SCREENS
+  // ============================================================
+  useEffect(() => {
+    if (!sectionRef.current || !isMounted) return;
+
+    const ctx = gsap.context(() => {
+      if (prefersReducedMotion()) {
+        gsap.set([
+          '.services-header-item',
+          '.filter-btn',
+          '.service-row-item',
+          '.service-image-col',
+          '.service-card-col'
+        ], {
+          opacity: 1,
+          y: 0,
+          scale: 1,
+          clearProps: 'transform,opacity'
+        });
+        return;
+      }
+
+      const isMobile = window.innerWidth < 768;
+      const isTablet = window.innerWidth >= 768 && window.innerWidth < 1024;
+      
+      // ✅ Device-specific durations
+      const dur = isMobile ? 0.5 : (isTablet ? 0.7 : 1);
+      const staggerDur = isMobile ? 0.05 : (isTablet ? 0.08 : 0.12);
+      const yOffset = isMobile ? 20 : (isTablet ? 28 : 35);
+
+      // ====== HEADER ANIMATIONS ======
+      gsap.fromTo('.services-header-item',
+        { y: yOffset, opacity: 0 },
+        {
+          y: 0,
+          opacity: 1,
+          duration: dur,
+          stagger: staggerDur * 1.5,
+          ease: 'power4.out',
+          scrollTrigger: {
+            trigger: sectionRef.current,
+            start: isMobile ? 'top 85%' : 'top 80%',
+            once: true,
+          },
+        }
+      );
+
+      // ====== FILTER BUTTONS ======
+      gsap.fromTo('.filter-btn',
+        { y: isMobile ? 12 : 20, opacity: 0, scale: 0.95 },
+        {
+          y: 0,
+          opacity: 1,
+          scale: 1,
+          duration: isMobile ? 0.4 : 0.6,
+          stagger: isMobile ? 0.04 : 0.06,
+          ease: 'back.out(1.4)',
+          scrollTrigger: {
+            trigger: '.services-header-item',
+            start: isMobile ? 'top 88%' : 'top 85%',
+            once: true,
+          },
+        }
+      );
+
+      // ====== SERVICE ROWS ======
+      const rows = gsap.utils.toArray('.service-row-item');
+      rows.forEach((row, index) => {
+        const imageCol = row.querySelector('.service-image-col');
+        const cardCol = row.querySelector('.service-card-col');
+
+        if (imageCol) {
+          gsap.fromTo(imageCol,
+            { y: isMobile ? 20 : 40, opacity: 0, scale: isMobile ? 0.96 : 0.92 },
+            {
+              y: 0,
+              opacity: 1,
+              scale: 1,
+              duration: isMobile ? 0.6 : (isTablet ? 0.8 : 1.2),
+              delay: index * (isMobile ? 0.08 : 0.15),
+              ease: 'power4.out',
+              scrollTrigger: {
+                trigger: row,
+                start: isMobile ? 'top 92%' : 'top 88%',
+                once: true,
+              },
+            }
+          );
+        }
+
+        if (cardCol) {
+          gsap.fromTo(cardCol,
+            { y: isMobile ? 25 : 50, opacity: 0, scale: isMobile ? 0.98 : 0.97 },
+            {
+              y: 0,
+              opacity: 1,
+              scale: 1,
+              duration: isMobile ? 0.7 : (isTablet ? 0.9 : 1.3),
+              delay: index * (isMobile ? 0.08 : 0.15) + (isMobile ? 0.08 : 0.15),
+              ease: 'power4.out',
+              scrollTrigger: {
+                trigger: row,
+                start: isMobile ? 'top 92%' : 'top 88%',
+                once: true,
+              },
+            }
+          );
+        }
+      });
+
+      // ====== REFRESH SCROLLTRIGGER ======
+      ScrollTrigger.refresh();
+
+    }, sectionRef);
+
+    return () => ctx.revert();
+  }, [isMounted]);
+
   if (!isMounted) {
     return null;
   }
@@ -282,8 +282,8 @@ export default function ServicesSection({ onOpenQuoteModal }) {
           </div>
         </div>
 
-        {/* Filter Category Pills - Enhanced UX */}
-        <div className="services-header-item flex flex-wrap items-center gap-2 mb-16 pb-4 border-b border-slate-200">
+        {/* Filter Category Pills */}
+        <div className="flex flex-wrap items-center gap-2 mb-16 pb-4 border-b border-slate-200">
           {[
             { id: 'all', label: t('services.allServices'), count: servicesList.length },
             { id: 'specialization', label: t('services.specializationsTab'), icon: <Star className="w-4 h-4 fill-amber-400 text-amber-500" /> },
@@ -292,7 +292,7 @@ export default function ServicesSection({ onOpenQuoteModal }) {
           ].map((category) => {
             const isActive = selectedCategory === category.id;
             const isSpecial = category.id === 'specialization';
-            const baseClasses = "px-5 py-2.5 rounded-full text-xs sm:text-sm font-bold transition-all duration-300 touch-manipulation";
+            const baseClasses = "filter-btn px-5 py-2.5 rounded-full text-xs sm:text-sm font-bold transition-all duration-300 touch-manipulation";
             
             let classes = baseClasses;
             if (isActive) {
@@ -308,7 +308,6 @@ export default function ServicesSection({ onOpenQuoteModal }) {
             return (
               <button
                 key={category.id}
-                ref={(el) => { filterRefs.current[category.id] = el; }}
                 onClick={() => handleFilterChange(category.id)}
                 className={classes}
                 aria-pressed={isActive}
@@ -346,7 +345,7 @@ export default function ServicesSection({ onOpenQuoteModal }) {
                     isEven ? 'lg:flex-row' : 'lg:flex-row-reverse'
                   }`}
                 >
-                  {/* Compact Image Column */}
+                  {/* Image Column */}
                   <div className="service-image-col w-full lg:w-[40%] shrink-0 relative z-10">
                     <div className="relative aspect-[4/3] sm:aspect-[1.1/1] rounded-none lg:rounded-[2.2rem] overflow-hidden shadow-none lg:shadow-lg border-none lg:border lg:border-slate-200/80 bg-slate-100">
                       {!hasError ? (

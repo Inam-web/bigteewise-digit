@@ -2,6 +2,7 @@
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import { SITE_URL } from "@/lib/siteConfig";
+import LenisProvider from "@/components/LenisProvider";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -98,7 +99,10 @@ export const viewport = {
 
 export default function RootLayout({ children }) {
   return (
-    <html lang="en" className="scroll-smooth" data-scroll-behavior="smooth"
+    <html 
+      lang="en" 
+      className="scroll-smooth" 
+      data-scroll-behavior="smooth"
     >
       <head>
         {/* ✅ Preconnect for performance */}
@@ -113,28 +117,30 @@ export default function RootLayout({ children }) {
         {/* ✅ DNS Prefetch */}
         <link rel="dns-prefetch" href="//fonts.googleapis.com" />
         <link rel="dns-prefetch" href="//fonts.gstatic.com" />
-        
       </head>
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased bg-white text-slate-900`}
       >
-        {/* ✅ Skip to content link for accessibility */}
-        <a
-          href="#main-content"
-          className="sr-only focus:not-sr-only focus:absolute focus:top-4 focus:left-4 focus:z-[999] focus:bg-white focus:text-blue-600 focus:px-4 focus:py-3 focus:rounded-xl focus:shadow-lg focus:font-bold focus:ring-2 focus:ring-blue-600"
-        >
-          Skip to content
-        </a>
+        {/* ✅ WRAP CHILDREN WITH LENIS PROVIDER FOR SMOOTH SCROLL */}
+        <LenisProvider>
+          {/* ✅ Skip to content link for accessibility */}
+          <a
+            href="#main-content"
+            className="sr-only focus:not-sr-only focus:absolute focus:top-4 focus:left-4 focus:z-[999] focus:bg-white focus:text-blue-600 focus:px-4 focus:py-3 focus:rounded-xl focus:shadow-lg focus:font-bold focus:ring-2 focus:ring-blue-600"
+          >
+            Skip to content
+          </a>
 
-        {/* ✅ Main Content */}
-        <main id="main-content">
-          {children}
-        </main>
+          {/* ✅ Main Content */}
+          <main id="main-content">
+            {children}
+          </main>
 
-        {/* ✅ Role for screen readers */}
-        <div role="status" aria-live="polite" className="sr-only">
-          Page loaded successfully
-        </div>
+          {/* ✅ Role for screen readers */}
+          <div role="status" aria-live="polite" className="sr-only">
+            Page loaded successfully
+          </div>
+        </LenisProvider>
       </body>
     </html>
   );

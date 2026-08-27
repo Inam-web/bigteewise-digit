@@ -28,7 +28,11 @@
   },
   "next": {
     "experimental": {
-      "optimizePackageImports": ["gsap", "lenis", "@gsap/react"]
+      "optimizePackageImports": [
+        "gsap",
+        "lenis",
+        "@gsap/react"
+      ]
     }
   }
 }

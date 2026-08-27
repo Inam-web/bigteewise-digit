@@ -17,14 +17,23 @@ import {
   Globe
 } from 'lucide-react';
 import gsap from 'gsap';
+import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { useLanguage } from '@/i18n/LanguageContext';
+
+if (typeof window !== 'undefined') {
+  gsap.registerPlugin(ScrollTrigger);
+}
+
+const prefersReducedMotion = () =>
+  typeof window !== 'undefined' &&
+  window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
 export default function Hero({ onOpenQuoteModal, onOpenVideoModal }) {
   const { t } = useLanguage();
   const containerRef = useRef(null);
   const [isMounted, setIsMounted] = useState(false);
 
-  // Refs for GSAP animations
+  // Refs for sections that will animate on scroll
   const badgeRef = useRef(null);
   const headingRef = useRef(null);
   const descRef = useRef(null);
@@ -41,14 +50,12 @@ export default function Hero({ onOpenQuoteModal, onOpenVideoModal }) {
   const platformHeadingRef = useRef(null);
   const platformCardsRef = useRef([]);
 
-  // Features data with translation keys
   const features = [
     t('hero.feature1'),
     t('hero.feature2'),
     t('hero.feature3'),
   ];
 
-  // Platforms data with translation keys
   const platforms = [
     { name: t('hero.platformAdobe'), label: t('hero.platformAdobeLabel'), color: 'blue', icon: Globe },
     { name: t('hero.platformShopify'), label: t('hero.platformShopifyLabel'), color: 'emerald', icon: ShoppingBag },
@@ -59,7 +66,6 @@ export default function Hero({ onOpenQuoteModal, onOpenVideoModal }) {
     { name: t('hero.platformMailchimp'), label: t('hero.platformMailchimpLabel'), color: 'yellow', icon: Star },
   ];
 
-  // ✅ Use useCallback to prevent unnecessary re-renders
   const addFeatureRef = useCallback((el) => {
     if (el && !featuresRef.current.includes(el)) {
       featuresRef.current.push(el);
@@ -84,294 +90,323 @@ export default function Hero({ onOpenQuoteModal, onOpenVideoModal }) {
     }
   }, []);
 
-  // ✅ Set mounted state for hydration
   useEffect(() => {
     setIsMounted(true);
   }, []);
 
-  // ✅ GSAP Animations - Optimized
+  // ============================================================
+  // GSAP ANIMATIONS - SCROLL-TRIGGERED (Buttery Smooth)
+  // ============================================================
   useEffect(() => {
-    // ✅ Don't run animations if not mounted
     if (!containerRef.current || !isMounted) return;
 
     const ctx = gsap.context(() => {
-      const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-      const isMobile = window.innerWidth < 768;
-      
-      const dur = isMobile ? 0.5 : 0.8;
-      const staggerDur = isMobile ? 0.06 : 0.1;
-
-      if (!reduceMotion) {
-        const tl = gsap.timeline({
-          defaults: {
-            ease: 'power3.out',
-            force3D: true,
-          }
-        });
-
-        // Initial states - check if refs exist
-        gsap.set(
-          [
-            badgeRef.current,
-            headingRef.current,
-            descRef.current,
-            socialRef.current,
-            imageBoxRef.current,
-            floatTopRef.current,
-            floatBottomRef.current,
-            resultsRef.current,
-            statusRef.current,
-            platformHeadingRef.current,
-            platformsRef.current
-          ].filter(Boolean),
-          {
-            opacity: 0,
-            willChange: 'transform, opacity',
-          }
-        );
-
-        gsap.set(featuresRef.current.filter(Boolean), {
-          opacity: 0,
-          willChange: 'transform, opacity',
-        });
-
-        gsap.set(ctasRef.current.filter(Boolean), {
-          opacity: 0,
-          willChange: 'transform, opacity',
-        });
-
-        gsap.set(resultItemsRef.current.filter(Boolean), {
-          opacity: 0,
-          willChange: 'transform, opacity',
-        });
-
-        gsap.set(platformCardsRef.current.filter(Boolean), {
-          opacity: 0,
-          y: 30,
-          willChange: 'transform, opacity',
-        });
-
-        if (badgeRef.current) gsap.set(badgeRef.current, { y: -20 });
-        if (headingRef.current) gsap.set(headingRef.current, { y: 30 });
-        if (descRef.current) gsap.set(descRef.current, { y: 20 });
-        if (featuresRef.current.length) gsap.set(featuresRef.current, { y: 15 });
-        if (ctasRef.current.length) gsap.set(ctasRef.current, { y: 20 });
-        if (socialRef.current) gsap.set(socialRef.current, { y: 15 });
-        if (imageBoxRef.current) gsap.set(imageBoxRef.current, { scale: 0.92 });
-        if (floatTopRef.current) gsap.set(floatTopRef.current, { x: -30 });
-        if (floatBottomRef.current) gsap.set(floatBottomRef.current, { x: 30 });
-        if (resultsRef.current) gsap.set(resultsRef.current, { y: 30 });
-        if (statusRef.current) gsap.set(statusRef.current, { y: 20 });
-        if (platformHeadingRef.current) gsap.set(platformHeadingRef.current, { y: 20 });
-        if (platformsRef.current) gsap.set(platformsRef.current, { y: 20 });
-
-        // ✅ Main animation sequence
-        tl.to(badgeRef.current, {
+      if (prefersReducedMotion()) {
+        gsap.set([
+          badgeRef.current,
+          headingRef.current,
+          descRef.current,
+          socialRef.current,
+          imageBoxRef.current,
+          floatTopRef.current,
+          floatBottomRef.current,
+          resultsRef.current,
+          statusRef.current,
+          platformHeadingRef.current,
+          platformsRef.current,
+          ...featuresRef.current,
+          ...ctasRef.current,
+          ...resultItemsRef.current,
+          ...platformCardsRef.current,
+        ].filter(Boolean), {
           opacity: 1,
           y: 0,
-          duration: dur * 0.6,
-          overwrite: 'auto',
-        })
-          .to(
-            headingRef.current,
-            {
-              opacity: 1,
-              y: 0,
-              duration: dur,
-              overwrite: 'auto',
-            },
-            '-=0.25'
-          )
-          .to(
-            descRef.current,
-            {
-              opacity: 1,
-              y: 0,
-              duration: dur * 0.7,
-              overwrite: 'auto',
-            },
-            '-=0.5'
-          )
-          .to(
-            featuresRef.current,
-            {
-              opacity: 1,
-              y: 0,
-              stagger: staggerDur,
-              duration: dur * 0.6,
-              overwrite: 'auto',
-            },
-            '-=0.4'
-          )
-          .to(
-            ctasRef.current,
-            {
-              opacity: 1,
-              y: 0,
-              stagger: staggerDur * 1.5,
-              duration: dur * 0.6,
-              overwrite: 'auto',
-            },
-            '-=0.3'
-          )
-          .to(
-            socialRef.current,
-            {
-              opacity: 1,
-              y: 0,
-              duration: dur * 0.6,
-              overwrite: 'auto',
-            },
-            '-=0.3'
-          )
-          .to(
-            imageBoxRef.current,
-            {
-              opacity: 1,
-              scale: 1,
-              duration: dur,
-              overwrite: 'auto',
-            },
-            '-=1'
-          )
-          .to(
-            floatTopRef.current,
-            {
-              opacity: 1,
-              x: 0,
-              duration: dur * 0.7,
-              overwrite: 'auto',
-            },
-            '-=0.4'
-          )
-          .to(
-            floatBottomRef.current,
-            {
-              opacity: 1,
-              x: 0,
-              duration: dur * 0.7,
-              overwrite: 'auto',
-            },
-            '-=0.5'
-          )
-          .to(
-            resultsRef.current,
-            {
-              opacity: 1,
-              y: 0,
-              duration: dur * 0.8,
-              overwrite: 'auto',
-            },
-            '-=0.3'
-          )
-          .to(
-            resultItemsRef.current,
-            {
-              opacity: 1,
-              y: 0,
-              stagger: staggerDur * 1.2,
-              duration: dur * 0.6,
-              overwrite: 'auto',
-            },
-            '-=0.35'
-          )
-          .to(
-            statusRef.current,
-            {
-              opacity: 1,
-              y: 0,
-              duration: dur * 0.7,
-              overwrite: 'auto',
-            },
-            '-=0.3'
-          )
-          .to(
-            platformHeadingRef.current,
-            {
-              opacity: 1,
-              y: 0,
-              duration: dur * 0.7,
-              overwrite: 'auto',
-            },
-            '-=0.2'
-          )
-          .to(
-            platformsRef.current,
-            {
-              opacity: 1,
-              y: 0,
-              duration: dur * 0.6,
-              overwrite: 'auto',
-            },
-            '-=0.3'
-          )
-          .to(
-            platformCardsRef.current,
-            {
-              opacity: 1,
-              y: 0,
-              stagger: staggerDur * 0.8,
-              duration: dur * 0.6,
-              ease: 'power3.out',
-              overwrite: 'auto',
-            },
-            '-=0.25'
-          );
-
-        // ✅ Floating animations (only on desktop)
-        if (!isMobile) {
-          if (floatTopRef.current) {
-            gsap.to(floatTopRef.current, {
-              y: -8,
-              duration: 3,
-              repeat: -1,
-              yoyo: true,
-              ease: 'power1.inOut',
-              overwrite: 'auto',
-            });
-          }
-
-          if (floatBottomRef.current) {
-            gsap.to(floatBottomRef.current, {
-              y: 8,
-              duration: 3.5,
-              repeat: -1,
-              yoyo: true,
-              ease: 'power1.inOut',
-              delay: 0.5,
-              overwrite: 'auto',
-            });
-          }
-        }
-      } else {
-        // ✅ If reduced motion, just show everything without animation
-        gsap.set(
-          [
-            badgeRef.current,
-            headingRef.current,
-            descRef.current,
-            socialRef.current,
-            imageBoxRef.current,
-            floatTopRef.current,
-            floatBottomRef.current,
-            resultsRef.current,
-            statusRef.current,
-            platformHeadingRef.current,
-            platformsRef.current,
-            ...featuresRef.current,
-            ...ctasRef.current,
-            ...resultItemsRef.current,
-            ...platformCardsRef.current,
-          ].filter(Boolean),
-          {
-            opacity: 1,
-            y: 0,
-            x: 0,
-            scale: 1,
-            clearProps: 'transform,opacity',
-          }
-        );
+          x: 0,
+          scale: 1,
+          clearProps: 'transform,opacity',
+        });
+        return;
       }
+
+      const isMobile = window.innerWidth < 768;
+      const isTablet = window.innerWidth >= 768 && window.innerWidth < 1024;
+      
+      const dur = isMobile ? 0.5 : (isTablet ? 0.7 : 0.9);
+      const staggerDur = isMobile ? 0.05 : (isTablet ? 0.08 : 0.1);
+
+      // ====== SECTION 1: BADGE & HEADING (First section) ======
+      // Badge
+      gsap.fromTo(badgeRef.current,
+        { y: isMobile ? -15 : -20, opacity: 0 },
+        {
+          y: 0,
+          opacity: 1,
+          duration: dur * 0.6,
+          ease: 'power4.out',
+          scrollTrigger: {
+            trigger: badgeRef.current,
+            start: 'top 85%',
+            once: true,
+          },
+        }
+      );
+
+      // Heading
+      gsap.fromTo(headingRef.current,
+        { y: isMobile ? 20 : 30, opacity: 0 },
+        {
+          y: 0,
+          opacity: 1,
+          duration: dur,
+          ease: 'power4.out',
+          scrollTrigger: {
+            trigger: headingRef.current,
+            start: 'top 85%',
+            once: true,
+          },
+        }
+      );
+
+      // Description
+      gsap.fromTo(descRef.current,
+        { y: isMobile ? 15 : 20, opacity: 0 },
+        {
+          y: 0,
+          opacity: 1,
+          duration: dur * 0.7,
+          ease: 'power4.out',
+          scrollTrigger: {
+            trigger: descRef.current,
+            start: 'top 88%',
+            once: true,
+          },
+        }
+      );
+
+      // ====== SECTION 2: FEATURES (Staggered) ======
+      gsap.fromTo(featuresRef.current,
+        { y: isMobile ? 12 : 15, opacity: 0 },
+        {
+          y: 0,
+          opacity: 1,
+          stagger: staggerDur,
+          duration: dur * 0.6,
+          ease: 'power4.out',
+          scrollTrigger: {
+            trigger: featuresRef.current[0] || containerRef.current,
+            start: 'top 88%',
+            once: true,
+          },
+        }
+      );
+
+      // ====== SECTION 3: CTAs ======
+      gsap.fromTo(ctasRef.current,
+        { y: isMobile ? 15 : 20, opacity: 0, scale: 0.95 },
+        {
+          y: 0,
+          opacity: 1,
+          scale: 1,
+          stagger: staggerDur * 1.5,
+          duration: dur * 0.6,
+          ease: 'back.out(1.4)',
+          scrollTrigger: {
+            trigger: ctasRef.current[0] || containerRef.current,
+            start: 'top 90%',
+            once: true,
+          },
+        }
+      );
+
+      // ====== SECTION 4: Social Proof ======
+      gsap.fromTo(socialRef.current,
+        { y: isMobile ? 12 : 15, opacity: 0 },
+        {
+          y: 0,
+          opacity: 1,
+          duration: dur * 0.6,
+          ease: 'power4.out',
+          scrollTrigger: {
+            trigger: socialRef.current,
+            start: 'top 90%',
+            once: true,
+          },
+        }
+      );
+
+      // ====== SECTION 5: Main Image ======
+      gsap.fromTo(imageBoxRef.current,
+        { scale: isMobile ? 0.96 : 0.92, opacity: 0 },
+        {
+          scale: 1,
+          opacity: 1,
+          duration: dur,
+          ease: 'power4.out',
+          scrollTrigger: {
+            trigger: imageBoxRef.current,
+            start: 'top 85%',
+            once: true,
+          },
+        }
+      );
+
+      // ====== SECTION 6: Floating Elements ======
+      gsap.fromTo(floatTopRef.current,
+        { x: isMobile ? -15 : -30, opacity: 0 },
+        {
+          x: 0,
+          opacity: 1,
+          duration: dur * 0.7,
+          ease: 'power4.out',
+          scrollTrigger: {
+            trigger: floatTopRef.current,
+            start: 'top 88%',
+            once: true,
+          },
+        }
+      );
+
+      gsap.fromTo(floatBottomRef.current,
+        { x: isMobile ? 15 : 30, opacity: 0 },
+        {
+          x: 0,
+          opacity: 1,
+          duration: dur * 0.7,
+          ease: 'power4.out',
+          scrollTrigger: {
+            trigger: floatBottomRef.current,
+            start: 'top 88%',
+            once: true,
+          },
+        }
+      );
+
+      // ====== SECTION 7: Results Section ======
+      gsap.fromTo(resultsRef.current,
+        { y: isMobile ? 20 : 30, opacity: 0 },
+        {
+          y: 0,
+          opacity: 1,
+          duration: dur * 0.8,
+          ease: 'power4.out',
+          scrollTrigger: {
+            trigger: resultsRef.current,
+            start: 'top 88%',
+            once: true,
+          },
+        }
+      );
+
+      // Result items with stagger
+      gsap.fromTo(resultItemsRef.current,
+        { y: isMobile ? 15 : 30, opacity: 0 },
+        {
+          y: 0,
+          opacity: 1,
+          stagger: staggerDur * 1.2,
+          duration: dur * 0.6,
+          ease: 'power4.out',
+          scrollTrigger: {
+            trigger: resultItemsRef.current[0] || resultsRef.current,
+            start: 'top 90%',
+            once: true,
+          },
+        }
+      );
+
+      // ====== SECTION 8: Status Bar ======
+      gsap.fromTo(statusRef.current,
+        { y: isMobile ? 15 : 20, opacity: 0 },
+        {
+          y: 0,
+          opacity: 1,
+          duration: dur * 0.7,
+          ease: 'power4.out',
+          scrollTrigger: {
+            trigger: statusRef.current,
+            start: 'top 92%',
+            once: true,
+          },
+        }
+      );
+
+      // ====== SECTION 9: Platforms ======
+      gsap.fromTo(platformHeadingRef.current,
+        { y: isMobile ? 15 : 20, opacity: 0 },
+        {
+          y: 0,
+          opacity: 1,
+          duration: dur * 0.7,
+          ease: 'power4.out',
+          scrollTrigger: {
+            trigger: platformHeadingRef.current,
+            start: 'top 92%',
+            once: true,
+          },
+        }
+      );
+
+      gsap.fromTo(platformsRef.current,
+        { y: isMobile ? 15 : 20, opacity: 0 },
+        {
+          y: 0,
+          opacity: 1,
+          duration: dur * 0.6,
+          ease: 'power4.out',
+          scrollTrigger: {
+            trigger: platformsRef.current,
+            start: 'top 92%',
+            once: true,
+          },
+        }
+      );
+
+      // Platform cards with stagger
+      gsap.fromTo(platformCardsRef.current,
+        { y: isMobile ? 15 : 30, opacity: 0 },
+        {
+          y: 0,
+          opacity: 1,
+          stagger: staggerDur * 0.8,
+          duration: dur * 0.6,
+          ease: 'power4.out',
+          scrollTrigger: {
+            trigger: platformCardsRef.current[0] || platformsRef.current,
+            start: 'top 93%',
+            once: true,
+          },
+        }
+      );
+
+      // ====== FLOATING ANIMATIONS (Desktop only) ======
+      if (!isMobile) {
+        if (floatTopRef.current) {
+          gsap.to(floatTopRef.current, {
+            y: -8,
+            duration: 3,
+            repeat: -1,
+            yoyo: true,
+            ease: 'power1.inOut',
+            overwrite: 'auto',
+          });
+        }
+
+        if (floatBottomRef.current) {
+          gsap.to(floatBottomRef.current, {
+            y: 8,
+            duration: 3.5,
+            repeat: -1,
+            yoyo: true,
+            ease: 'power1.inOut',
+            delay: 0.5,
+            overwrite: 'auto',
+          });
+        }
+      }
+
+      // ====== REFRESH SCROLLTRIGGER ======
+      ScrollTrigger.refresh();
+
     }, containerRef);
 
     return () => {
@@ -379,7 +414,9 @@ export default function Hero({ onOpenQuoteModal, onOpenVideoModal }) {
     };
   }, [isMounted]);
 
-  // Get color class for platform
+  // ============================================================
+  // COLOR HELPERS
+  // ============================================================
   const getColorClass = (color) => {
     const colors = {
       blue: 'hover:border-blue-500/50 hover:shadow-blue-500/5',
@@ -416,7 +453,6 @@ export default function Hero({ onOpenQuoteModal, onOpenVideoModal }) {
     return colors[color] || colors.blue;
   };
 
-  // ✅ If not mounted, return null to prevent hydration mismatch
   if (!isMounted) {
     return null;
   }
